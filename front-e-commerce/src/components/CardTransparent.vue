@@ -44,12 +44,12 @@
     object-fit: cover;
     border-radius: 10px;
     height: 350px;
-    width: 700px;
+    width: 650px;
     z-index: 1;
   }
   .image-wrapper::before {
     height: 350px;
-    width: 700px;
+    width: 650px;
     object-fit: cover;
     border-radius: 10px;
     content: "";
