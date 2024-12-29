@@ -8,7 +8,7 @@
       <img
         class="img"
         :src="image"
-      />
+      >
     </div>
     <div class="content">
       <h1>{{ title }}</h1>
