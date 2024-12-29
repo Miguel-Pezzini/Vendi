@@ -26,9 +26,10 @@
   <h1 class="text-center my-7 text">
     Lançamentos
   </h1>
-
-  <v-slide-group>
+  <v-sheet>
+  <v-slide-group show-arrows>
     <v-slide-group-item
+      class="product-item"
       v-for="n in 6"
       :key="n"
     >
@@ -38,6 +39,9 @@
       />
     </v-slide-group-item>
   </v-slide-group>
+</v-sheet>
+  <v-divider class="my-15" color="#DBB671" opacity=1 />
+a
 </template>
   
 <script setup>
@@ -61,7 +65,7 @@
   const cardThree = {image: card3, title: "COZINHA"}
   const cardFour = {image: card4, title: "BANHEIRO"}
 
-  const productOne = {image: card1, title: "Interruptor inteligente Sonoff Mini R2 - Wifi - Automação Residencial", price: 10.5, subdivision: 10}
+  const productOne = {image: card4, title: "Interruptor inteligente Sonoff Mini R2 - Wifi - Automação Residencial", price: 10.5, subdivision: 10}
 </script>
   
 <style scoped>
@@ -73,6 +77,9 @@ body {
 }
 .text {
   font-weight: 400;
+}
+.product-item {
+  
 }
 </style>
   

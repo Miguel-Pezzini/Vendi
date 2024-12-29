@@ -1,5 +1,5 @@
 <template>
-  <v-card class="container">
+  <v-card class="container ma-4">
     <v-img
       class="image"
       :src="prop.image"
@@ -53,11 +53,11 @@
       font-family: "Poppins", serif;
     }
     .container {
-        max-height: 560px;
-        max-width: 400px;
+        height: 560px;
+        width: 400px;
     }
     .image {
-      max-height: 350px;
+      height: 350px;
     }
     .title {
       font-size: 16px;
