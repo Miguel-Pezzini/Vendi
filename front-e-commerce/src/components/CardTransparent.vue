@@ -40,6 +40,11 @@
   .container {
     position: relative;
   }
+  .container:hover {
+    transition: .2s;
+    scale: 1.01;
+    cursor: pointer;
+  }
   .img {
     object-fit: cover;
     border-radius: 10px;

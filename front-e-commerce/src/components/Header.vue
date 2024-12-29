@@ -1,15 +1,14 @@
 <template>
   <v-row
-    height="90"
     class="header-container"
     align="center"
     no-gutters
   >
     <v-col
       cols="3"
-      class="d-flex justify-center"
+      class="d-flex justify-center align-center"
     >
-      Logo
+      <img class="img" src="../assets/logo.png"/>
     </v-col>
     <v-col
       cols="1"
@@ -47,7 +46,7 @@
     >
       <RouterLink>Computadores</RouterLink>
     </v-col>
-    <v-col cols="2">
+    <v-col cols="3">
       <v-row class="d-flex justify-center ga-4">
         <RouterLink>
           <v-icon
@@ -85,13 +84,19 @@
         cursor: pointer;
         color: black;
       }
-      a:hover {
+      a:hover, .img:hover {
+        cursor: pointer;
+        transition: .2s;
         scale: 1.05;
       }
       .header-container {
-        height: 90px;
+        height: 100px;
+        background-color: #FFF;
       }
       .icon {
         cursor: pointer;
+      }
+      .img {
+        height: 100px;
       }
 </style>

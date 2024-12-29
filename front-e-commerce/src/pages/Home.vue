@@ -2,7 +2,7 @@
   <Header />
   <Slide :images="images" />
   <v-row
-    class="container-images"
+    class="mt-13"
     justify="center"
   >
     <CardTransparent
@@ -179,14 +179,14 @@
 body {
   font-family: "Poppins", serif;
 }
-.container-images {
-  margin-top: 50px;
+button:hover {
+  transition: .2s;
+  scale: 1.05;
 }
 .newsletter {
   padding-left: 80px;
   padding-right: 80px;
 }
-
 .input {
   height: 50px;
   width: 340px;
@@ -223,7 +223,7 @@ body {
   padding-bottom: 50px;
 }
 .divider-footer {
-  flex:auto;
+  flex: auto;
 }
 </style>
   

@@ -1,7 +1,8 @@
 <template>
-  <v-card class="container ma-4">
+  <v-card class="ma-4" height=560 width=400>
     <v-img
       class="image"
+      height=350
       :src="prop.image"
     />
     <v-card-item class="pb-0">
@@ -52,13 +53,6 @@
     body {
       font-family: "Poppins", serif;
     }
-    .container {
-        height: 560px;
-        width: 400px;
-    }
-    .image {
-      height: 350px;
-    }
     .title {
       font-size: 16px;
       font-weight: 400;
@@ -79,6 +73,9 @@
       width: 50%;
       height: 53px;
     }
-
+    .button:hover {
+      transition: .2s;
+      scale: 1.01;
+    }
 </style>
     

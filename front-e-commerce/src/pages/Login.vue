@@ -2,7 +2,6 @@
   <v-form @submit.prevent="logar">
     <v-container
       width="450"
-      fill-height
       class="d-flex justify-center align-center"
     >
       <v-row class="style-vrow">
@@ -102,9 +101,8 @@ a {
 form {
   background-color: #F5F5F5;
 }
-/* Optional: If you need to ensure that the container takes up the full height of the screen */
 .v-container {
-  height: 100vh; /* 100% of the viewport height */
+  height: 100vh;
 }
 .style-vrow {
   border-radius: 10px;
