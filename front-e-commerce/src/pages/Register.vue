@@ -65,9 +65,10 @@
           class="d-flex justify-end align-center"
         >
           <Button
+           style="background-color: #000;"
             title="Criar Conta"
             block
-            color="black"
+            color="white"
           />
         </v-col>
         <v-col

@@ -11,11 +11,44 @@
     </v-row>
 
     <v-row class="container">
-      <v-col class="pa-0">
+      <v-col class="pa-0" cols="4">
         <SideMenu active-minha-conta="true" />
       </v-col>
 
-      <v-col />
+      <v-col>
+        <v-card>
+        <v-form class="rounded">
+          <v-row>
+            <h1 class="title">Edite Seu Perfil</h1>
+          </v-row>
+          <v-row>
+            <Input variant="outlined" label="Nome" />
+          </v-row>
+          <v-row class="ga-4">
+            <Input variant="outlined" label="E-mail" />
+            <Input variant="outlined" label="Endereco" />
+          </v-row>
+          <v-row>
+            <h1 class="title">Mudança de Senha</h1>
+          </v-row>
+          <v-row>
+            <Input variant="outlined" label="Senha Atual" />
+          </v-row>
+          <v-row>
+            <Input variant="outlined" label="Nova Senha" />
+          </v-row>
+          <v-row>
+            <Input variant="outlined" label="Confirmar Nova Senha" />
+          </v-row>
+          <v-row>
+            <v-spacer></v-spacer>
+            <Button title="CANCELAR" variant="text"/>
+            <Button title="SALVAR MUDANçAS" style="background-color: #DBB671;" />
+          </v-row>
+        </v-form>
+      </v-card>
+        
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -24,6 +57,8 @@
     import Header from '@/components/Header.vue';
     import Path from '@/components/Path.vue';
     import SideMenu from '@/components/SideMenu.vue';
+    import Input from '@/components/Input.vue';
+    import Button from '@/components/Button.vue';
 </script>
   
   <style scoped>
@@ -33,11 +68,15 @@
   .container {
     margin-top: 80px;
   }
-  ul {
-    list-style: none;
+  .v-card {
+    font-family: "Poppins", serif;
+    padding: 40px 80px 40px 80px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   }
-  h1 {
-    font-size: 16px;
+  .title {
+    padding-bottom: 16px;
+    color: #DBB671;
+    font-size: 20px;
     font-weight: 500;
   }
   </style>

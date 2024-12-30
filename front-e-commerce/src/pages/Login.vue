@@ -46,10 +46,11 @@
           class="d-flex justify-end align-center"
         >
           <Button
+            style="background-color: #000;"
             :loading="loading"
             title="Logar"
             block
-            color="black"
+            color="white"
           />
         </v-col>
         <v-col

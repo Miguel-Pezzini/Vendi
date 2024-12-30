@@ -4,6 +4,7 @@
     :block="block"
     :color="color"
     :loading="loading"
+    :variant="variant"
   >
     {{ title }}
   </v-btn>
@@ -25,11 +26,15 @@
           },
           color: {
             type: String,
-            default: "white"
+            default: "black"
           },
           loading: {
             type: Boolean,
             default: false
+          },
+          variant: {
+            type: String,
+            default: null
           }
       })
   </script>

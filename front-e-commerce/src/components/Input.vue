@@ -2,7 +2,7 @@
   <v-text-field
     :type="mostrarSenha()"
     :label="label"
-    variant="underlined"
+    :variant="variant"
     :prepend-inner-icon="prependIcon"
     :append-inner-icon="mostrarIcon()"
     :rules="rules"
@@ -34,6 +34,10 @@ const props = defineProps({
           rules: {
             type: Array,
             default: v => v
+          },
+          variant: {
+            type: String,
+            default: "underlined"
           }
     })
 
