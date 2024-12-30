@@ -16,7 +16,7 @@
     no-gutters
   >
     <v-col
-      cols="3"
+      cols="2"
       class="d-flex justify-center align-center"
     >
       <router-link to="/home">
@@ -53,24 +53,25 @@
     </v-col>
     <v-col
       cols="1"
-      class="d-flex justify-center"
-    >
-      <RouterLink>Ideias de Presente</RouterLink>
-    </v-col>
-    <v-col
-      cols="1"
-      class="d-flex justify-center"
+      class=" mr-10"
     >
       <RouterLink>Computadores</RouterLink>
     </v-col>
-    <v-col cols="2">
+    <v-col
+      cols="3"
+      class="d-flex justify-center align-center"
+    >
+      <v-text-field
+        v-model="dadoPesquisa"
+        hide-details="true"
+        label="Pesquise seu Produto"
+        append-inner-icon="mdi-magnify"
+        variant="outlined"
+        @click:append-inner="pesquisar()"
+      />
+    </v-col>
+    <v-col cols="1">
       <v-row class="d-flex justify-center ga-4">
-        <RouterLink>
-          <v-icon
-            size="x-large"
-            icon="mdi-magnify"
-          />
-        </RouterLink>
         <RouterLink to="profile">
           <v-icon
             :color="accountActive ? '#DBB671' : null"
@@ -97,8 +98,9 @@
 </template>
       
     <script setup>
+    import { ref } from 'vue';
     import router from '@/router';
-import Button from './Button.vue';
+    import Button from './Button.vue';
 
 defineProps({
   accountActive: {
@@ -106,6 +108,12 @@ defineProps({
     default: false
   }
 })
+
+const dadoPesquisa = ref(null)
+
+function pesquisar() {
+  console.log(dadoPesquisa.value)
+}
     </script>
 <style scoped>
 body {

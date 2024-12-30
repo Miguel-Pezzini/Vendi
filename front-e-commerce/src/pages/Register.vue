@@ -65,7 +65,7 @@
           class="d-flex justify-end align-center"
         >
           <Button
-           style="background-color: #000;"
+            style="background-color: #000;"
             title="Criar Conta"
             block
             color="white"
