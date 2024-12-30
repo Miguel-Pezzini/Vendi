@@ -1,4 +1,10 @@
 <template>
+  <v-row class="header" justify="center">
+    <v-col class="d-flex justify-center align-center ga-2">
+      <span style="font-size: 14px;">Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!</span>
+      <RouterLink style="color: white; font-size: 14px; text-decoration: underline;">ShopNow</RouterLink>
+    </v-col>
+  </v-row>
   <v-row
     class="header-container"
     align="center"
@@ -8,7 +14,9 @@
       cols="3"
       class="d-flex justify-center align-center"
     >
-      <img class="img" src="../assets/logo.png"/>
+    <router-link to="/home">
+      <img class="img" src="../assets/logo.png" alt="Logo" />
+    </router-link>
     </v-col>
     <v-col
       cols="1"
@@ -46,7 +54,7 @@
     >
       <RouterLink>Computadores</RouterLink>
     </v-col>
-    <v-col cols="3">
+    <v-col cols="2">
       <v-row class="d-flex justify-center ga-4">
         <RouterLink>
           <v-icon
@@ -54,7 +62,7 @@
             icon="mdi-magnify"
           />
         </RouterLink>
-        <RouterLink>
+        <RouterLink to="profile">
           <v-icon
             size="x-large"
             icon="mdi-account-outline"
@@ -68,17 +76,21 @@
         </RouterLink>
       </v-row>
     </v-col>
+    <v-col>
+      <Button title="SAIR" color="error" @click="router.push({name: 'Login'})"/>
+    </v-col>
   </v-row>
 </template>
       
     <script setup>
-        defineProps({
-          
-        })
+    import router from '@/router';
+import Button from './Button.vue';
     </script>
 <style scoped>
+body {
+  font-family: "Poppins", serif;
+}
     a {
-        font-family: "Poppins", serif;
         font-weight: 600;
         text-decoration: none;
         cursor: pointer;
@@ -88,6 +100,11 @@
         cursor: pointer;
         transition: .2s;
         scale: 1.05;
+      }
+      .header {
+        height: 48px;
+        background-color: #000;
+        color: #FFF;
       }
       .header-container {
         height: 100px;
