@@ -1,8 +1,13 @@
 <template>
-  <v-row class="header" justify="center">
+  <v-row
+    class="header"
+    justify="center"
+  >
     <v-col class="d-flex justify-center align-center ga-2">
       <span style="font-size: 14px;">Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!</span>
-      <RouterLink style="color: white; font-size: 14px; text-decoration: underline;">ShopNow</RouterLink>
+      <RouterLink style="color: white; font-size: 14px; text-decoration: underline;">
+        ShopNow
+      </RouterLink>
     </v-col>
   </v-row>
   <v-row
@@ -14,9 +19,13 @@
       cols="3"
       class="d-flex justify-center align-center"
     >
-    <router-link to="/home">
-      <img class="img" src="../assets/logo.png" alt="Logo" />
-    </router-link>
+      <router-link to="/home">
+        <img
+          class="img"
+          src="../assets/logo.png"
+          alt="Logo"
+        >
+      </router-link>
     </v-col>
     <v-col
       cols="1"
@@ -64,8 +73,9 @@
         </RouterLink>
         <RouterLink to="profile">
           <v-icon
+            :color="accountActive ? '#DBB671' : null"
             size="x-large"
-            icon="mdi-account-outline"
+            :icon="accountActive ? 'mdi-account-circle-outline' : 'mdi-account-outline'"
           />
         </RouterLink>
         <RouterLink>
@@ -77,7 +87,11 @@
       </v-row>
     </v-col>
     <v-col>
-      <Button title="SAIR" color="error" @click="router.push({name: 'Login'})"/>
+      <Button
+        title="SAIR"
+        color="error"
+        @click="router.push({name: 'Login'})"
+      />
     </v-col>
   </v-row>
 </template>
@@ -85,6 +99,13 @@
     <script setup>
     import router from '@/router';
 import Button from './Button.vue';
+
+defineProps({
+  accountActive: {
+    type: Boolean,
+    default: false
+  }
+})
     </script>
 <style scoped>
 body {

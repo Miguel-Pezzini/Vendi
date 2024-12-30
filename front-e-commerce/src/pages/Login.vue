@@ -38,7 +38,7 @@
             rel="noopener noreferrer"
             target="_blank"
           >
-            <RouterLink> Esqueci minha senha</RouterLink>
+            <RouterLink>Esqueci minha senha</RouterLink>
           </p>
         </v-col>
         <v-col
@@ -96,7 +96,7 @@ body {
 }
 a {
   text-decoration: none;
-  color: #0000FF
+  color: #DBB671;
 }
 form {
   background-color: #F5F5F5;

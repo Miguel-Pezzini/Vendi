@@ -1,8 +1,14 @@
 <template>
-    <div class="d-flex">
-        <p style="opacity: 0.5;" v-for="oldP in oldPaths" :key="oldP">&nbsp;&nbsp;{{oldP}}&nbsp;&nbsp; /</p>
-        <span>&nbsp;&nbsp; {{activePath}}</span>
-    </div>
+  <div class="d-flex">
+    <p
+      v-for="oldP in oldPaths"
+      :key="oldP"
+      style="opacity: 0.5;"
+    >
+&nbsp;&nbsp;{{ oldP }}&nbsp;&nbsp; /
+    </p>
+    <span>&nbsp;&nbsp; {{ activePath }}</span>
+  </div>
 </template>
       
   <script setup>

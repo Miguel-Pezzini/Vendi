@@ -126,7 +126,7 @@
   }
   a {
     text-decoration: none;
-    color: #0000FF
+    color: #DBB671
   }
   form {
     background-color: #F5F5F5;

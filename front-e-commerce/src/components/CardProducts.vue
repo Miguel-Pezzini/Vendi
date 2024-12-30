@@ -1,8 +1,12 @@
 <template>
-  <v-card class="ma-4" height=560 width=400>
+  <v-card
+    class="ma-4"
+    height="560"
+    width="400"
+  >
     <v-img
       class="image"
-      height=350
+      height="350"
       :src="prop.image"
     />
     <v-card-item class="pb-0">
