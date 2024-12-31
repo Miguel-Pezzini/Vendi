@@ -5,7 +5,10 @@
   >
     <v-col class="d-flex justify-center align-center ga-2">
       <span style="font-size: 14px;">Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!</span>
-      <RouterLink style="color: white; font-size: 14px; text-decoration: underline;" to="/products">
+      <RouterLink
+        style="color: white; font-size: 14px; text-decoration: underline;"
+        to="/products"
+      >
         ShopNow
       </RouterLink>
     </v-col>
@@ -31,31 +34,41 @@
       cols="1"
       class="d-flex justify-center"
     >
-      <RouterLink :to="{ path: '/products', query: { category: 'most-seller' } }">Mais Vendidos</RouterLink>
+      <RouterLink :to="{ path: '/products', query: { category: 'most-seller' } }">
+        Mais Vendidos
+      </RouterLink>
     </v-col>
     <v-col
       cols="1"
       class="d-flex justify-center"
     >
-      <RouterLink :to="{ path: '/products', query: { category: 'eletronics' } }">Eletrônicos</RouterLink>
+      <RouterLink :to="{ path: '/products', query: { category: 'eletronics' } }">
+        Eletrônicos
+      </RouterLink>
     </v-col>
     <v-col
       cols="1"
       class="d-flex justify-center"
     >
-      <RouterLink :to="{ path: '/products', query: { category: 'household' } }">Doméstico</RouterLink>
+      <RouterLink :to="{ path: '/products', query: { category: 'household' } }">
+        Doméstico
+      </RouterLink>
     </v-col>
     <v-col
       cols="1"
       class="d-flex justify-center"
     >
-      <RouterLink :to="{ path: '/products', query: { category: 'books' } }">Livros</RouterLink>
+      <RouterLink :to="{ path: '/products', query: { category: 'books' } }">
+        Livros
+      </RouterLink>
     </v-col>
     <v-col
       cols="1"
       class=" mr-10"
     >
-      <RouterLink :to="{ path: '/products', query: { category: 'offers' } }">Ofertas</RouterLink>
+      <RouterLink :to="{ path: '/products', query: { category: 'offers' } }">
+        Ofertas
+      </RouterLink>
     </v-col>
     <v-col
       cols="2"
@@ -79,7 +92,7 @@
       <v-row class="d-flex justify-center ga-4">
         <RouterLink to="/profile">
           <v-icon
-            :color="accountActive ? '#DBB671' : null"
+            :color="accountActive ? '#DBB671' : 'black'"
             size="x-large"
             :icon="accountActive ? 'mdi-account-circle-outline' : 'mdi-account-outline'"
           />
@@ -87,7 +100,8 @@
         <RouterLink>
           <v-icon
             size="x-large"
-            icon="mdi-shopping-outline"
+            :color="shoppingActive ? '#DBB671' : null"
+            icon='mdi-shopping-outline'
           />
         </RouterLink>
         <RouterLink>
@@ -116,6 +130,10 @@
 
 defineProps({
   accountActive: {
+    type: Boolean,
+    default: false
+  },
+  shoppingActive: {
     type: Boolean,
     default: false
   }
