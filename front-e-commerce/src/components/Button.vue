@@ -5,6 +5,7 @@
     :color="color"
     :loading="loading"
     :variant="variant"
+    :style="{ backgroundColor: bgColor }"
   >
     {{ title }}
   </v-btn>
@@ -35,6 +36,10 @@
           variant: {
             type: String,
             default: null
+          },
+          bgColor: {
+            type: String,
+            default: "white",
           }
       })
   </script>

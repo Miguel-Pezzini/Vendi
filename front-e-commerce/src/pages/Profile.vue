@@ -74,7 +74,7 @@
               />
               <Button
                 title="SALVAR MUDANçAS"
-                style="background-color: #DBB671;"
+                bg-color="#DBB671"
               />
             </v-row>
           </v-form>

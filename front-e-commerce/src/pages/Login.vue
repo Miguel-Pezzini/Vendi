@@ -46,7 +46,7 @@
           class="d-flex justify-end align-center"
         >
           <Button
-            style="background-color: #000;"
+            bg-color="black"
             :loading="loading"
             title="Logar"
             block

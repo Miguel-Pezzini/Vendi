@@ -31,7 +31,6 @@
       <v-slide-group-item
         v-for="n in 6"
         :key="n"
-        class="product-item"
       >
         <CardProducts
           :prop="productOne"

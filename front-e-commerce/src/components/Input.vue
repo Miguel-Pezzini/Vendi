@@ -6,6 +6,7 @@
     :prepend-inner-icon="prependIcon"
     :append-inner-icon="mostrarIcon()"
     :rules="rules"
+    :hide-details="hideDetails"
     @click:append-inner="show = !show"
   />
 </template>
@@ -38,17 +39,21 @@ const props = defineProps({
           variant: {
             type: String,
             default: "underlined"
+          },
+          hideDetails: {
+            type: Boolean,
+            default: false
           }
     })
 
 function mostrarSenha() {
+  console.log(props.rules)
   if(props.type === "email") return "email"
   if(props.type === "text") return "text"
   return show.value ? "text": "password"
 }
 function mostrarIcon() {
-  if(props.type === "text") return null
-  if(props.type === "email") return null
+  if(!props.appendIcon) return null
   return show.value ? "mdi-eye-off": "mdi-eye"
 }
 
