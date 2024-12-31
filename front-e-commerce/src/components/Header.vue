@@ -51,7 +51,7 @@
       class="d-flex justify-center"
     >
       <RouterLink :to="{ path: '/products', query: { category: 'household' } }">
-        Doméstico
+        Domésticos
       </RouterLink>
     </v-col>
     <v-col
@@ -101,7 +101,7 @@
           <v-icon
             size="x-large"
             :color="shoppingActive ? '#DBB671' : null"
-            icon='mdi-shopping-outline'
+            icon="mdi-shopping-outline"
           />
         </RouterLink>
         <RouterLink>

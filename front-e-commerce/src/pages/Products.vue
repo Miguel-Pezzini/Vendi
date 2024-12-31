@@ -1,27 +1,57 @@
 <template>
   <div class="page-wrapper">
     <Header />
-   <v-divider />
-    <v-container class="pa-0" fluid>
+    <v-divider />
+    <v-container
+      class="pa-0"
+      fluid
+    >
       <div class="d-flex">
         <!-- Filtros -->
-        <v-sheet class="filter-sheet" elevation="4">
+        <v-sheet
+          class="filter-sheet"
+          elevation="4"
+        >
           <v-list>
-            <v-list-item title="Filtros de Produtos"></v-list-item>
-            <v-divider></v-divider>
+            <v-list-item title="Filtros de Produtos"/>
+            <v-divider class="mb-5"  />
 
             <!-- Filtros -->
             <v-list-item>
-              <v-checkbox label="Preço baixo a alto" v-model="filters.priceAsc" />
+              <span>Preço:</span>
+              <span> R${{ mostrarPrecoMin() }} - R${{ mostrarPrecoMax() }}</span>
+              <div class="d-flex align-center pb-3">
+                <!-- Range Slider -->
+                <v-range-slider
+                  min="0"
+                  max="500"
+                  class="mx-3"
+                  hide-details="false"
+                  v-model="priceFilter"
+                  strict
+                  />
+                <!-- Botão "IR" -->
+                 
+                  <v-btn @click="searchByPrice" color="black" rounded="pill">IR</v-btn>
+              </div>
             </v-list-item>
+
             <v-list-item>
-              <v-checkbox label="Preço alto a baixo" v-model="filters.priceDesc" />
+              <v-autocomplete
+                v-model="filters.brand"
+                :items="brands"
+                label="Marcas"
+                variant="outlined"
+              />
             </v-list-item>
+            
             <v-list-item>
-              <v-select :items="brands" label="Marcas" v-model="filters.brand" />
-            </v-list-item>
-            <v-list-item>
-              <v-select :items="colors" label="Cores" v-model="filters.color" />
+              <v-select
+                v-model="filters.color"
+                :items="colors"
+                label="Cores"
+                variant="outlined"
+              />
             </v-list-item>
           </v-list>
         </v-sheet>
@@ -29,7 +59,7 @@
         <!-- Conteúdo Principal -->
         <v-col class="products-content">
           <!-- Aqui você pode adicionar os produtos -->
-          <h2>Produtos</h2>
+          <h2>Resultados</h2>
           <p>Adicione a lista de produtos aqui...</p>
         </v-col>
       </div>
@@ -45,14 +75,26 @@ import Footer from '@/components/Footer.vue';
 import { ref } from 'vue';
 
 const filters = ref({
-  priceAsc: false,
-  priceDesc: false,
   brand: null,
   color: null,
 });
 
+const priceFilter = ref([0, 500])
+
 const brands = ref(['Marca A', 'Marca B', 'Marca C']);
 const colors = ref(['Vermelho', 'Azul', 'Verde']);
+
+function mostrarPrecoMin() {
+  return priceFilter.value[0].toFixed(0)
+}
+function mostrarPrecoMax() {
+  return priceFilter.value[1].toFixed(0)
+}
+function searchByPrice() {
+  console.log(priceFilter.value)
+}
+
+
 </script>
 
 <style scoped>
@@ -67,7 +109,7 @@ body {
 }
 
 .filter-sheet {
-  width: 300px;
+  width: 350px;
   padding: 15px;
   flex-shrink: 0; /* Garante que ele não diminua */
 }

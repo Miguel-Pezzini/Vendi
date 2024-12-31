@@ -34,7 +34,7 @@ const props = defineProps({
           },
           rules: {
             type: Array,
-            default: v => v
+            default: () => []
           },
           variant: {
             type: String,
