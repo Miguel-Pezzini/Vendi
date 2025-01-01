@@ -122,7 +122,7 @@
   </v-row>
 </template>
       
-    <script setup>
+<script setup>
     import { ref } from 'vue';
     import router from '@/router';
     import Input from './Input.vue';
@@ -142,7 +142,7 @@ defineProps({
 const dadoPesquisa = ref(null)
 
 function pesquisar() {
-  console.log(dadoPesquisa.value)
+  router.push({ name: "Products"})
 }
     </script>
 <style scoped>

@@ -47,7 +47,6 @@ const props = defineProps({
     })
 
 function mostrarSenha() {
-  console.log(props.rules)
   if(props.type === "email") return "email"
   if(props.type === "text") return "text"
   return show.value ? "text": "password"

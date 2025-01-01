@@ -20,7 +20,7 @@
             <v-list-item>
               <span>Preço:</span>
               <span> R${{ mostrarPrecoMin() }} - R${{ mostrarPrecoMax() }}</span>
-              <div class="d-flex align-center pb-3">
+              <div class="d-flex align-center pb-3 ga-2">
                 <!-- Range Slider -->
                 <v-range-slider
                   min="0"
@@ -36,23 +36,22 @@
               </div>
             </v-list-item>
 
-            <v-list-item>
-              <v-autocomplete
-                v-model="filters.brand"
-                :items="brands"
-                label="Marcas"
-                variant="outlined"
-              />
-            </v-list-item>
-            
-            <v-list-item>
-              <v-select
-                v-model="filters.color"
-                :items="colors"
-                label="Cores"
-                variant="outlined"
-              />
-            </v-list-item>
+            <div v-for="filter in filters" :key="filter.name">
+              <v-list-item>
+                <v-list-item-title>{{ filter.name }}</v-list-item-title>
+              </v-list-item>
+              <!-- Itera pelos itens do filtro -->
+              <v-list-item  class="pa-0" v-for="item in filter.items" :key="item">
+                <v-checkbox
+                  hide-details="true"
+                  v-model="selectedFilters[filter.name]"
+                  :label="item"
+                  :value="item"
+                />
+              </v-list-item>
+              <v-divider />
+            </div>
+
           </v-list>
         </v-sheet>
 
@@ -60,7 +59,6 @@
         <v-col class="products-content">
           <!-- Aqui você pode adicionar os produtos -->
           <h2>Resultados</h2>
-          <p>Adicione a lista de produtos aqui...</p>
         </v-col>
       </div>
     </v-container>
@@ -71,18 +69,34 @@
 <script setup>
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
+import { useRoute } from 'vue-router'
 
 import { ref } from 'vue';
 
-const filters = ref({
-  brand: null,
-  color: null,
+const route = useRoute()
+
+const filters = [
+  {
+    name: "CPU",
+    items: ["Intel i5", "Intel i7", "Ryzen 5"]
+  },
+  {
+    name: "RAM",
+    items: ["8GB", "16GB", "32GB"]
+  },
+  {
+    name: "Gênero",
+    items: ["Ficção", "Biografia", "Terror"]
+  }
+]
+
+const selectedFilters = ref({
+  CPU: [],
+  RAM: [],
+  GENERO: []
 });
 
 const priceFilter = ref([0, 500])
-
-const brands = ref(['Marca A', 'Marca B', 'Marca C']);
-const colors = ref(['Vermelho', 'Azul', 'Verde']);
 
 function mostrarPrecoMin() {
   return priceFilter.value[0].toFixed(0)
@@ -92,6 +106,7 @@ function mostrarPrecoMax() {
 }
 function searchByPrice() {
   console.log(priceFilter.value)
+  console.log(selectedFilters.value)
 }
 
 
