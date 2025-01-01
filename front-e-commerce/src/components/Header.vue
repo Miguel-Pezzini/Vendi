@@ -142,7 +142,7 @@ defineProps({
 const dadoPesquisa = ref(null)
 
 function pesquisar() {
-  router.push({ name: "Products"})
+  router.push({ path: "/products", query: { products: dadoPesquisa.value  }})
 }
     </script>
 <style scoped>

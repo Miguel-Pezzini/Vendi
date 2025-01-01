@@ -12,9 +12,9 @@
           class="filter-sheet"
           elevation="4"
         >
-          <v-list>
-            <v-list-item title="Filtros de Produtos"/>
-            <v-divider class="mb-5"  />
+          <v-list v-if="filters">
+            <v-list-item title="Filtros de Produtos" />
+            <v-divider class="mb-5" />
 
             <!-- Filtros -->
             <v-list-item>
@@ -23,35 +23,64 @@
               <div class="d-flex align-center pb-3 ga-2">
                 <!-- Range Slider -->
                 <v-range-slider
+                  v-model="priceFilter"
                   min="0"
                   max="500"
                   class="mx-3"
                   hide-details="false"
-                  v-model="priceFilter"
                   strict
-                  />
+                />
                 <!-- Botão "IR" -->
                  
-                  <v-btn @click="searchByPrice" color="black" rounded="pill">IR</v-btn>
+                <v-btn
+                  color="black"
+                  rounded="pill"
+                  @click="searchByPrice"
+                >
+                  IR
+                </v-btn>
               </div>
             </v-list-item>
 
-            <div v-for="filter in filters" :key="filter.name">
+            <div
+              v-for="filter in filters"
+              :key="filter.name"
+            >
               <v-list-item>
                 <v-list-item-title>{{ filter.name }}</v-list-item-title>
               </v-list-item>
               <!-- Itera pelos itens do filtro -->
-              <v-list-item  class="pa-0" v-for="item in filter.items" :key="item">
+              <v-list-item
+                v-for="item in filter.items"
+                :key="item"
+                class="pa-0 ml-2"
+              >
                 <v-checkbox
-                  hide-details="true"
                   v-model="selectedFilters[filter.name]"
+                  density="comfortable"
+                  hide-details="true"
                   :label="item"
                   :value="item"
                 />
               </v-list-item>
               <v-divider />
             </div>
+          </v-list>
 
+          <v-list v-if="categories">
+            <v-list-item title="Lista de Categorias" />
+            <v-divider class="mb-5" />
+            <v-list-item>
+              <v-list-item-title class="text-h5">
+                {{ categories.name }}
+              </v-list-item-title>
+            </v-list-item>
+            <v-list-item
+              v-for="category in categories.childCategories"
+              :key="category"
+            >
+                <span class="ml-4" @click="getProductsByCategory(category)">{{ category }}</span>
+            </v-list-item>
           </v-list>
         </v-sheet>
 
@@ -59,6 +88,7 @@
         <v-col class="products-content">
           <!-- Aqui você pode adicionar os produtos -->
           <h2>Resultados</h2>
+          <ResultsProduct />
         </v-col>
       </div>
     </v-container>
@@ -69,31 +99,35 @@
 <script setup>
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
-import { useRoute } from 'vue-router'
+import ResultsProduct from '@/components/ResultsProduct.vue'
+
 
 import { ref } from 'vue';
 
-const route = useRoute()
+// const filters = [
+//   {
+//     name: "CPU",
+//     items: ["Intel i5", "Intel i7", "Ryzen 5"]
+//   },
+//   {
+//     name: "RAM",
+//     items: ["8GB", "16GB", "32GB"]
+//   },
+//   {
+//     name: "Gênero",
+//     items: ["Ficção", "Biografia", "Terror"]
+//   }
+// ]
 
-const filters = [
-  {
-    name: "CPU",
-    items: ["Intel i5", "Intel i7", "Ryzen 5"]
-  },
-  {
-    name: "RAM",
-    items: ["8GB", "16GB", "32GB"]
-  },
-  {
-    name: "Gênero",
-    items: ["Ficção", "Biografia", "Terror"]
-  }
-]
+const categories = {
+  name: "Eletronics",
+  childCategories: ["Computer", "Cellphone", "Headphone"]
+}
 
 const selectedFilters = ref({
   CPU: [],
   RAM: [],
-  GENERO: []
+  Gênero: []
 });
 
 const priceFilter = ref([0, 500])
@@ -108,6 +142,9 @@ function searchByPrice() {
   console.log(priceFilter.value)
   console.log(selectedFilters.value)
 }
+function getProductsByCategory(category) {
+  console.log(category)
+}
 
 
 </script>
@@ -116,6 +153,14 @@ function searchByPrice() {
 /* Layout base */
 body {
   font-family: "Poppins", serif;
+}
+span {
+  color: black;
+  font-weight: 300;
+}
+span:hover {
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .page-wrapper {

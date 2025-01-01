@@ -24,7 +24,7 @@
       <Button
         title="Ver mais"
         class="button"
-        bgColor="#DBB671"
+        bg-color="#DBB671"
       />
     </v-card-actions>
   </v-card>
