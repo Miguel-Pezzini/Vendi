@@ -88,7 +88,7 @@
         <v-col class="products-content">
           <!-- Aqui você pode adicionar os produtos -->
           <h2>Resultados</h2>
-          <ResultsProduct />
+          <ResultsProduct :product="prod1" />
         </v-col>
       </div>
     </v-container>
@@ -103,6 +103,13 @@ import ResultsProduct from '@/components/ResultsProduct.vue'
 
 
 import { ref } from 'vue';
+
+const prod1 = {
+  discount: 35,
+  name: "Laptop",
+  price: "960",
+  fullPrice: "1160",
+}
 
 // const filters = [
 //   {

@@ -6,8 +6,14 @@
     :loading="loading"
     :variant="variant"
     :style="{ backgroundColor: bgColor }"
+    :icon="icon"
+    :flat="flat"
+    :density="density"
   >
-    {{ title }}
+  <template v-if="title">{{ title }}</template>
+  <template v-if="icon">
+    <v-icon>{{ icon }}</v-icon>
+  </template>
   </v-btn>
 </template>
     
@@ -15,7 +21,7 @@
       defineProps({
         title: {
               type: String,
-              default: "title"
+              default: null
           },
           type: {
               type: String,
@@ -40,6 +46,18 @@
           bgColor: {
             type: String,
             default: "white",
+          },
+          density: {
+            type: String,
+            default: "default",
+          },
+          flat: {
+            type: Boolean,
+            default: false,
+          },
+          icon: {
+            type: String,
+            default: null
           }
       })
   </script>

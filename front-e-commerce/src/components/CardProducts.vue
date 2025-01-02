@@ -37,7 +37,7 @@
       type: Object,
       default: null
     }
-  })
+    })
 
   function mostrarPrice(price) {
     let priceFormatado = price.toFixed(2)
