@@ -87,8 +87,12 @@
         <!-- Conteúdo Principal -->
         <v-col class="products-content">
           <!-- Aqui você pode adicionar os produtos -->
-          <h2>Resultados</h2>
-          <ResultsProduct :product="prod1" />
+          <h2 class="mb-6">Resultados</h2>
+          <v-row justify="center" no-gutters class="ml-6" >
+            <v-col v-for="n in 6" :key="n">
+              <ResultsProduct @addToCart="addToCart" @toggleWishList="toggleWishList" :product="prod1" class="pa-3" />
+            </v-col>
+          </v-row>
         </v-col>
       </div>
     </v-container>
@@ -101,14 +105,22 @@ import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
 import ResultsProduct from '@/components/ResultsProduct.vue'
 
-
 import { ref } from 'vue';
 
-const prod1 = {
+const prod1 = ref({
   discount: 35,
   name: "Laptop",
   price: "960",
   fullPrice: "1160",
+  isInWishList: true,
+})
+
+function toggleWishList(props) {
+  prod1.value.isInWishList = props;
+}
+
+function addToCart(props) {
+  console.log(props)
 }
 
 // const filters = [
@@ -176,7 +188,7 @@ span:hover {
 }
 
 .filter-sheet {
-  width: 350px;
+  width: 300px;
   padding: 15px;
   flex-shrink: 0; /* Garante que ele não diminua */
 }

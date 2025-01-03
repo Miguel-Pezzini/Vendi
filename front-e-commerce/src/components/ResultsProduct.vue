@@ -9,7 +9,7 @@
           <v-spacer />
           <v-col cols="auto" class="icons-container mt-3 mr-3">
             <Button v-if="wishListProduct" density="comfortable" :flat="true" icon="mdi-delete-outline" />
-            <Button density="comfortable" :flat="true" icon="mdi-heart-outline" />
+            <Button v-else :color="product.isInWishList ? 'red' : 'black' "  @click="toggleWishList()" density="comfortable" :flat="true"  :icon="product.isInWishList ? 'mdi-heart' : 'mdi-heart-outline' " />
           </v-col>
         </v-row>
           
@@ -17,7 +17,7 @@
         <div class="image-container">
           <img src="../assets/card3.webp"/>
         </div>
-        <v-btn color="black" prepend-icon="mdi-cart" :rounded="false" class="w-100 rounded-b" text="Add To Cart" />
+        <v-btn @click="addToCart" color="black" prepend-icon="mdi-cart" :rounded="false" class="w-100 rounded-b" text="Add To Cart" />
       </div>
     </v-card>
     <div class="mt-4">
@@ -32,9 +32,11 @@
         
 <script setup>
       import Button from '../components/Button'
-      import { ref } from 'vue';
+      import { defineEmits } from 'vue';
 
-      defineProps({
+      const emit = defineEmits(['toggleWishList', 'addToCart']);
+
+      const props = defineProps({
         product: {
           type: Object,
           default: null
@@ -44,8 +46,19 @@
           default: false
         },
     })
+
+    function toggleWishList() {
+      props.product.isInWishList = !props.product.isInWishList;
+      emit('toggleWishList', props.product.isInWishList)
+    }
+
+    function addToCart() {
+      emit('addToCart', props.product)
+    }
 </script>
+
         
+
 <style scoped>
     .image-container {
       box-sizing: content-box;

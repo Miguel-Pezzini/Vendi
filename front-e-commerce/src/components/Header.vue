@@ -1,4 +1,12 @@
 <template>
+  <v-navigation-drawer v-model="showCart" location="right" temporary>
+    <v-list-item title="My Application" subtitle="Vuetify"></v-list-item>
+    <v-divider></v-divider>
+    <v-list-item link title="List Item 1"></v-list-item>
+    <v-list-item link title="List Item 2"></v-list-item>
+    <v-list-item link title="List Item 3"></v-list-item>
+  </v-navigation-drawer>
+
   <v-row
     class="header"
     justify="center"
@@ -108,6 +116,7 @@
           <v-icon
             size="x-large"
             icon="mdi-cart-outline"
+            @click="showCart = !showCart"
           />
         </RouterLink>
       </v-row>
@@ -139,6 +148,7 @@ defineProps({
   }
 })
 
+const showCart = ref(false)
 const dadoPesquisa = ref(null)
 
 function pesquisar() {
