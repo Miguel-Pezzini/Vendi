@@ -10,10 +10,12 @@
     :flat="flat"
     :density="density"
   >
-  <template v-if="title">{{ title }}</template>
-  <template v-if="icon">
-    <v-icon>{{ icon }}</v-icon>
-  </template>
+    <template v-if="title">
+      {{ title }}
+    </template>
+    <template v-if="icon">
+      <v-icon>{{ icon }}</v-icon>
+    </template>
   </v-btn>
 </template>
     

@@ -1,30 +1,60 @@
 <template>
   <div>
-    <v-card width="270" height="300" elevation="0" color="#F5F5F5">
+    <v-card
+      width="270"
+      height="300"
+      elevation="0"
+      color="#F5F5F5"
+    >
       <div>
         <v-row>
           <v-col cols="auto  mt-3 ml-3">
-            <span class="icon-discount"> -{{product.discount}}% </span>
+            <span class="icon-discount"> -{{ product.discount }}% </span>
           </v-col>
           <v-spacer />
-          <v-col cols="auto" class="icons-container mt-3 mr-3">
-            <Button v-if="wishListProduct" density="comfortable" :flat="true" icon="mdi-delete-outline" />
-            <Button v-else :color="product.isInWishList ? 'red' : 'black' "  @click="toggleWishList()" density="comfortable" :flat="true"  :icon="product.isInWishList ? 'mdi-heart' : 'mdi-heart-outline' " />
+          <v-col
+            cols="auto"
+            class="icons-container mt-3 mr-3"
+          >
+            <Button
+              v-if="wishListProduct"
+              density="comfortable"
+              :flat="true"
+              icon="mdi-delete-outline"
+            />
+            <Button
+              v-else
+              :color="product.isInWishList ? 'red' : 'black' "
+              density="comfortable"
+              :flat="true"
+              :icon="product.isInWishList ? 'mdi-heart' : 'mdi-heart-outline' "
+              @click="toggleWishList()"
+            />
           </v-col>
         </v-row>
           
           
         <div class="image-container">
-          <img src="../assets/card3.webp"/>
+          <img src="../assets/card3.webp">
         </div>
-        <v-btn @click="addToCart" color="black" prepend-icon="mdi-cart" :rounded="false" class="w-100 rounded-b" text="Add To Cart" />
+        <v-btn
+          color="black"
+          prepend-icon="mdi-cart"
+          :rounded="false"
+          class="w-100 rounded-b"
+          text="Add To Cart"
+          @click="addToCart"
+        />
       </div>
     </v-card>
     <div class="mt-4">
-      <span class="name">{{product.name}}</span>
+      <span class="name">{{ product.name }}</span>
       <div class="d-flex ga-3 mt-3">
-        <span class="actualPrice">{{product.price}} </span>
-        <span v-if="product.discount" class="price">{{product.fullPrice}}</span>
+        <span class="actualPrice">R${{ product.price }} </span>
+        <span
+          v-if="product.discount"
+          class="price"
+        >R${{ product.fullPrice }}</span>
       </div>
     </div>
   </div>

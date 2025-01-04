@@ -1,10 +1,25 @@
 <template>
-  <v-navigation-drawer v-model="showCart" location="right" temporary>
-    <v-list-item title="My Application" subtitle="Vuetify"></v-list-item>
-    <v-divider></v-divider>
-    <v-list-item link title="List Item 1"></v-list-item>
-    <v-list-item link title="List Item 2"></v-list-item>
-    <v-list-item link title="List Item 3"></v-list-item>
+  <v-navigation-drawer
+    v-model="showCart"
+    width="400"
+    location="right"
+    temporary
+  >
+    <v-list-item
+      title="My Cart"
+      subtitle="2 Itens"
+    />
+    <v-divider />
+    <ProductCartCard :product="prodCart" />
+    <ProductCartCard :product="prodCart" />
+    <v-list-item
+      link
+      title="List Item 2"
+    />
+    <v-list-item
+      link
+      title="List Item 3"
+    />
   </v-navigation-drawer>
 
   <v-row
@@ -136,6 +151,7 @@
     import router from '@/router';
     import Input from './Input.vue';
     import Button from './Button.vue';
+    import ProductCartCard from './ProductCartCard.vue';
 
 defineProps({
   accountActive: {
@@ -146,6 +162,20 @@ defineProps({
     type: Boolean,
     default: false
   }
+})
+
+// const prod1 = ref({
+//   discount: 35,
+//   name: "Laptop",
+//   price: "960",
+//   fullPrice: "1160",
+//   isInWishList: true,
+// })
+
+const prodCart = ref({
+  name: 'LapTop',
+  price: 1000,
+  quantity: 2,
 })
 
 const showCart = ref(false)

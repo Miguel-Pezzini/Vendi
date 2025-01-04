@@ -79,7 +79,10 @@
               v-for="category in categories.childCategories"
               :key="category"
             >
-                <span class="ml-4" @click="getProductsByCategory(category)">{{ category }}</span>
+              <span
+                class="ml-4"
+                @click="getProductsByCategory(category)"
+              >{{ category }}</span>
             </v-list-item>
           </v-list>
         </v-sheet>
@@ -87,10 +90,24 @@
         <!-- Conteúdo Principal -->
         <v-col class="products-content">
           <!-- Aqui você pode adicionar os produtos -->
-          <h2 class="mb-6">Resultados</h2>
-          <v-row justify="center" no-gutters class="ml-6" >
-            <v-col v-for="n in 6" :key="n">
-              <ResultsProduct @addToCart="addToCart" @toggleWishList="toggleWishList" :product="prod1" class="pa-3" />
+          <h2 class="mb-6">
+            Resultados
+          </h2>
+          <v-row
+            justify="center"
+            no-gutters
+            class="ml-6"
+          >
+            <v-col
+              v-for="n in 6"
+              :key="n"
+            >
+              <ResultsProduct
+                :product="prod1"
+                class="pa-3"
+                @add-to-cart="addToCart"
+                @toggle-wish-list="toggleWishList"
+              />
             </v-col>
           </v-row>
         </v-col>
