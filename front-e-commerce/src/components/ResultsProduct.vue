@@ -78,7 +78,7 @@
     })
 
     function toggleWishList() {
-      props.product.isInWishList = !props.product.isInWishList;
+      //props.product.isInWishList = !props.product.isInWishList;
       emit('toggleWishList', props.product.isInWishList)
     }
 

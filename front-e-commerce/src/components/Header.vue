@@ -1,26 +1,5 @@
 <template>
-  <v-navigation-drawer
-    v-model="showCart"
-    width="400"
-    location="right"
-    temporary
-  >
-    <v-list-item
-      title="My Cart"
-      subtitle="2 Itens"
-    />
-    <v-divider />
-    <ProductCartCard :product="prodCart" />
-    <ProductCartCard :product="prodCart" />
-    <v-list-item
-      link
-      title="List Item 2"
-    />
-    <v-list-item
-      link
-      title="List Item 3"
-    />
-  </v-navigation-drawer>
+  <CardMenu v-model:show-cart="showCart" />
 
   <v-row
     class="header"
@@ -151,7 +130,7 @@
     import router from '@/router';
     import Input from './Input.vue';
     import Button from './Button.vue';
-    import ProductCartCard from './ProductCartCard.vue';
+    import CardMenu from './CartMenu.vue';
 
 defineProps({
   accountActive: {
@@ -172,19 +151,14 @@ defineProps({
 //   isInWishList: true,
 // })
 
-const prodCart = ref({
-  name: 'LapTop',
-  price: 1000,
-  quantity: 2,
-})
-
 const showCart = ref(false)
 const dadoPesquisa = ref(null)
 
 function pesquisar() {
   router.push({ path: "/products", query: { products: dadoPesquisa.value  }})
 }
-    </script>
+</script>
+
 <style scoped>
 body {
   font-family: "Poppins", serif;
