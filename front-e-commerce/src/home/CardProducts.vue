@@ -31,7 +31,7 @@
 </template>
     
     <script setup>
-    import Button from './Button.vue';
+    import Button from '../core/Button.vue';
     defineProps({
     prop: {
       type: Object,

@@ -86,12 +86,12 @@
 </template>
   
 <script setup>
-    import Header from '@/components/Header.vue';
-    import Path from '@/components/Path.vue';
-    import SideMenu from '@/components/SideMenu.vue';
-    import Input from '@/components/Input.vue';
-    import Button from '@/components/Button.vue';
-    import Footer from '@/components/Footer.vue';
+    import Header from '@/core/Header.vue';
+    import Path from '@/core/Path.vue';
+    import SideMenu from '@/profile/SideMenu.vue';
+    import Input from '@/core/Input.vue';
+    import Button from '@/core/Button.vue';
+    import Footer from '@/core/Footer.vue';
 </script>
   
   <style scoped>

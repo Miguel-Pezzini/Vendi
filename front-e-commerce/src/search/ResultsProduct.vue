@@ -61,7 +61,7 @@
 </template>
         
 <script setup>
-      import Button from '../components/Button'
+      import Button from '../core/Button'
       import { defineEmits } from 'vue';
 
       const emit = defineEmits(['toggleWishList', 'addToCart']);

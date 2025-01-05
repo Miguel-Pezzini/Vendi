@@ -12,35 +12,27 @@
       </template>
     </v-list-item>
     <v-divider />
-    <ProductCartCard :product="prodCart" />
-    <ProductCartCard :product="prodCart" />
-    <v-list-item
-      link
-      title="List Item 2"
-    />
-    <v-list-item
-      link
-      title="List Item 3"
-    />
+    <ProductCartCard :product="prodCart" :loading="loading" />
   </v-navigation-drawer>
 </template>
         
 <script setup>
     import { ref } from 'vue';
     import ProductCartCard from './ProductCartCard.vue';
-    import { defineEmits } from 'vue';
   
     defineProps({
         showCart: {
-        type: Boolean,
-        default: false
+          type: Boolean,
+          default: false
         },
     })
+
+    const loading = ref(false)
 
     const emit = defineEmits(['update:showCart']);
 
     const updateShowCart = (value) => {
-    emit('update:showCart', value);
+      emit('update:showCart', value);
     };
     
     const prodCart = ref({

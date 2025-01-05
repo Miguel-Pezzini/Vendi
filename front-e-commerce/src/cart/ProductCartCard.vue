@@ -72,16 +72,19 @@
   const props = defineProps({
         product: {
           type: Object,
-          default: null
+          required: true,
         },
+        loading: {
+          type: Boolean,
+          default: false,
+        }
     })
 
   function incrementQuantity() {
+    console.log(props.product)
   }
   function decrementQuantity() {
-    if(props.product.quantity == 1) {
       //emit('deleteFromCart', props.id)
-    }
   }
     
 </script>

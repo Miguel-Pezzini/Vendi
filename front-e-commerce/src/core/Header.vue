@@ -128,9 +128,9 @@
 <script setup>
     import { ref } from 'vue';
     import router from '@/router';
-    import Input from './Input.vue';
-    import Button from './Button.vue';
-    import CardMenu from './CartMenu.vue';
+    import Input from '../core/Input.vue';
+    import Button from '../core/Button.vue';
+    import CardMenu from '../cart/CartMenu.vue';
 
 defineProps({
   accountActive: {

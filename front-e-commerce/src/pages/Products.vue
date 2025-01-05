@@ -118,9 +118,9 @@
 </template>
 
 <script setup>
-import Header from '@/components/Header.vue';
-import Footer from '@/components/Footer.vue';
-import ResultsProduct from '@/components/ResultsProduct.vue'
+import Header from '@/core/Header.vue';
+import Footer from '@/core/Footer.vue';
+import ResultsProduct from '@/search/ResultsProduct.vue'
 
 import { ref } from 'vue';
 

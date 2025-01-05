@@ -85,8 +85,8 @@
 </template>
   
   <script setup>
-  import Input from '../components/Input'
-  import Button from '../components/Button'
+  import Input from '../core/Input'
+  import Button from '../core/Button'
   import router from '@/router';
   import { ref } from 'vue';
 

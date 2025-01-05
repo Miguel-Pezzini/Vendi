@@ -68,8 +68,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import Input from '../components/Input'
-import Button from '../components/Button'
+import Input from '../core/Input'
+import Button from '../core/Button'
 import router from '@/router';
 const user = ref("")
 const password = ref("")

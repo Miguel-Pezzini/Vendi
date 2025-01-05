@@ -91,11 +91,11 @@
   import card3 from '@/assets/card3.webp'
   import card4 from '@/assets/card4.webp'
 
-  import Header from '@/components/Header.vue';
-  import Slide from '@/components/Slide.vue';
-  import CardTransparent from '@/components/CardTransparent.vue';
-  import CardProducts from '@/components/CardProducts.vue';
-  import Footer from '@/components/Footer.vue';
+  import Header from '@/core/Header.vue';
+  import Slide from '@/core/Slide.vue';
+  import CardTransparent from '@/home/CardTransparent.vue';
+  import CardProducts from '@/home/CardProducts.vue';
+  import Footer from '@/core/Footer.vue';
 
   const images = [banner1, banner2, banner3]
   const cardOne = {image: card1, title: "DECORAÇÃO"}
