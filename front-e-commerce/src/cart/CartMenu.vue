@@ -10,15 +10,27 @@
       <template #title>
         <span style="font-size: 20px;">Seu carrinho tem <span style="font-weight: bold;">{{ quantity }} itens</span></span>
       </template>
+      <template #subtitle>
+        <RouterLink
+          style="text-decoration: none; color: blue;"
+          to="/cart"
+        >
+          Mais detalhes
+        </RouterLink>
+      </template>
     </v-list-item>
     <v-divider />
-    <ProductCartCard :product="prodCart" :loading="loading" />
+    <ProductCartCard
+      :product="prodCart"
+      :loading="loading"
+    />
   </v-navigation-drawer>
 </template>
         
 <script setup>
     import { ref } from 'vue';
     import ProductCartCard from './ProductCartCard.vue';
+import { RouterLink } from 'vue-router';
   
     defineProps({
         showCart: {

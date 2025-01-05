@@ -109,6 +109,7 @@
         <RouterLink>
           <v-icon
             size="x-large"
+            :color="cartActive ? '#DBB671' : null"
             icon="mdi-cart-outline"
             @click="showCart = !showCart"
           />
@@ -138,6 +139,10 @@ defineProps({
     default: false
   },
   shoppingActive: {
+    type: Boolean,
+    default: false
+  },
+  cartActive: {
     type: Boolean,
     default: false
   }

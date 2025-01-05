@@ -40,7 +40,7 @@
           style="margin-bottom: -6px;"
         >
           <v-col class="d-flex align-center justify-center">
-            <span class="subTitle">R$ {{ product.price }}</span>
+            <span class="subTitle">R$ {{ formatPrice(product.price) }}</span>
           </v-col>
           <v-col class="d-flex align-center justify-center">
             <v-row
@@ -85,6 +85,9 @@
   }
   function decrementQuantity() {
       //emit('deleteFromCart', props.id)
+  }
+  function formatPrice(price) {
+    return price.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
     
 </script>

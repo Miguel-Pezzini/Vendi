@@ -7,6 +7,8 @@
     :append-inner-icon="mostrarIcon()"
     :rules="rules"
     :hide-details="hideDetails"
+    :max-width="maxWidth"
+    :density="density"
     @click:append-inner="show = !show"
   />
 </template>
@@ -18,7 +20,7 @@ const show = ref(false)
 const props = defineProps({
         label: {
             type: String,
-            default: "Label"
+            default: null
         },
         type: {
             type: String,
@@ -43,10 +45,19 @@ const props = defineProps({
           hideDetails: {
             type: Boolean,
             default: false
+          },
+          maxWidth: {
+            type: Number,
+            default: null,
+          },
+          density: {
+            type: String,
+            default: "default"
           }
     })
 
 function mostrarSenha() {
+  if(props.type === "number") return "number"
   if(props.type === "email") return "email"
   if(props.type === "text") return "text"
   return show.value ? "text": "password"
