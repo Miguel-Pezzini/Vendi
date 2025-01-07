@@ -1,12 +1,13 @@
 <template>
   <div class="d-flex">
-    <p
+    <RouterLink
+      :to="`/${oldP}`"
       v-for="oldP in oldPaths"
       :key="oldP"
       style="opacity: 0.5;"
     >
 &nbsp;&nbsp;{{ oldP }}&nbsp;&nbsp; /
-    </p>
+    </RouterLink>
     <span>&nbsp;&nbsp; {{ activePath }}</span>
   </div>
 </template>
@@ -28,6 +29,10 @@
   body {
     font-family: "Poppins", serif;
     font-size: 14px;
+  }
+  a {
+    text-decoration: none;
+    color: #000;
   }
   </style>
       
