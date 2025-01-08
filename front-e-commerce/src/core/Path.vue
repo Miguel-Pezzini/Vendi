@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex">
     <RouterLink
-      :to="`/${oldP}`"
       v-for="oldP in oldPaths"
       :key="oldP"
+      :to="`/${oldP}`"
       style="opacity: 0.5;"
     >
 &nbsp;&nbsp;{{ oldP }}&nbsp;&nbsp; /

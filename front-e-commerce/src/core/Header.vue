@@ -36,7 +36,7 @@
       cols="1"
       class="d-flex justify-center"
     >
-      <RouterLink :to="{ path: '/products', query: { category: 'most-seller' } }">
+      <RouterLink :to="{ path: '/store', query: { category: 'most-seller' } }">
         Mais Vendidos
       </RouterLink>
     </v-col>
@@ -44,7 +44,7 @@
       cols="1"
       class="d-flex justify-center"
     >
-      <RouterLink :to="{ path: '/products', query: { category: 'eletronics' } }">
+      <RouterLink :to="{ path: '/store', query: { category: 'eletronics' } }">
         Eletrônicos
       </RouterLink>
     </v-col>
@@ -52,7 +52,7 @@
       cols="1"
       class="d-flex justify-center"
     >
-      <RouterLink :to="{ path: '/products', query: { category: 'household' } }">
+      <RouterLink :to="{ path: '/store', query: { category: 'household' } }">
         Domésticos
       </RouterLink>
     </v-col>
@@ -60,7 +60,7 @@
       cols="1"
       class="d-flex justify-center"
     >
-      <RouterLink :to="{ path: '/products', query: { category: 'books' } }">
+      <RouterLink :to="{ path: '/store', query: { category: 'books' } }">
         Livros
       </RouterLink>
     </v-col>
@@ -68,7 +68,7 @@
       cols="1"
       class=" mr-10"
     >
-      <RouterLink :to="{ path: '/products', query: { category: 'offers' } }">
+      <RouterLink :to="{ path: '/store', query: { category: 'offers' } }">
         Ofertas
       </RouterLink>
     </v-col>

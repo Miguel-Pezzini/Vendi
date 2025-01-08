@@ -4,6 +4,7 @@ import Login from '@/pages/Login.vue'
 import Home from '@/pages/Home.vue'
 import Profile from '@/pages/Profile.vue'
 import Products from '@/pages/Products.vue'
+import Product from '@/pages/Product.vue'
 import Cart from '@/pages/Cart.vue'
 
 const router = createRouter({
@@ -30,14 +31,19 @@ const router = createRouter({
       component: Profile
     },
     {
-      path: '/products',
-      name: 'Products',
+      path: '/store',
+      name: 'Store',
       component: Products
     },
     {
       path: '/cart',
       name: 'Cart',
       component: Cart
+    },
+    {
+      path: '/product',
+      name: 'Product',
+      component: Product
     }
   ]
 })

@@ -1,13 +1,14 @@
 <template>
   <div>
     <v-card
+      :hover="true"
       width="270"
-      height="300"
-      elevation="0"
+      height="294"
       color="#F5F5F5"
+      @click="verProduct()"
     >
       <div>
-        <v-row>
+        <v-row align="center">
           <v-col cols="auto  mt-3 ml-3">
             <span class="icon-discount"> -{{ product.discount }}% </span>
           </v-col>
@@ -64,7 +65,7 @@
       import Button from '../core/Button'
       import { defineEmits } from 'vue';
 
-      const emit = defineEmits(['toggleWishList', 'addToCart']);
+      const emit = defineEmits(['toggleWishList', 'addToCart', 'verProduct']);
 
       const props = defineProps({
         product: {
@@ -84,6 +85,10 @@
 
     function addToCart() {
       emit('addToCart', props.product)
+    }
+
+    function verProduct() {
+      emit('verProduct', props.product.name)
     }
 </script>
 

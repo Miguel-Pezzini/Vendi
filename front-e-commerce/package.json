@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "roboto-fontface": "*",
+    "test": "file:",
     "vue": "^3.4.31",
     "vuetify": "^3.6.14"
   },

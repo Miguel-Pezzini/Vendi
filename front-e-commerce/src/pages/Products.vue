@@ -105,6 +105,7 @@
               <ResultsProduct
                 :product="prod1"
                 class="pa-3"
+                @ver-product="verProduct"
                 @add-to-cart="addToCart"
                 @toggle-wish-list="toggleWishList"
               />
@@ -121,6 +122,7 @@
 import Header from '@/core/Header.vue';
 import Footer from '@/core/Footer.vue';
 import ResultsProduct from '@/search/ResultsProduct.vue'
+import router from '@/router';
 
 import { ref } from 'vue';
 
@@ -180,6 +182,10 @@ function searchByPrice() {
 }
 function getProductsByCategory(category) {
   console.log(category)
+}
+function verProduct(productName) {
+  router.push({ path: "/product", query: { product: productName, origin: ["Home","Store"]}})
+
 }
 
 
