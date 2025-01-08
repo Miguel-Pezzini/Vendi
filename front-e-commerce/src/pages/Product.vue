@@ -68,6 +68,17 @@
               </div>
               <h2>R$ {{ prod.price }}</h2>
             </div>
+            <div class="d-flex flex-column ga-6 mt-6">
+              <p>{{ prod.description }}</p>
+              <v-divider opacity="0.5"></v-divider>
+              <div class="d-flex align-center ga-6">
+                <h3>Cores: </h3>
+                <div class="d-flex align-center ga-2">
+                  <ColorButton color="red"/>
+                  <ColorButton color="blue"/>
+                </div>
+              </div>
+            </div>
           </div>
         </v-col>
       </v-row>
@@ -88,6 +99,7 @@
   import loadPastPaths from "../utils/loadPastPaths";
   import Header from '@/core/Header.vue';
   import Path from '@/core/Path.vue';
+  import ColorButton from '@/core/ColorButton.vue';
   import Footer from '@/core/Footer.vue';
   //import router from '@/router';
   const oldPaths = ref([])
@@ -107,6 +119,7 @@
   const prod = ref({
     discount: 35,
     name: "Laptop",
+    description: "PlayStation 5 Controller Skin High quality vinyl with air channel adhesive for easy bubble free install & mess free removal Pressure sensitive.",
     price: "960",
     fullPrice: "1160",
     isInWishList: true,
