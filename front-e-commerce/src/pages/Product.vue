@@ -47,9 +47,10 @@
               <div class="d-flex ga-4">
                 <div class="d-flex ga-2">
                   <v-rating
+                  half-increments
                     :size="24"
                     active-color="yellow"
-                    :model-value="prod.rating"
+                    v-model="prod.rating"
                     readonly
                   />
                   <p
@@ -78,6 +79,21 @@
                   <ColorButton color="blue"/>
                 </div>
               </div>
+              <div class="d-flex align-center ga-6">
+                <h3>Tamanho: </h3>
+                <div class="d-flex align-center ga-4">
+                  <SizeButton size="XS" :is-active="true"/>
+                  <SizeButton size="S"/>
+                  <SizeButton size="M"/>
+                  <SizeButton size="L"/>
+                  <SizeButton size="XL"/>
+                </div>
+              </div>
+              <div class="d-flex align-center ga-4">
+                  <v-number-input variant="solo"  hide-details="false" control-variant="split" :min="1" :model-value="prod.quantity"></v-number-input>
+                  <button class="button">Comprar Agora</button>
+                  <button class="button-icon" ><v-icon size="large">mdi-heart-outline</v-icon></button>
+              </div>
             </div>
           </div>
         </v-col>
@@ -100,6 +116,7 @@
   import Header from '@/core/Header.vue';
   import Path from '@/core/Path.vue';
   import ColorButton from '@/core/ColorButton.vue';
+  import SizeButton from '@/core/SizeButton.vue';
   import Footer from '@/core/Footer.vue';
   //import router from '@/router';
   const oldPaths = ref([])
@@ -123,7 +140,8 @@
     price: "960",
     fullPrice: "1160",
     isInWishList: true,
-    rating: 4,
+    rating: 4.5,
+    quantity: 1,
     reviews: 150,
     inStock: true,
   })
@@ -131,10 +149,6 @@
   </script>
   
   <style scoped>
-  /* Layout base */
-  body {
-    font-family: "Poppins", serif;
-  }
   .container {
     font-family: "Poppins", serif;
     margin-top: 80px;
@@ -145,6 +159,24 @@
   .product-container {
     max-height: 600px;
     max-width: 800px ;
+  }
+  .button {
+    box-sizing: border-box;
+    padding: 10px 40px 10px 40px;
+    background-color: #DBB671;
+    border: none;
+    border-radius: 4px;
+    color: #FFF;
+    font-size: 16px;
+    font-weight: 500;
+    height: 50px;
+  }
+  .button-icon {
+    padding: 4px;
+    border: 1px solid #AAA;
+    border-radius: 4px;
+    height: 50px;
+    width: 50px;
   }
   </style>
   
