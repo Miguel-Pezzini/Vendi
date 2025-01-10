@@ -57,6 +57,19 @@
           class="price"
         >R${{ product.fullPrice }}</span>
       </div>
+      <div class="d-flex align-center mt-2" v-if="!wishListProduct">
+        <v-rating
+          readonly="true"
+          half-increments
+          :size="24"
+          active-color="yellow"
+          color="rgba(0, 0, 0, 0.25)"
+          :model-value="3.5"
+        />
+        <p style="font-size: 14px; font-weight: 700; opacity: 0.5;">
+          (65)
+        </p>
+      </div>
     </div>
   </div>
 </template>
