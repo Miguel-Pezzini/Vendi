@@ -1,6 +1,6 @@
 <template>
-    <button  :style="{ backgroundColor: color }"/>
-  </template>
+  <button :style="{ backgroundColor: color }" />
+</template>
       
   <script setup>
       defineProps({

@@ -18,24 +18,29 @@
         <v-col>
           <div class="d-flex product-container ga-8">
             <div class="d-flex flex-column ga-4">
-              <v-img
-                v-for="i in 4"
-                :key="i"
-                aspect-ratio="16/9"
-                cover
-                :src="card1"
-                :height="calcularHeightImg(4)"
-                width="170"
-              />
+              <div
+                v-for="image in listImages"
+                :key="image.img"
+                class="d-flex align-center"
+                :style="{ border: image.active ? '2px solid #DBB671' : '1px solid #000' }"
+                style="width: 80px; height: 80px; border-radius: 4px; padding: 5px; cursor: pointer;"
+                @mouseover="setActiveImg(image.img)"
+              >
+                <v-img
+                  aspect-ratio="16/9"
+                
+                
+                  cover
+                  :src="image.img"
+                />
+              </div>
             </div>
             <div style="max-width: 600px;">
               <v-img
-                aspect-ratio="1/1"
-                cover
                 class="fill-height fill-width"
-                :src="card1"
-                :height="heightBigImg"
-                width="600"
+                :src="activeImage"
+                :height="600"
+                :width="600"
               />
             </div>
           </div>
@@ -47,10 +52,10 @@
               <div class="d-flex ga-4">
                 <div class="d-flex ga-2 align-center">
                   <v-rating
-                  half-increments
+                    v-model="prod.rating"
+                    half-increments
                     :size="24"
                     active-color="yellow"
-                    v-model="prod.rating"
                     readonly
                     color="#AAA"
                   />
@@ -64,56 +69,104 @@
                 <p style="opacity: 0.5;">
                   |
                 </p>
-                <span :style="{ color: prod.inStock ? '#00FF66' : '#FF0000' }" style="font-size: 14px;;">
+                <span
+                  :style="{ color: prod.inStock ? '#00FF66' : '#FF0000' }"
+                  style="font-size: 14px;;"
+                >
                   {{ prod.inStock ? 'Em Estoque' : 'Indisponível' }}
                 </span>
               </div>
               <h2>R$ {{ prod.price }}</h2>
             </div>
             <div class="d-flex flex-column ga-4 mt-6">
-              <p style="font-size: 14px;">{{ prod.description }}</p>
-              <v-divider opacity="0.5"></v-divider>
+              <p style="font-size: 14px;">
+                {{ prod.description }}
+              </p>
+              <v-divider opacity="0.5" />
               <div class="d-flex align-center ga-6">
                 <h3>Cores: </h3>
                 <div class="d-flex align-center ga-2">
-                  <ColorButton color="red"/>
-                  <ColorButton color="blue"/>
+                  <ColorButton color="red" />
+                  <ColorButton color="blue" />
                 </div>
               </div>
               <div class="d-flex align-center ga-6">
                 <h3>Tamanho: </h3>
                 <div class="d-flex align-center ga-4">
-                  <SizeButton size="XS" :is-active="true"/>
-                  <SizeButton size="S"/>
-                  <SizeButton size="M"/>
-                  <SizeButton size="L"/>
-                  <SizeButton size="XL"/>
+                  <SizeButton
+                    size="XS"
+                    :is-active="true"
+                  />
+                  <SizeButton
+                    value="S"
+                    size="S"
+                    @click="emitClick(value)"
+                  />
+                  <SizeButton
+                    value="M"
+                    size="M"
+                    @click="emitClick(value)"
+                  />
+                  <SizeButton
+                    value="L"
+                    size="L"
+                    @click="emitClick(value)"
+                  />
+                  <SizeButton
+                    value="XL"
+                    size="XL"
+                    @click="emitClick(value)"
+                  />
                 </div>
               </div>
               <div class="d-flex align-center">
-                <v-col cols="5" class="pl-0">
-                  <v-number-input density="comfortable" variant="solo"  hide-details="false" control-variant="split" :min="1" :model-value="prod.quantity"></v-number-input>
+                <v-col
+                  cols="5"
+                  class="pl-0"
+                >
+                  <v-number-input
+                    density="comfortable"
+                    variant="solo"
+                    hide-details="false"
+                    control-variant="split"
+                    :min="1"
+                    :model-value="prod.quantity"
+                  />
                 </v-col>
                 <v-col cols="5">
-                  <button class="button">Comprar</button>
+                  <button class="button">
+                    Comprar
+                  </button>
                 </v-col>
                 <v-col cols="2">
-                  <button class="button-icon" ><v-icon size="large">mdi-heart-outline</v-icon></button>
+                  <button class="button-icon">
+                    <v-icon size="large">
+                      mdi-heart-outline
+                    </v-icon>
+                  </button>
                 </v-col>
               </div>
               <div class="delivery d-flex flex-column">
                 <div class="delivery-container-one d-flex align-center ga-4">
-                  <v-icon size="x-large">mdi-truck-delivery-outline</v-icon>
+                  <v-icon size="x-large">
+                    mdi-truck-delivery-outline
+                  </v-icon>
                   <div class="d-flex flex-column ga-2">
                     <h4>Delivery</h4>
-                    <p style="font-size: 12px; font-weight: 500;">Insira seu CEP para verificar opções de entrega</p>
+                    <p style="font-size: 12px; font-weight: 500;">
+                      Insira seu CEP para verificar opções de entrega
+                    </p>
                   </div>
                 </div>
                 <div class="delivery-container-two d-flex align-center  ga-4">
-                  <v-icon size="x-large">mdi-cached</v-icon>
+                  <v-icon size="x-large">
+                    mdi-cached
+                  </v-icon>
                   <div class="d-flex flex-column ga-2">
                     <h4>Delivery</h4>
-                    <p style="font-size: 12px; font-weight: 500;">Devoluções de Entrega Grátis em 30 Dias. Detalhes</p>
+                    <p style="font-size: 12px; font-weight: 500;">
+                      Devoluções de Entrega Grátis em 30 Dias. Detalhes
+                    </p>
                   </div>
                 </div>
               </div>
@@ -129,9 +182,9 @@
   
   <script setup>
   import card1 from '@/assets/card1.webp'
-  // import card2 from '@/assets/card2.webp'
-  // import card3 from '@/assets/card3.webp'
-  //  import card4 from '@/assets/card4.webp'
+  import card2 from '@/assets/card2.webp'
+  import card3 from '@/assets/card3.webp'
+   import card4 from '@/assets/card4.webp'
 
   import { useRoute } from 'vue-router';
   import { ref, onMounted } from 'vue'
@@ -144,16 +197,20 @@
   //import router from '@/router';
   const oldPaths = ref([])
 
-  const heightBigImg = 600;
+  const listImages = [{img: card1, active: true}, {img: card2, active: false}, {img: card3, active: false}, {img: card4, active: false}]
+  const activeImage = ref(card1)
 
   const route = useRoute()
 
   onMounted(() => {
     oldPaths.value = loadPastPaths(route)
   })
-  
-  function calcularHeightImg(timeImages) {
-    return (heightBigImg / timeImages) - 64
+
+  function setActiveImg(image) {
+    listImages.forEach(img => {
+      img.img == image ? img.active = true : img.active = false
+    })
+    activeImage.value = image
   }
 
   const prod = ref({
@@ -168,6 +225,10 @@
     reviews: 150,
     inStock: true,
   })
+
+  function emitClick(value) {
+    console.log(value)
+  }
 
   </script>
   

@@ -1,8 +1,8 @@
 <template>
-    <button :style="{ backgroundColor: isActive ? '#DBB671' : '' }">
+  <button :style="{ backgroundColor: isActive ? '#DBB671' : '' }">
     {{ size }}
   </button>
-  </template>
+</template>
       
   <script setup>
       defineProps({
@@ -13,6 +13,10 @@
           isActive: {
             type: Boolean,
             default: false,
+          },
+          value: {
+            type: String,
+            default: null
           }
       })
   </script>
