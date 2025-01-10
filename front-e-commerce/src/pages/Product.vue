@@ -28,34 +28,35 @@
                 width="170"
               />
             </div>
-            <div style="max-width: 500px;">
+            <div style="max-width: 600px;">
               <v-img
                 aspect-ratio="1/1"
                 cover
                 class="fill-height fill-width"
                 :src="card1"
                 :height="heightBigImg"
-                width="500"
+                width="600"
               />
             </div>
           </div>
         </v-col>
         <v-col class="ml-16">
           <div class="d-flex flex-column">
-            <div class="d-flex flex-column ga-4">
+            <div class="d-flex flex-column ga-2">
               <h1>{{ prod.name }}</h1>
               <div class="d-flex ga-4">
-                <div class="d-flex ga-2">
+                <div class="d-flex ga-2 align-center">
                   <v-rating
                   half-increments
                     :size="24"
                     active-color="yellow"
                     v-model="prod.rating"
                     readonly
+                    color="#AAA"
                   />
                   <p
                     v-if="prod.reviews"
-                    style="opacity: 0.5;"
+                    style="opacity: 0.5; font-size: 14px;"
                   >
                     ({{ prod.reviews }} Avaliações)
                   </p>
@@ -63,14 +64,14 @@
                 <p style="opacity: 0.5;">
                   |
                 </p>
-                <span :style="{ color: prod.inStock ? '#00FF66' : '#FF0000' }">
+                <span :style="{ color: prod.inStock ? '#00FF66' : '#FF0000' }" style="font-size: 14px;;">
                   {{ prod.inStock ? 'Em Estoque' : 'Indisponível' }}
                 </span>
               </div>
               <h2>R$ {{ prod.price }}</h2>
             </div>
-            <div class="d-flex flex-column ga-6 mt-6">
-              <p>{{ prod.description }}</p>
+            <div class="d-flex flex-column ga-4 mt-6">
+              <p style="font-size: 14px;">{{ prod.description }}</p>
               <v-divider opacity="0.5"></v-divider>
               <div class="d-flex align-center ga-6">
                 <h3>Cores: </h3>
@@ -89,10 +90,32 @@
                   <SizeButton size="XL"/>
                 </div>
               </div>
-              <div class="d-flex align-center ga-4">
-                  <v-number-input variant="solo"  hide-details="false" control-variant="split" :min="1" :model-value="prod.quantity"></v-number-input>
-                  <button class="button">Comprar Agora</button>
+              <div class="d-flex align-center">
+                <v-col cols="5" class="pl-0">
+                  <v-number-input density="comfortable" variant="solo"  hide-details="false" control-variant="split" :min="1" :model-value="prod.quantity"></v-number-input>
+                </v-col>
+                <v-col cols="5">
+                  <button class="button">Comprar</button>
+                </v-col>
+                <v-col cols="2">
                   <button class="button-icon" ><v-icon size="large">mdi-heart-outline</v-icon></button>
+                </v-col>
+              </div>
+              <div class="delivery d-flex flex-column">
+                <div class="delivery-container-one d-flex align-center ga-4">
+                  <v-icon size="x-large">mdi-truck-delivery-outline</v-icon>
+                  <div class="d-flex flex-column ga-2">
+                    <h4>Delivery</h4>
+                    <p style="font-size: 12px; font-weight: 500;">Insira seu CEP para verificar opções de entrega</p>
+                  </div>
+                </div>
+                <div class="delivery-container-two d-flex align-center  ga-4">
+                  <v-icon size="x-large">mdi-cached</v-icon>
+                  <div class="d-flex flex-column ga-2">
+                    <h4>Delivery</h4>
+                    <p style="font-size: 12px; font-weight: 500;">Devoluções de Entrega Grátis em 30 Dias. Detalhes</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -156,12 +179,23 @@
     margin-right: 135px;
     margin-left: 135px;
   }
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+  }
+  h2 {
+    font-size: 24px;
+    font-weight: 400;
+  }
+  h3 {
+    font-size: 20px;
+    font-weight: 400;
+  }
   .product-container {
     max-height: 600px;
     max-width: 800px ;
   }
   .button {
-    box-sizing: border-box;
     padding: 10px 40px 10px 40px;
     background-color: #DBB671;
     border: none;
@@ -169,14 +203,31 @@
     color: #FFF;
     font-size: 16px;
     font-weight: 500;
-    height: 50px;
+    height: 48px;
+    width: 100%;
   }
   .button-icon {
     padding: 4px;
     border: 1px solid #AAA;
     border-radius: 4px;
-    height: 50px;
-    width: 50px;
+    height: 48px;
+    width: 56px;
+  }
+  .delivery {
+    border-radius: 4px;
+    border: 1px solid #aaa;
+
+  }
+  h4 {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .delivery-container-one {
+    padding: 20px 16px 16px 16px;
+    border-bottom: 1px solid #aaa;
+  }
+  .delivery-container-two {
+    padding: 16px 16px 20px 16px;
   }
   </style>
   
