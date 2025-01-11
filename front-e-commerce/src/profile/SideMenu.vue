@@ -22,7 +22,11 @@
       </div>
     </div>
         
-    <li><RouterLink><h1>Lista De Desejos</h1></RouterLink></li>
+    <li>
+      <RouterLink to="/wishlist">
+        <h1>Lista De Desejos</h1>
+      </RouterLink>
+    </li>
   </ul>
 </template>
     

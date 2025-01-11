@@ -131,7 +131,7 @@ const prod1 = ref({
   name: "Laptop",
   price: "960",
   fullPrice: "1160",
-  isInWishList: true,
+  isInWishList: false,
 })
 
 function toggleWishList(props) {

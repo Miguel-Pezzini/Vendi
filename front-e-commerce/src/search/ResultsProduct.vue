@@ -1,10 +1,9 @@
 <template>
   <div>
     <v-card
-      :hover="true"
+      :hover="false"
       width="270"
       height="294"
-      color="#F5F5F5"
       @click="verProduct()"
     >
       <div>
@@ -18,7 +17,7 @@
             class="icons-container mt-3 mr-3"
           >
             <Button
-              v-if="wishListProduct"
+              v-if="product.isInWishList"
               density="comfortable"
               :flat="true"
               icon="mdi-delete-outline"
@@ -36,7 +35,7 @@
           
           
         <div class="image-container">
-          <img src="../assets/card3.webp">
+          <img src="../assets/card1.webp">
         </div>
         <v-btn
           color="black"
@@ -57,7 +56,10 @@
           class="price"
         >R${{ product.fullPrice }}</span>
       </div>
-      <div class="d-flex align-center mt-2" v-if="!wishListProduct">
+      <div
+        v-if="!product.isInWishList"
+        class="d-flex align-center mt-2"
+      >
         <v-rating
           readonly="true"
           half-increments
@@ -84,10 +86,6 @@
         product: {
           type: Object,
           default: null
-        },
-        wishListProduct: {
-          type: Boolean,
-          default: false
         },
     })
 

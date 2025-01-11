@@ -6,6 +6,7 @@ import Profile from '@/pages/Profile.vue'
 import Products from '@/pages/Products.vue'
 import Product from '@/pages/Product.vue'
 import Cart from '@/pages/Cart.vue'
+import WishList from '@/pages/WishList.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,11 @@ const router = createRouter({
       path: '/product',
       name: 'Product',
       component: Product
+    },
+    {
+      path: '/wishlist',
+     name: 'Wishlist',
+      component: WishList
     }
   ]
 })
