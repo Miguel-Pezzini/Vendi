@@ -1,6 +1,7 @@
 <template>
   <div class="page-wrapper">
     <Header />
+    <v-divider></v-divider>
     <div class="d-flex container">
       <v-container>
         <v-row>
