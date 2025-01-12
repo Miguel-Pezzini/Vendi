@@ -101,7 +101,7 @@
             <h2>Total:</h2> <v-spacer /> R$ 1750
           </v-row>
           <v-row justify="center">
-            <button class="button golden">
+            <button @click="irCheckout" class="button golden">
               Avançar para o checkout
             </button>
           </v-row>
@@ -117,6 +117,7 @@
   import card2 from '@/assets/card2.webp'
 
     import { ref } from 'vue'
+    import router from '@/router';
     import Header from '@/core/Header.vue';
     import Path from '@/core/Path.vue';
     import Input from  '@/core/Input.vue';
@@ -136,6 +137,10 @@
       subtotal: 650,
       image: card2,
     }])
+
+    function irCheckout() {
+      router.push({ path: "/checkout", query: { origin: ["Home","Cart"]}})
+    }
 </script>
     
 <style scoped>

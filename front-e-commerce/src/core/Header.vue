@@ -21,7 +21,7 @@
     no-gutters
   >
     <v-col
-      cols="2"
+      cols="3"
       class="d-flex justify-center align-center"
     >
       <router-link to="/home">
@@ -65,16 +65,8 @@
       </RouterLink>
     </v-col>
     <v-col
-      cols="1"
-      class=" mr-10"
-    >
-      <RouterLink :to="{ path: '/store', query: { category: 'offers' } }">
-        Ofertas
-      </RouterLink>
-    </v-col>
-    <v-col
       cols="2"
-      class="d-flex justify-center align-center"
+      class="d-flex justify-center align-center ml-8"
     >
       <form
         style="width: 100%;"
@@ -90,13 +82,13 @@
         />
       </form>
     </v-col>
-    <v-col cols="2">
+    <v-col>
       <v-row class="d-flex justify-center ga-4">
-        <RouterLink to="/profile">
+        <RouterLink to="/wishlist">
           <v-icon
-            :color="accountActive ? '#DBB671' : 'black'"
             size="x-large"
-            :icon="accountActive ? 'mdi-account-circle-outline' : 'mdi-account-outline'"
+            :color="wishListActive ? '#DBB671' : null"
+            :icon="wishListActive ? 'mdi-heart' : 'mdi-heart-outline'"
           />
         </RouterLink>
         <RouterLink>
@@ -106,6 +98,7 @@
             icon="mdi-shopping-outline"
           />
         </RouterLink>
+
         <RouterLink>
           <v-icon
             size="x-large"
@@ -114,14 +107,22 @@
             @click="showCart = !showCart"
           />
         </RouterLink>
+
+          <RouterLink to="/profile">
+          <v-icon
+            :color="accountActive ? '#DBB671' : 'black'"
+            size="x-large"
+            :icon="accountActive ? 'mdi-account-circle-outline' : 'mdi-account-outline'"
+          />
+        </RouterLink>
+
+          <Button
+            class="ml-5"
+            title="SAIR"
+            color="error"
+            @click="router.push({name: 'Login'})"
+          />
       </v-row>
-    </v-col>
-    <v-col>
-      <Button
-        title="SAIR"
-        color="error"
-        @click="router.push({name: 'Login'})"
-      />
     </v-col>
   </v-row>
 </template>
@@ -145,6 +146,10 @@ defineProps({
   cartActive: {
     type: Boolean,
     default: false
+  },
+  wishListActive: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -162,6 +167,7 @@ const dadoPesquisa = ref(null)
 function pesquisar() {
   router.push({ path: "/products", query: { products: dadoPesquisa.value  }})
 }
+
 </script>
 
 <style scoped>

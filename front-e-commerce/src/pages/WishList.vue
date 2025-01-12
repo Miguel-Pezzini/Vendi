@@ -1,11 +1,11 @@
 <template>
   <div class="page-wrapper">
-    <Header />
+    <Header :wishListActive="true" />
     <v-divider></v-divider>
     <div class="d-flex container">
       <v-container>
         <v-row>
-          <h1 style="font-size: 20px; font-weight: 400;">WishList (4)</h1>
+          <h1 style="font-size: 20px; font-weight: 400;">Lista de Desejos (4)</h1>
           <v-spacer />
           <button class="button">
             Mover todos para o carrinho

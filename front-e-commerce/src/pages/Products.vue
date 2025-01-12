@@ -94,13 +94,13 @@
             Resultados
           </h2>
           <v-row
-            justify="center"
             no-gutters
-            class="ml-6"
+            class="ml-6 mb-16"
           >
             <v-col
-              v-for="n in 6"
+              v-for="n in 8"
               :key="n"
+              cols="3"
             >
               <ResultsProduct
                 :product="prod1"
