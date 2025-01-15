@@ -1,7 +1,7 @@
 <template>
   <v-text-field
     :type="mostrarSenha()"
-    :label="label"
+    :label="localLabel"
     :variant="variant"
     :prepend-inner-icon="prependIcon"
     :append-inner-icon="mostrarIcon()"
@@ -10,12 +10,17 @@
     :max-width="maxWidth"
     :density="density"
     @click:append-inner="show = !show"
+    :required="required"
   />
 </template>
   
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 const show = ref(false)
+
+const localLabel = computed(() => {
+  return props.required ? `${props.label}*` : props.label;
+});
 
 const props = defineProps({
         label: {
@@ -53,6 +58,10 @@ const props = defineProps({
           density: {
             type: String,
             default: "default"
+          },
+          required: {
+            type: Boolean,
+            default: false
           }
     })
 
