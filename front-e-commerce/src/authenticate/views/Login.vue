@@ -68,9 +68,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import Input from '../core/Input'
-import Button from '../core/Button'
-import router from '@/router';
+import Input from '@/core/components/Input'
+import Button from '@/core/components/Button'
+import router from '@/core/router';
 const user = ref("")
 const password = ref("")
 const loading = ref(false)

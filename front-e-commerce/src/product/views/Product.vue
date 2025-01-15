@@ -188,12 +188,12 @@
 
   import { useRoute } from 'vue-router';
   import { ref, onMounted } from 'vue'
-  import loadPastPaths from "../utils/loadPastPaths";
-  import Header from '@/core/Header.vue';
-  import Path from '@/core/Path.vue';
-  import ColorButton from '@/core/ColorButton.vue';
-  import SizeButton from '@/core/SizeButton.vue';
-  import Footer from '@/core/Footer.vue';
+  import loadPastPaths from "@/core/utils/loadPastPaths";
+  import Header from '@/core/components//Header.vue';
+  import Path from '@/core/components/Path.vue';
+  import ColorButton from '@/core/components/ColorButton.vue';
+  import SizeButton from '@/core/components/SizeButton.vue';
+  import Footer from '@/core/components/Footer.vue';
   //import router from '@/router';
   const oldPaths = ref([])
 

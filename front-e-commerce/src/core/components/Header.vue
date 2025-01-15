@@ -27,7 +27,7 @@
       <router-link to="/home">
         <img
           class="img"
-          src="../assets/logo.png"
+          src="@/assets/logo.png"
           alt="Logo"
         >
       </router-link>
@@ -129,10 +129,10 @@
       
 <script setup>
     import { ref } from 'vue';
-    import router from '@/router';
-    import Input from '../core/Input.vue';
-    import Button from '../core/Button.vue';
-    import CardMenu from '../cart/CartMenu.vue';
+    import router from '@/core/router';
+    import Input from '@/core/components/Input.vue';
+    import Button from '@/core/components/Button.vue';
+    import CardMenu from '@/cart/components/CartMenu.vue';
 
 defineProps({
   accountActive: {

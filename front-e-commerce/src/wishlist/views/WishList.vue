@@ -52,9 +52,9 @@
 </template>
   
   <script setup>
-  import Header from '@/core/Header.vue';
-  import Footer from '@/core/Footer.vue';
- import ResultsProduct from '@/search/ResultsProduct.vue'
+  import Header from '@/core/components/Header.vue';
+  import Footer from '@/core/components/Footer.vue';
+ import ResultsProduct from '@/core/components/ResultsProduct.vue'
 //   import router from '@/router';
   
    import { ref } from 'vue';

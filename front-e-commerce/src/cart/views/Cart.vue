@@ -120,11 +120,11 @@
   import card2 from '@/assets/card2.webp'
 
     import { ref } from 'vue'
-    import router from '@/router';
-    import Header from '@/core/Header.vue';
-    import Path from '@/core/Path.vue';
-    import Input from  '@/core/Input.vue';
-    import Footer from '@/core/Footer.vue';
+    import router from '@/core/router';
+    import Header from '@/core/components/Header.vue';
+    import Path from '@/core/components/Path.vue';
+    import Input from  '@/core/components/Input.vue';
+    import Footer from '@/core/components/Footer.vue';
 
     const cartProducts = ref([{
       name: 'LCD Monitor',

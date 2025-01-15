@@ -35,7 +35,7 @@
           
           
         <div class="image-container">
-          <img src="../assets/card1.webp">
+          <img :src="product.image">
         </div>
         <v-btn
           color="black"
@@ -77,7 +77,7 @@
 </template>
         
 <script setup>
-      import Button from '../core/Button'
+      import Button from '@/core/components/Button'
       import { defineEmits } from 'vue';
 
       const emit = defineEmits(['toggleWishList', 'addToCart', 'verProduct']);

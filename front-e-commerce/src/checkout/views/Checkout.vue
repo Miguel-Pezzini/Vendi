@@ -89,7 +89,22 @@
               <p>R$ 500</p>
             </v-row>
           </div>
-          <v-row align="center"><v-checkbox label="Banco" /><v-spacer /><v-icon>mdi-account</v-icon></v-row>
+          <v-row class="mt-8">
+            <v-radio-group>
+              <div class="d-flex align-center">
+                <v-radio
+                label="Banco"
+                value="BANCO"
+              />
+              <v-spacer /><v-icon>mdi-account</v-icon>
+              </div>
+              
+              <v-radio
+                label="Dinheiro na entrega"
+                value="DINHEIRO"
+              />
+            </v-radio-group>
+          </v-row>
         </v-col>
       </v-row>
     </v-container>
@@ -101,13 +116,13 @@
 <script setup>
     import { ref, onMounted } from 'vue';
     import { useRoute } from 'vue-router';
-  import Header from '@/core/Header.vue';
-  import Path from '@/core/Path.vue';
-  import Input from '@/core/Input.vue';
-  import Footer from '@/core/Footer.vue';
+  import Header from '@/core/components/Header.vue';
+  import Path from '@/core/components/Path.vue';
+  import Input from '@/core/components/Input.vue';
+  import Footer from '@/core/components/Footer.vue';
   import card1 from '@/assets/card1.webp'
 
-  import loadPastPaths from '@/utils/loadPastPaths';
+  import loadPastPaths from '@/core/utils/loadPastPaths';
 
   const route = useRoute()
 
