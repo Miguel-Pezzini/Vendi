@@ -96,7 +96,14 @@
                 label="Banco"
                 value="BANCO"
               />
-              <v-spacer /><v-icon>mdi-account</v-icon>
+              <v-spacer />
+              <div class="d-flex ga-2">
+                <v-img width="42" height="28" :src="logoBradesco"></v-img>
+                <v-img width="42" height="28" :src="logoItau"></v-img>
+                <v-img width="42" height="28" :src="logoSantander"></v-img>
+                <v-img width="42" height="28" :src="logoNubank"></v-img>
+                <v-img width="42" height="28" :src="logoPIX"></v-img>
+              </div>
               </div>
               
               <v-radio
@@ -116,11 +123,17 @@
 <script setup>
     import { ref, onMounted } from 'vue';
     import { useRoute } from 'vue-router';
-  import Header from '@/core/components/Header.vue';
-  import Path from '@/core/components/Path.vue';
-  import Input from '@/core/components/Input.vue';
-  import Footer from '@/core/components/Footer.vue';
-  import card1 from '@/assets/card1.webp'
+    import Header from '@/core/components/Header.vue';
+    import Path from '@/core/components/Path.vue';
+    import Input from '@/core/components/Input.vue';
+    import Footer from '@/core/components/Footer.vue';
+
+    import card1 from '@/assets/card1.webp'
+    import logoBradesco from '@/assets/logo-bancos/logo-bradesco.svg'
+    import logoPIX from '@/assets/logo-bancos/logo-pix.png'
+    import logoItau from '@/assets/logo-bancos/logo-itau.svg'
+    import logoNubank from '@/assets/logo-bancos/logo-nubank.png'
+    import logoSantander from '@/assets/logo-bancos/logo-santander.svg'
 
   import loadPastPaths from '@/core/utils/loadPastPaths';
 
