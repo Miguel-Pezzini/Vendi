@@ -79,8 +79,13 @@
 <script setup>
       import Button from '@/core/components/Button'
       import { defineEmits } from 'vue';
+      import router from '../router';
+      import { useRoute } from 'vue-router';
+      import loadPastPaths from '../utils/loadPastPaths';
 
-      const emit = defineEmits(['toggleWishList', 'addToCart', 'verProduct']);
+      const route = useRoute();
+
+      const emit = defineEmits(['toggleWishList', 'addToCart']);
 
       const props = defineProps({
         product: {
@@ -99,7 +104,7 @@
     }
 
     function verProduct() {
-      emit('verProduct', props.product.name)
+      router.push({ path: "/product", query: { product: props.product.name, origin: loadPastPaths(route)}})
     }
 </script>
 

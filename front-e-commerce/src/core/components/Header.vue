@@ -1,5 +1,5 @@
 <template>
-  <CardMenu v-model:show-cart="showCart" />
+  <CartMenu v-model:show-cart="showCart" />
 
   <v-row
     class="header"
@@ -36,7 +36,7 @@
       cols="1"
       class="d-flex justify-center"
     >
-      <RouterLink :to="{ path: '/store', query: { category: 'most-seller' } }">
+      <RouterLink :to="{ path: '/store', query: { category: 'most-seller', origin: ['Home'] } }">
         Mais Vendidos
       </RouterLink>
     </v-col>
@@ -44,7 +44,7 @@
       cols="1"
       class="d-flex justify-center"
     >
-      <RouterLink :to="{ path: '/store', query: { category: 'eletronics' } }">
+      <RouterLink :to="{ path: '/store', query: { category: 'eletronics', origin: ['Home'] }}">
         Eletrônicos
       </RouterLink>
     </v-col>
@@ -52,7 +52,7 @@
       cols="1"
       class="d-flex justify-center"
     >
-      <RouterLink :to="{ path: '/store', query: { category: 'household' } }">
+      <RouterLink :to="{ path: '/store', query: { category: 'household', origin: ['Home'] }, }">
         Domésticos
       </RouterLink>
     </v-col>
@@ -60,7 +60,7 @@
       cols="1"
       class="d-flex justify-center"
     >
-      <RouterLink :to="{ path: '/store', query: { category: 'books' } }">
+      <RouterLink :to="{ path: '/store', query: { category: 'books', origin: ['Home'] }}">
         Livros
       </RouterLink>
     </v-col>
@@ -84,7 +84,7 @@
     </v-col>
     <v-col>
       <v-row class="d-flex justify-center ga-4">
-        <RouterLink to="/wishlist">
+        <RouterLink :to="{ path: '/wishlist', query: { origin: ['Home', 'Wishlist'] } }">
           <v-icon
             size="x-large"
             :color="wishListActive ? '#DBB671' : null"
@@ -108,7 +108,7 @@
           />
         </RouterLink>
 
-        <RouterLink to="/profile">
+        <RouterLink :to="{ path: '/profile', query: { origin: ['Home', 'Profile'] } }">
           <v-icon
             :color="accountActive ? '#DBB671' : 'black'"
             size="x-large"
@@ -132,7 +132,7 @@
     import router from '@/core/router';
     import Input from '@/core/components/Input.vue';
     import Button from '@/core/components/Button.vue';
-    import CardMenu from '@/cart/components/CartMenu.vue';
+    import CartMenu from '@/cart/components/CartMenu.vue';
 
 defineProps({
   accountActive: {

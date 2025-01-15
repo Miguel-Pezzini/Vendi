@@ -32,18 +32,13 @@
     
     <script setup>
     import Button from '@/core/components/Button.vue';
+    import mostrarPrice from '@/core/utils/mostrarPrice';
     defineProps({
     prop: {
       type: Object,
       default: null
     }
     })
-
-  function mostrarPrice(price) {
-    let priceFormatado = price.toFixed(2)
-
-    return priceFormatado.replace('.', ',');
-  }
 
   function mostrarPriceDescontado(price, subdivision) {
     let priceDescontado = price / subdivision;

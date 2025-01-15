@@ -8,18 +8,22 @@
     <CardTransparent
       :image="cardOne.image"
       :title="cardOne.title"
+      @click="router.push({ path: '/store', query: { category: 'decoration', origin: ['Home'] }, })"
     />
     <CardTransparent
       :image="cardTwo.image"
       :title="cardTwo.title"
+      @click="router.push({ path: '/store', query: { category: 'computers', origin: ['Home'] }, })"
     />
     <CardTransparent
       :image="cardThree.image"
       :title="cardThree.title"
+      @click="router.push({ path: '/store', query: { category: 'kitchen', origin: ['Home'] }, })"
     />
     <CardTransparent
       :image="cardFour.image"
       :title="cardFour.title"
+      @click="router.push({ path: '/store', query: { category: 'bathroom', origin: ['Home'] },})"
     />
   </v-row>
 
@@ -82,9 +86,10 @@
 </template>
   
 <script setup>
-  import banner1 from '@/assets/banner1.jpg';
-  import banner2 from '@/assets/banner2.jpg';
-  import banner3 from '@/assets/banner3.jpg';
+  import router from '@/core/router';
+  import banner1 from '@/assets/banners/banner1.jpg';
+  import banner2 from '@/assets/banners/banner2.jpg';
+  import banner3 from '@/assets/banners/banner3.jpg';
 
   import card1 from '@/assets/card1.webp'
   import card2 from '@/assets/card2.webp'

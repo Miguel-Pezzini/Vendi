@@ -50,18 +50,21 @@
                 required
               />
               <Input
-                type="email"
                 v-model="dadosForm.email"
+                type="email"
                 variant="outlined"
                 label="E-mail"
                 required
               />
-              <v-checkbox label="Salvar esses dados para Transações futuras" />
+              <v-checkbox
+                v-model="salvarForm"
+                label="Salvar esses dados para Transações futuras"
+              />
             </v-form>
           </div>
         </v-col>
         <v-col class="billing-container">
-          <BillingContainer @fazerPedido="onFazerPedido" />
+          <BillingContainer @fazer-pedido="onFazerPedido" />
         </v-col>
       </v-row>
     </v-container>
@@ -96,6 +99,7 @@
     email: '',
   })
   const paymentMethod = ref(null)
+  const salvarForm = ref(false)
 
 
   async function onFazerPedido(data) {
