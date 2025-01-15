@@ -5,11 +5,11 @@
     :variant="variant"
     :prepend-inner-icon="prependIcon"
     :append-inner-icon="mostrarIcon()"
-    :rules="rules"
+    :rules="computedRules"
     :hide-details="hideDetails"
     :max-width="maxWidth"
     :density="density"
-    :required="required"
+    :required=" required"
     @click:append-inner="show = !show"
   />
 </template>
@@ -18,8 +18,27 @@
 import { ref, computed } from 'vue';
 const show = ref(false)
 
+
 const localLabel = computed(() => {
   return props.required ? `${props.label}*` : props.label;
+});
+
+const computedRules = computed(() => {
+  const autoRules = [];
+
+  if (props.required) {
+    autoRules.push((value) => !!value || "Este campo é obrigatório.");
+  }
+
+  if (props.type === "email") {
+    autoRules.push(
+      (value) =>
+        /.+@.+\..+/.test(value) || "Por favor, insira um e-mail válido."
+    );
+  }
+
+  // Combina regras automáticas com as fornecidas manualmente
+  return [...autoRules, ...props.rules];
 });
 
 const props = defineProps({
@@ -66,9 +85,7 @@ const props = defineProps({
     })
 
 function mostrarSenha() {
-  if(props.type === "number") return "number"
-  if(props.type === "email") return "email"
-  if(props.type === "text") return "text"
+  if(props.type !== "password") return props.type
   return show.value ? "text": "password"
 }
 function mostrarIcon() {

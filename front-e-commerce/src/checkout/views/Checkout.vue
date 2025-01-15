@@ -14,36 +14,44 @@
             Detalhes da Compra
           </h1>
           <div style="max-width: 470px;">
-            <v-form>
+            <v-form ref="form">
               <Input
+                v-model="dadosForm.firstName"
                 variant="outlined"
                 label="Primeiro Nome"
                 required
               />
               <Input
+                v-model="dadosForm.companyName"
                 variant="outlined"
                 label="Nome da Empresa"
               />
               <Input
+                v-model="dadosForm.address"
                 variant="outlined"
                 label="Endereço"
                 required
               />
               <Input
+                v-model="dadosForm.additionalAddress"
                 variant="outlined"
                 label="Apartamento, casa, etc. (Opcional)"
               />
               <Input
+                v-model="dadosForm.city"
                 variant="outlined"
                 label="Cidade"
                 required
               />
               <Input
+                v-model="dadosForm.phone"
                 variant="outlined"
                 label="Telefone"
                 required
               />
               <Input
+                type="email"
+                v-model="dadosForm.email"
                 variant="outlined"
                 label="E-mail"
                 required
@@ -52,7 +60,9 @@
             </v-form>
           </div>
         </v-col>
-        <BillingContainer />
+        <v-col class="billing-container">
+          <BillingContainer @fazerPedido="onFazerPedido" />
+        </v-col>
       </v-row>
     </v-container>
   </div>
@@ -62,7 +72,6 @@
   
 <script setup>
     import { ref, onMounted } from 'vue';
-    import { useRoute } from 'vue-router';
     import Header from '@/core/components/Header.vue';
     import Path from '@/core/components/Path.vue';
     import Input from '@/core/components/Input.vue';
@@ -70,13 +79,30 @@
     import Footer from '@/core/components/Footer.vue';
     import loadPastPaths from '@/core/utils/loadPastPaths';
 
-  const route = useRoute()
-
   const oldPaths = ref([])
+  const form = ref(null)
 
   onMounted(() => {
-    oldPaths.value = loadPastPaths(route)
+    oldPaths.value = loadPastPaths()
   })
+
+  const dadosForm = ref({
+    firstName: '',
+    companyName: '',
+    address: '',
+    additionalAddress: '',
+    city: '',
+    phone: '',
+    email: '',
+  })
+  const paymentMethod = ref(null)
+
+
+  async function onFazerPedido(data) {
+    const isValid = await form.value.validate()
+    if(!isValid) return
+    paymentMethod.value = data;
+  }
 </script>
   
 <style scoped>
@@ -89,15 +115,6 @@
   }
   .billing-container {
     margin-top: 160px;
-  }
-  .prices-container {
-    max-width: 425px;
-  }
-  .button-cupom {
-    background-color: #DBB671;
-    color: #FFF;
-    padding: 16px 48px;
-    border-radius: 4px;
   }
 </style>
   
