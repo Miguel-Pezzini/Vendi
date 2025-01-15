@@ -107,6 +107,7 @@
                 class="pa-3"
                 @add-to-cart="addToCart"
                 @toggle-wish-list="toggleWishList"
+                activePage="Store"
               />
             </v-col>
           </v-row>

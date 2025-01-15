@@ -92,6 +92,10 @@
           type: Object,
           default: null
         },
+        activePage: {
+          type: String,
+          default: null
+        }
     })
 
     function toggleWishList() {
@@ -104,7 +108,7 @@
     }
 
     function verProduct() {
-      router.push({ path: "/product", query: { product: props.product.name, origin: loadPastPaths(route)}})
+      router.push({ path: "/product", query: { product: props.product.name, origin: loadPastPaths(route, props.activePage)}})
     }
 </script>
 

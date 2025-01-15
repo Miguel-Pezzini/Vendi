@@ -19,7 +19,7 @@
             :key="n"
             cols="3"
           >
-            <ResultsProduct :product="prod1" />
+            <ResultsProduct  activePage="Wishlist" :product="prod1" />
           </v-col>
         </v-row>
 
@@ -42,7 +42,7 @@
             :key="n"
             cols="3"
           >
-            <ResultsProduct :product="prod2" />
+            <ResultsProduct activePage="Wishlist" :product="prod2" />
           </v-col>
         </v-row>
       </v-container>
@@ -55,7 +55,7 @@
   import Header from '@/core/components/Header.vue';
   import Footer from '@/core/components/Footer.vue';
  import ResultsProduct from '@/core/components/ResultsProduct.vue'
-//   import router from '@/router';
+import card1 from '@/assets/card1.webp'
   
    import { ref } from 'vue';
   
@@ -65,6 +65,7 @@
     price: "960",
     fullPrice: "1160",
     isInWishList: true,
+    image: card1
   })
 
   const prod2 = ref({
@@ -73,6 +74,7 @@
     price: "960",
     fullPrice: "1160",
     isInWishList: false,
+    image: card1
   })
   
   // const filters = [

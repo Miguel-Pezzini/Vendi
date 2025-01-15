@@ -4,7 +4,7 @@
   <v-container class="container">
     <v-row>
       <Path
-        :old-paths="['Home']"
+        :old-paths="loadPastPaths(route)"
         active-path="Minha Conta"
       />
       <v-spacer />
@@ -92,6 +92,12 @@
     import Input from '@/core/components/Input.vue';
     import Button from '@/core/components/Button.vue';
     import Footer from '@/core/components/Footer.vue';
+    import { useRoute } from 'vue-router';
+    import loadPastPaths from '@/core/utils/loadPastPaths';
+
+    const route = useRoute();
+
+   
 </script>
   
   <style scoped>

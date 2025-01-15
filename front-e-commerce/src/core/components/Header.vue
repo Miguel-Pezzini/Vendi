@@ -84,7 +84,7 @@
     </v-col>
     <v-col>
       <v-row class="d-flex justify-center ga-4">
-        <RouterLink :to="{ path: '/wishlist', query: { origin: ['Home', 'Wishlist'] } }">
+        <RouterLink :to="{ path: '/wishlist', query: { origin: ['Home'] } }">
           <v-icon
             size="x-large"
             :color="wishListActive ? '#DBB671' : null"
@@ -108,7 +108,7 @@
           />
         </RouterLink>
 
-        <RouterLink :to="{ path: '/profile', query: { origin: ['Home', 'Profile'] } }">
+        <RouterLink :to="{ path: '/profile', query: { origin: ['Home'] } }">
           <v-icon
             :color="accountActive ? '#DBB671' : 'black'"
             size="x-large"
