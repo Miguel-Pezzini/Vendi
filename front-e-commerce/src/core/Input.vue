@@ -9,8 +9,8 @@
     :hide-details="hideDetails"
     :max-width="maxWidth"
     :density="density"
-    @click:append-inner="show = !show"
     :required="required"
+    @click:append-inner="show = !show"
   />
 </template>
   

@@ -1,34 +1,49 @@
 <template>
   <div class="page-wrapper">
-    <Header :wishListActive="true" />
-    <v-divider></v-divider>
+    <Header :wish-list-active="true" />
+    <v-divider />
     <div class="d-flex container">
       <v-container>
         <v-row>
-          <h1 style="font-size: 20px; font-weight: 400;">Lista de Desejos (4)</h1>
+          <h1 style="font-size: 20px; font-weight: 400;">
+            Lista de Desejos (4)
+          </h1>
           <v-spacer />
           <button class="button">
             Mover todos para o carrinho
           </button>
         </v-row>
         <v-row class="mt-15">
-            <v-col cols="3" v-for="n in 4" :key="n">
-                <ResultsProduct :product="prod1" />
-            </v-col>
+          <v-col
+            v-for="n in 4"
+            :key="n"
+            cols="3"
+          >
+            <ResultsProduct :product="prod1" />
+          </v-col>
         </v-row>
 
-        <v-row class="mt-16 pt-4" align="center">
-            <div class="decoration mr-4"></div>
-            <h1 style="font-size: 20px; font-weight: 400;">Só Para Você</h1>
-            <v-spacer />
-            <button class="button">
+        <v-row
+          class="mt-16 pt-4"
+          align="center"
+        >
+          <div class="decoration mr-4" />
+          <h1 style="font-size: 20px; font-weight: 400;">
+            Só Para Você
+          </h1>
+          <v-spacer />
+          <button class="button">
             Ver Todos
           </button>
         </v-row>
         <v-row class="mt-15">
-            <v-col cols="3" v-for="n in 4" :key="n">
-                <ResultsProduct :product="prod2" />
-            </v-col>
+          <v-col
+            v-for="n in 4"
+            :key="n"
+            cols="3"
+          >
+            <ResultsProduct :product="prod2" />
+          </v-col>
         </v-row>
       </v-container>
     </div>

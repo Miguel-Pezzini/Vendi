@@ -108,7 +108,7 @@
           />
         </RouterLink>
 
-          <RouterLink to="/profile">
+        <RouterLink to="/profile">
           <v-icon
             :color="accountActive ? '#DBB671' : 'black'"
             size="x-large"
@@ -116,12 +116,12 @@
           />
         </RouterLink>
 
-          <Button
-            class="ml-5"
-            title="SAIR"
-            color="error"
-            @click="router.push({name: 'Login'})"
-          />
+        <Button
+          class="ml-5"
+          title="SAIR"
+          color="error"
+          @click="router.push({name: 'Login'})"
+        />
       </v-row>
     </v-col>
   </v-row>

@@ -101,7 +101,10 @@
             <h2>Total:</h2> <v-spacer /> R$ 1750
           </v-row>
           <v-row justify="center">
-            <button @click="irCheckout" class="button golden">
+            <button
+              class="button golden"
+              @click="irCheckout"
+            >
               Avançar para o checkout
             </button>
           </v-row>
