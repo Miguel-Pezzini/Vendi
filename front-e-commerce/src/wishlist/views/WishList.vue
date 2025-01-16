@@ -19,7 +19,10 @@
             :key="n"
             cols="3"
           >
-            <ResultsProduct  activePage="Wishlist" :product="prod1" />
+            <ResultsProduct
+              active-page="Wishlist"
+              :product="prod1"
+            />
           </v-col>
         </v-row>
 
@@ -42,7 +45,10 @@
             :key="n"
             cols="3"
           >
-            <ResultsProduct activePage="Wishlist" :product="prod2" />
+            <ResultsProduct
+              active-page="Wishlist"
+              :product="prod2"
+            />
           </v-col>
         </v-row>
       </v-container>

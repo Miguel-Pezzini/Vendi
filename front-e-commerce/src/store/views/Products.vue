@@ -105,9 +105,9 @@
               <ResultsProduct
                 :product="prod1"
                 class="pa-3"
+                active-page="Store"
                 @add-to-cart="addToCart"
                 @toggle-wish-list="toggleWishList"
-                activePage="Store"
               />
             </v-col>
           </v-row>
