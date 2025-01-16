@@ -1,146 +1,120 @@
 <template>
-  <v-form @submit.prevent="registrou">
-    <v-container
-      width="450"
-      fill-height
-      class="d-flex justify-center align-center"
-    >
-      <v-row class="style-vrow">
-        <v-col>
-          <h1 class="text-center">
-            Crie sua conta
-          </h1>
-        </v-col>
-        <v-col
-          cols="12"
-          class="pa-1"
-        >
-          <Input
-            v-model="name"
-            label="Nome"
-            prepend-icon="mdi-account"
-            :rules="userRules"
-          />
-        </v-col>
-        <v-col
-          cols="12"
-          class="pa-1"
-        >
-          <Input
-            v-model="email"
-            type="email"
-            label="E-mail"
-            prepend-icon="mdi-email"
-            :rules="userRules"
-          />
-        </v-col>
-        <v-col
-          cols="12"
-          class="pa-1"
-        >
-          <Input
-            v-model="password"
-            type="password"
-            label="Senha"
-            prepend-icon="mdi-lock"
-            :rules="passwordRules"
-            append-icon="mdi-eye"
-          />
-        </v-col>
-        <v-col
-          cols="12"
-          class="pa-1"
-        >
-          <Input
-            v-model="passwordRepeat"
-            type="password"
-            label="Senha novamente"
-            prepend-icon="mdi-lock"
-            :rules="confirmPasswordRules"
-            append-icon="mdi-eye"
-          />
-        </v-col>
-        <v-col
-          cols="12"
-          class="d-flex justify-end align-center"
-        >
-          <Button
-            bg-color="black"
-            title="Criar Conta"
-            block
-            color="white"
-          />
-        </v-col>
-        <v-col
-          cols="12"
-          class="d-flex justify-center align-center"
-        >
-          <RouterLink to="/login">
-            Clique aqui caso você já tenha uma conta!
-          </RouterLink>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-form>
+  <div class="page">
+    <div class="container">
+      <img src="../../assets/side-image-login.png">
+      <v-form class="form" ref="form" @submit.prevent="logar()">
+        <div class="form-container">
+          <div class="d-flex flex-column ga-6">
+            <h1>Crie sua Conta</h1>
+            <p>Insira seus dados abaixo</p>
+          </div>
+          <div class="d-flex flex-column mt-6 w-100">
+            <Input
+              v-model="user"
+              label="Nome de usuário"
+              required
+            />
+            <Input
+              v-model="email"
+              label="E-mail"
+              required
+            />
+            <Input
+              appendIcon="mdi-eye"
+              v-model="password"
+              label="Senha"
+              required
+              type="password"
+            />
+            <Input
+              appendIcon="mdi-eye"
+              v-model="password"
+              label="Repita sua Senha"
+              required
+              type="password"
+            />
+          </div>
+          <div class="mt-6 d-flex justify-space-between align-center">
+            <v-btn
+              height="52"
+              size="large"
+              class="button-padding w-100"
+              color="#DBB671"
+              :loading="loading"
+              @click="logar()"
+            >
+              Criar Conta
+            </v-btn>
+          </div>
+          <div class="d-flex justify-center align-center mt-4">
+            <RouterLink
+              to="/"
+            >Ja possui conta? <span style="color: #DBB671">Logar!</span></RouterLink>
+          </div>
+          
+
+        </div>
+      </v-form>
+    </div>
+    <Footer />
+  </div>
 </template>
-  
-  <script setup>
-  import Input from '@/core/components/Input'
-  import Button from '@/core/components/Button'
-  import router from '@/core/router';
-  import { ref } from 'vue';
 
-  const name = ref("")
-  const email = ref("")
-  const password = ref("")
-  const passwordRepeat = ref("")
+<script setup>
+import { ref } from 'vue';
+import router from '@/core/router';
+import Input from '@/core/components/Input'
+import Footer from '@/core/components/Footer.vue';
 
-  const userRules = [
-    v => !!v || 'Esse campo é obrigatório',
-  ]
+const user = ref("")
+const password = ref("")
+const loading = ref(false)
+const form = ref(null)
 
-  const passwordRules = [
-    v => !!v || 'Esse campo é obrigatório',
-    v => v.length >= 6 || 'A senha deve ter pelo menos 6 caracteres',
-  ]
 
-  const confirmPasswordRules =  [
-    v => !!v || 'Esse campo é obrigatório',
-    v => v === password.value || 'As senhas não coincidem',
-  ];
-  function validarInputs() {
-    if(!name.value || !email.value || !password.value || !passwordRepeat.value) return false
-    if(password.value !== passwordRepeat.value) return false
-    if(password.value.length < 6) return false
+async function logar() {
+  const isValid = await form.value.validate()
+  if(!isValid.valid) return
 
-    return true
-  }
-  function registrou() {
-    if(!validarInputs()) return
-    router.push({ name: 'Home' })
-  }
-  </script>
-  
-  <style scoped>
-   body {
-    font-family: "Poppins", serif;
-  }
-  a {
-    text-decoration: none;
-    color: #DBB671
-  }
-  form {
-    background-color: #F5F5F5;
-  }
-  /* Optional: If you need to ensure that the container takes up the full height of the screen */
-  .v-container {
-    
-    height: 100vh; /* 100% of the viewport height */
-  }
-  .style-vrow {
-    border-radius: 10px;
-    padding: 15px 35px 15px 35px;
-    background-color: #FFF;
-  }
-  </style>
-  
+  loading.value = true;
+  router.push({name: 'Home'})
+}
+</script>
+
+<style scoped>
+h1 {
+  font-size: 36px;
+  font-weight: 500;
+}
+a {
+  text-decoration: none;
+  color: #000;
+  opacity: 0.8;
+}
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.container {
+  font-family: "Poppins", serif;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+}
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 135px;
+}
+.form-container {
+  width: 380px;
+}
+.button-padding {
+  padding: 16px 48px 16px 48px;
+}
+</style>
