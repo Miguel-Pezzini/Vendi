@@ -75,6 +75,7 @@
   
 <script setup>
     import { ref, onMounted } from 'vue';
+    import { useRoute } from 'vue-router';
     import Header from '@/core/components/Header.vue';
     import Path from '@/core/components/Path.vue';
     import Input from '@/core/components/Input.vue';
@@ -82,11 +83,13 @@
     import Footer from '@/core/components/Footer.vue';
     import loadPastPaths from '@/core/utils/loadPastPaths';
 
+    const router = useRoute()
+
   const oldPaths = ref([])
   const form = ref(null)
 
   onMounted(() => {
-    oldPaths.value = loadPastPaths()
+    oldPaths.value = loadPastPaths(router)
   })
 
   const dadosForm = ref({
@@ -104,7 +107,7 @@
 
   async function onFazerPedido(data) {
     const isValid = await form.value.validate()
-    if(!isValid) return
+    if(!isValid.valid) return
     paymentMethod.value = data;
   }
 </script>
