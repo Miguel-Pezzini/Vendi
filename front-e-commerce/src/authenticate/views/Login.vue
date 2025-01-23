@@ -1,8 +1,8 @@
 <template>
   <div class="page">
     <div class="container">
-      <img src="../../assets/side-image-login.png">
-      <v-form class="form" ref="form" @submit.prevent="logar()">
+      <img src="../../assets/side-image-login.png" v-if="$vuetify.display.mdAndUp">
+      <v-form :style="$vuetify.display.mdAndUp ? 'margin: 0 135px' : ' margin: 50px 30px'" class="form" ref="form" @submit.prevent="logar()">
         <div class="form-container">
           <div class="d-flex flex-column ga-6">
             <h1>Faça seu Login</h1>
@@ -22,11 +22,13 @@
               type="password"
             />
           </div>
-          <div class="mt-6 d-flex justify-space-between align-center">
+          <div :style="$vuetify.display.mdAndUp ? 'justify-content: space-between' : 'justify-content: start; gap: 12px'" class="mt-6 d-flex align-center">
             <v-btn
               height="52"
-              size="large"
+              :size="$vuetify.display.mdAndUp ? 'large' : 'regular'"
+              :style="$vuetify.display.mdAndUp ? 'padding: 16px 48px;' : 'padding: 12px 24px'"
               class="button-padding"
+              type="submit"
               color="#DBB671"
               :loading="loading"
               @click="logar()"
@@ -67,7 +69,6 @@ const password = ref("")
 const loading = ref(false)
 const form = ref(null)
 
-
 async function logar() {
   const isValid = await form.value.validate()
   if(!isValid.valid) return
@@ -105,7 +106,6 @@ a {
   align-items: center;
   flex-direction: column;
   width: 100%;
-  margin: 0 135px;
 }
 .form-container {
   width: 380px;

@@ -29,6 +29,9 @@ const computedRules = computed(() => {
   if (props.required) {
     autoRules.push((value) => !!value || "Este campo é obrigatório.");
   }
+  if(props.minLength) {
+    autoRules.push((value) => value.length >= props.minLength || `O campo deve ter ao menos ${props.minLength} caracteres.`)
+  }
 
   if (props.type === "email") {
     autoRules.push(
@@ -81,6 +84,10 @@ const props = defineProps({
           required: {
             type: Boolean,
             default: false
+          },
+          minLength: {
+            type: Number,
+            default: null
           }
     })
 

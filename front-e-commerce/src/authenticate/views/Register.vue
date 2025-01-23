@@ -24,12 +24,15 @@
               v-model="password"
               label="Senha"
               required
+              :rules="passwordRules"
+              :min-Length="6"
               type="password"
             />
             <Input
               appendIcon="mdi-eye"
-              v-model="password"
+              v-model="repeatPassword"
               label="Repita sua Senha"
+              :min-Length="6"
               required
               type="password"
             />
@@ -38,6 +41,7 @@
             <v-btn
               height="52"
               size="large"
+              type="submit"
               class="button-padding w-100"
               color="#DBB671"
               :loading="loading"
@@ -68,8 +72,17 @@ import Footer from '@/core/components/Footer.vue';
 
 const user = ref("")
 const password = ref("")
+const repeatPassword = ref("")
 const loading = ref(false)
 const form = ref(null)
+
+const passwordRules = [
+        value => {
+          if (repeatPassword.value == value) return true
+
+          return 'As senhas tem que ser iguais'
+        },
+      ]
 
 
 async function logar() {
