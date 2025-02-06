@@ -1,9 +1,6 @@
 package com.vendi.controller;
 
-import com.vendi.domain.user.LoginRequestDTO;
-import com.vendi.domain.user.LoginResponseDTO;
-import com.vendi.domain.user.RegisterUserDTO;
-import com.vendi.domain.user.User;
+import com.vendi.domain.user.*;
 import com.vendi.infra.security.TokenService;
 import com.vendi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +44,9 @@ public class AuthController {
 
         this.repository.save(newUser);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken(newUser);
+
+        return ResponseEntity.ok(new RegisterResponseDTO(token));
 
 
     }
