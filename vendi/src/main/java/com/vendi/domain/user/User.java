@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,17 +23,10 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private UserRole role;
+    private final Date createdAt;
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getName() {
@@ -43,24 +37,20 @@ public class User implements UserDetails {
         return this.email;
     }
 
-    public User(String email, String password, UserRole role) {
+    public void setEmail(String email) {
         this.email = email;
-        this.password = password;
-        this.role = role;
-    }
-
-    public User() {
-
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     public String getPassword() {
         return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Date getCreatedAt() {
+        return this.createdAt;
     }
 
     @Override
@@ -70,6 +60,24 @@ public class User implements UserDetails {
 
     public UUID getId() {
         return this.id;
+    }
+
+    public User(String email, String password,String name, UserRole role) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.role = role;
+        this.createdAt = new Date();
+    }
+
+    public User() {
+        this.createdAt = new Date();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
