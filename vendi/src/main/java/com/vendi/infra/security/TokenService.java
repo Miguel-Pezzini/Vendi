@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.vendi.domain.user.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,8 +21,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
-            String token = JWT.create().withSubject(user.getEmail()).withExpiresAt(this.generateExpirationDate()).sign(algorithm);
-            return token;
+            return JWT.create().withSubject(user.getEmail()).withExpiresAt(this.generateExpirationDate()).sign(algorithm);
         }catch (JWTCreationException exception) {
             throw new RuntimeException("Error while authenticating");
         }
