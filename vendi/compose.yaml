@@ -1,1 +1,38 @@
+version: '3'
 services:
+  postgres:
+    image: postgres:13
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: vendi       # Nome do banco de dados
+      POSTGRES_USER: user         # Nome de usuário
+      POSTGRES_PASSWORD: 1234       # Senha do usuário
+    ports:
+      - "5432:5432"                  # Porta do PostgreSQL
+    volumes:
+      - postgres-data:/var/lib/postgresql/data   # Volume para persistência dos dados
+    networks:
+      - app-network
+
+  springboot:
+    image: vendi
+    container_name: vendi
+    build:
+      context: .
+    ports:
+      - "8080:8080"                # Porta do Spring Boot
+    depends_on:
+      - postgres                   # Garante que o PostgreSQL estará pronto antes de iniciar o Spring Boot
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/vendi  # URL de conexão com o PostgreSQL
+      SPRING_DATASOURCE_USERNAME: user                              # Usuário do PostgreSQL
+      SPRING_DATASOURCE_PASSWORD: 1234                                # Senha do PostgreSQL
+    networks:
+      - app-network
+
+volumes:
+  postgres-data:   # Volume para dados persistentes do PostgreSQL
+
+networks:
+  app-network:
+    driver: bridge
