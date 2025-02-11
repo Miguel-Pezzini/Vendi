@@ -1,6 +1,10 @@
 package com.vendi.domain.user;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
+@Setter
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 @Entity
 public class User implements UserDetails {
@@ -25,41 +31,9 @@ public class User implements UserDetails {
     private UserRole role;
     private final Date createdAt;
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Date getCreatedAt() {
-        return this.createdAt;
-    }
-
     @Override
     public String getUsername() {
         return "";
-    }
-
-    public UUID getId() {
-        return this.id;
     }
 
     public User(String email, String password,String name, UserRole role) {
