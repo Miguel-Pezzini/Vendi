@@ -10,7 +10,7 @@
           </div>
           <div class="d-flex flex-column mt-6 w-100">
             <Input
-              v-model="user"
+              v-model="email"
               label="E-mail ou nome de usuário"
               required
             />
@@ -49,8 +49,6 @@
               to="/register"
             >Não possui conta? <span style="color: #DBB671">Criar uma!</span></RouterLink>
           </div>
-          
-
         </div>
       </v-form>
     </div>
@@ -59,21 +57,33 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, getCurrentInstance } from 'vue';
 import router from '@/core/router';
 import Input from '@/core/components/Input'
 import Footer from '@/core/components/Footer.vue';
+import api from '@/core/plugins/api';
 
-const user = ref("")
+const { proxy } = getCurrentInstance();
+
+const email = ref("")
 const password = ref("")
 const loading = ref(false)
 const form = ref(null)
 
 async function logar() {
+  loading.value = true;
   const isValid = await form.value.validate()
   if(!isValid.valid) return
-
-  loading.value = true;
+  const token = await api.carregar("auth/login", {
+        email: email.value, 
+        password: password.value 
+  }).catch(err => {
+    loading.value = false;
+    console.log(err)
+    proxy.$showMessage('error', err.response.data);
+  }) 
+  proxy.$showMessage('success', 'Login failed. Please check your credentials and try again.');
+  loading.value = false;
   router.push({name: 'Home'})
 }
 </script>
