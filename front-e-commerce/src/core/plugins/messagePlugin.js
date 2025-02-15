@@ -13,8 +13,6 @@ export default  {
       snackbarData.message = message;
       snackbarData.color = type === 'error' ? 'red' : 'green'; // Cor para erro ou sucesso
       snackbarData.visible = true;
-
-        throw new Error(message);
     };
 
     // Definir um componente global para o Snackbar
