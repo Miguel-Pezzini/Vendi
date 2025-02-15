@@ -227,7 +227,6 @@
   })
 
   function emitClick(value) {
-    console.log(value)
   }
 
   </script>

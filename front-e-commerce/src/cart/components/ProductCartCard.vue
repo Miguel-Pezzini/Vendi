@@ -81,7 +81,7 @@
     })
 
   function incrementQuantity() {
-    console.log(props.product)
+
   }
   function decrementQuantity() {
       //emit('deleteFromCart', props.id)
