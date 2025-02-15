@@ -2,7 +2,11 @@
   <div class="page">
     <div class="container">
       <img src="../../assets/side-image-login.png">
-      <v-form class="form" ref="form" @submit.prevent="logar()">
+      <v-form
+        ref="form"
+        class="form"
+        @submit.prevent="logar()"
+      >
         <div class="form-container">
           <div class="d-flex flex-column ga-6">
             <h1>Crie sua Conta</h1>
@@ -20,19 +24,19 @@
               required
             />
             <Input
-              appendIcon="mdi-eye"
               v-model="password"
+              append-icon="mdi-eye"
               label="Senha"
               required
               :rules="passwordRules"
-              :min-Length="6"
+              :min-length="6"
               type="password"
             />
             <Input
-              appendIcon="mdi-eye"
               v-model="repeatPassword"
+              append-icon="mdi-eye"
               label="Repita sua Senha"
-              :min-Length="6"
+              :min-length="6"
               required
               type="password"
             />
@@ -53,10 +57,10 @@
           <div class="d-flex justify-center align-center mt-4">
             <RouterLink
               to="/"
-            >Ja possui conta? <span style="color: #DBB671">Logar!</span></RouterLink>
+            >
+              Ja possui conta? <span style="color: #DBB671">Logar!</span>
+            </RouterLink>
           </div>
-          
-
         </div>
       </v-form>
     </div>

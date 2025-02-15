@@ -1,8 +1,16 @@
 <template>
   <div class="page">
     <div class="container">
-      <img src="../../assets/side-image-login.png" v-if="$vuetify.display.mdAndUp">
-      <v-form :style="$vuetify.display.mdAndUp ? 'margin: 0 135px' : ' margin: 50px 30px'" class="form" ref="form" @submit.prevent="logar()">
+      <img
+        v-if="$vuetify.display.mdAndUp"
+        src="../../assets/side-image-login.png"
+      >
+      <v-form
+        ref="form"
+        :style="$vuetify.display.mdAndUp ? 'margin: 0 135px' : ' margin: 50px 30px'"
+        class="form"
+        @submit.prevent="logar()"
+      >
         <div class="form-container">
           <div class="d-flex flex-column ga-6">
             <h1>Faça seu Login</h1>
@@ -15,14 +23,17 @@
               required
             />
             <Input
-              appendIcon="mdi-eye"
               v-model="password"
+              append-icon="mdi-eye"
               label="Senha"
               required
               type="password"
             />
           </div>
-          <div :style="$vuetify.display.mdAndUp ? 'justify-content: space-between' : 'justify-content: start; gap: 12px'" class="mt-6 d-flex align-center">
+          <div
+            :style="$vuetify.display.mdAndUp ? 'justify-content: space-between' : 'justify-content: start; gap: 12px'"
+            class="mt-6 d-flex align-center"
+          >
             <v-btn
               height="52"
               :size="$vuetify.display.mdAndUp ? 'large' : 'regular'"
@@ -46,7 +57,9 @@
           <div class="d-flex justify-center align-center mt-4">
             <RouterLink
               to="/register"
-            >Não possui conta? <span style="color: #DBB671">Criar uma!</span></RouterLink>
+            >
+              Não possui conta? <span style="color: #DBB671">Criar uma!</span>
+            </RouterLink>
           </div>
         </div>
       </v-form>
