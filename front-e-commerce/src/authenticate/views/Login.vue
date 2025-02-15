@@ -30,8 +30,7 @@
               class="button-padding"
               type="submit"
               color="#DBB671"
-              :loading="loading"
-              @click="logar()"
+              :loading="$loadingState['auth/login']"
             >
               Login
             </v-btn>
@@ -62,29 +61,28 @@ import router from '@/core/router';
 import Input from '@/core/components/Input'
 import Footer from '@/core/components/Footer.vue';
 import api from '@/core/plugins/api';
+import { saveTokenJWT } from '@/core/utils/saveTokenJWT';
 
 const { proxy } = getCurrentInstance();
 
 const email = ref("")
 const password = ref("")
-const loading = ref(false)
 const form = ref(null)
 
 async function logar() {
-  loading.value = true;
   const isValid = await form.value.validate()
   if(!isValid.valid) return
-  const token = await api.carregar("auth/login", {
+
+  api.carregar("auth/login", {
         email: email.value, 
         password: password.value 
+  }).then(response => {
+    saveTokenJWT(response.token)
+    proxy.$showMessage('success', 'Login feito com sucesso.');
+    router.push({name: 'Home'})
   }).catch(err => {
-    loading.value = false;
-    console.log(err)
-    proxy.$showMessage('error', err.response.data);
+    proxy.$showMessage('error', err);
   }) 
-  proxy.$showMessage('success', 'Login failed. Please check your credentials and try again.');
-  loading.value = false;
-  router.push({name: 'Home'})
 }
 </script>
 
