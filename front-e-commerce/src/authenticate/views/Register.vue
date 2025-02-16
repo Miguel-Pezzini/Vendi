@@ -5,7 +5,7 @@
       <v-form
         ref="form"
         class="form"
-        @submit.prevent="logar()"
+        @submit.prevent="registrar()"
       >
         <div class="form-container">
           <div class="d-flex flex-column ga-6">
@@ -14,7 +14,7 @@
           </div>
           <div class="d-flex flex-column mt-6 w-100">
             <Input
-              v-model="user"
+              v-model="name"
               label="Nome de usuário"
               required
             />
@@ -48,8 +48,7 @@
               type="submit"
               class="button-padding w-100"
               color="#DBB671"
-              :loading="loading"
-              @click="logar()"
+              :loading="!!$loadingState['auth/register']"
             >
               Criar Conta
             </v-btn>
@@ -69,15 +68,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, getCurrentInstance } from 'vue';
 import router from '@/core/router';
 import Input from '@/core/components/Input'
 import Footer from '@/core/components/Footer.vue';
+import api from '@/core/plugins/api';
+import { saveTokenJWT } from '@/core/utils/saveTokenJWT';
 
-const user = ref("")
+const { proxy } = getCurrentInstance();
+
+const name = ref("")
+const email = ref("")
 const password = ref("")
 const repeatPassword = ref("")
-const loading = ref(false)
 const form = ref(null)
 
 const passwordRules = [
@@ -89,12 +92,22 @@ const passwordRules = [
       ]
 
 
-async function logar() {
+async function registrar() {
   const isValid = await form.value.validate()
   if(!isValid.valid) return
 
-  loading.value = true;
-  router.push({name: 'Home'})
+  api.carregar("auth/register", {
+        name: name.value,
+        email: email.value, 
+        password: password.value 
+  }).then(response => {
+    proxy.$showMessage('success', 'Conta registrada com sucesso.');
+    saveTokenJWT(response.token);
+    router.push({name: 'Home'})
+  }) .catch(err => {
+    proxy.$showMessage('error', err);
+  }) 
+  
 }
 </script>
 

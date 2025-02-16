@@ -21,7 +21,7 @@ server.interceptors.request.use(req => {
     store.commit('startLoading', req.url)
     return req
 }, 
-    err => Promise.reject(err))
+    err => Promise.reject(err.response.data))
 
 server.interceptors.response.use(res => {
     store.commit('stopLoading', res.config.url)
@@ -29,6 +29,7 @@ server.interceptors.response.use(res => {
 }, 
     err => {
         store.commit('stopLoading', err.config.url)
+        return Promise.reject(err.response.data)
     })
 
 const api = {

@@ -9,7 +9,6 @@
     <template #actions>
       <v-icon
         size="x-large"
-        :color="shoppingActive ? '#DBB671' : null"
         icon="mdi-close"
         @click="snackbarData.visible = false"
       />

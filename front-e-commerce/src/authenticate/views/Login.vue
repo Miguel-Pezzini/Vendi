@@ -41,7 +41,7 @@
               class="button-padding"
               type="submit"
               color="#DBB671"
-              :loading="$loadingState['auth/login']"
+              :loading="!!$loadingState['auth/login']"
             >
               Login
             </v-btn>
@@ -94,6 +94,7 @@ async function logar() {
     proxy.$showMessage('success', 'Login feito com sucesso.');
     router.push({name: 'Home'})
   }).catch(err => {
+    console.log(err)
     proxy.$showMessage('error', err);
   }) 
 }
