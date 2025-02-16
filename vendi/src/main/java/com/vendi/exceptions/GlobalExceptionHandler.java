@@ -3,6 +3,7 @@ package com.vendi.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -12,6 +13,13 @@ public class GlobalExceptionHandler {
     // Captura a exceção BadCredentialsException globalmente
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<String> handleBadCredentials(BadCredentialsException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("Credenciais inválidas. Verifique seu email e senha.");
+    }
+
+    // Captura a exceção BadCredentialsException globalmente
+    @ExceptionHandler(InternalAuthenticationServiceException.class)
+    public ResponseEntity<String> handleUserNotFound(InternalAuthenticationServiceException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body("Credenciais inválidas. Verifique seu email e senha.");
     }
