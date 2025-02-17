@@ -1,27 +1,23 @@
 package com.vendi.domain.user;
 
+import com.vendi.domain.product.Product;
+import com.vendi.domain.purchase.Purchase;
+import com.vendi.domain.rating.Rating;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 @Entity
 public class User implements UserDetails {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -30,6 +26,15 @@ public class User implements UserDetails {
     private String password;
     private UserRole role;
     private final Date createdAt;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Purchase> purchases = new ArrayList<>();
 
     @Override
     public String getUsername() {
