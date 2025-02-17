@@ -99,7 +99,8 @@ async function registrar() {
   api.carregar("auth/register", {
         name: name.value,
         email: email.value, 
-        password: password.value 
+        password: password.value,
+        role: "USER"
   }).then(response => {
     proxy.$showMessage('success', 'Conta registrada com sucesso.');
     saveTokenJWT(response.token);
