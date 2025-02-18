@@ -78,7 +78,6 @@
         
 <script setup>
       import Button from '@/core/components/Button'
-      import { defineEmits } from 'vue';
       import router from '../router';
       import { useRoute } from 'vue-router';
       import loadPastPaths from '../utils/loadPastPaths';
