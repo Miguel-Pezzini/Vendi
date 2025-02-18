@@ -1,10 +1,13 @@
 package com.vendi.domain.user;
 
+import com.vendi.domain.AbstractEditableEntity;
+import com.vendi.domain.address.Address;
 import com.vendi.domain.product.Product;
 import com.vendi.domain.purchase.Purchase;
 import com.vendi.domain.rating.Rating;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,17 +18,19 @@ import java.util.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 @Entity
-public class User implements UserDetails {
+public class User extends AbstractEditableEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
     private String email;
     private String password;
+
+    @Enumerated(EnumType.STRING)
     private UserRole role;
-    private final Date createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
@@ -36,21 +41,24 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Purchase> purchases = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addresses = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "current_address_id")
+    private Address currentAddress;
+
     @Override
     public String getUsername() {
         return "";
     }
 
     public User(String email, String password,String name, UserRole role) {
+        super();
         this.email = email;
         this.password = password;
         this.name = name;
         this.role = role;
-        this.createdAt = new Date();
-    }
-
-    public User() {
-        this.createdAt = new Date();
     }
 
     @Override
