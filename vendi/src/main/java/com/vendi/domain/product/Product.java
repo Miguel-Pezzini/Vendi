@@ -1,5 +1,6 @@
 package com.vendi.domain.product;
 
+import com.vendi.domain.AbstractEditableEntity;
 import com.vendi.domain.photo.Photo;
 import com.vendi.domain.purchase.Purchase;
 import com.vendi.domain.purchase.PurchaseItem;
@@ -20,7 +21,7 @@ import java.util.Date;
 @Setter
 @Table(name = "product")
 @Entity
-public class Product {
+public class Product extends AbstractEditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -49,11 +50,4 @@ public class Product {
     @Min(0)
     @Max(100)
     private int discount;
-
-    private final Date createdAt;
-    private Date updatedAt;
-
-    public Product() {
-        this.createdAt = new Date();
-    }
 }
