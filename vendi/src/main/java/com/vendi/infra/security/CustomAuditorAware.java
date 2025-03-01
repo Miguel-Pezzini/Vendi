@@ -17,9 +17,9 @@ public class CustomAuditorAware implements AuditorAware<String> {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // Se o usuário estiver autenticado
-        if (authentication != null && authentication.isAuthenticated()) {
+        if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
             User user = (User) authentication.getPrincipal();
-            return Optional.of(user.getId().toString());  // Retorna o nome de usuário
+            return Optional.of(user.getId().toString());  // Retorna o id de usuário
         }
 
         // Caso não esteja autenticado, retorna um valor default ou null
