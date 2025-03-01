@@ -1,5 +1,6 @@
 package com.vendi.domain.address;
 
+import com.vendi.domain.AbstractEditableEntity;
 import com.vendi.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,11 +10,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "address")
-public class Address {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Address extends AbstractEditableEntity {
     private String street;
     private String city;
     private String state;

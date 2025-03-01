@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,9 +23,6 @@ import java.util.Date;
 @Table(name = "product")
 @Entity
 public class Product extends AbstractEditableEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
     private String name;
     private Float price;
 

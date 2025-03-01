@@ -1,5 +1,6 @@
 package com.vendi.domain.rating;
 
+import com.vendi.domain.AbstractEditableEntity;
 import com.vendi.domain.product.Product;
 import com.vendi.domain.user.User;
 import jakarta.persistence.*;
@@ -15,11 +16,7 @@ import java.util.UUID;
 @Setter
 @Table(name = "rating")
 @Entity
-public class Rating {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
+public class Rating extends AbstractEditableEntity {
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
@@ -33,13 +30,5 @@ public class Rating {
     private int stars; // Rating de 1 a 5 estrelas
 
     private String comment;
-
-    private Date createdAt;
-
-    public Rating() {
-        this.createdAt = new Date();
-    }
-
-    // Getters e Setters
 }
 

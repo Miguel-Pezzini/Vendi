@@ -1,14 +1,18 @@
 package com.vendi.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @MappedSuperclass
 public class AbstractEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
     @Column(name = "created_at")
     private final Date createdAt;
 

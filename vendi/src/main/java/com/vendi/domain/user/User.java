@@ -23,9 +23,6 @@ import java.util.*;
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 @Entity
 public class User extends AbstractEditableEntity implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
     private String name;
     private String email;
     private String password;
