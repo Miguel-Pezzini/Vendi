@@ -40,11 +40,7 @@
   </script>
     
     <style scoped>
-    body {
-      font-family: "Poppins", serif;
-    }
     a {
-        font-family: "Poppins", serif;
         text-decoration: none;
         color: black;
     }

@@ -188,10 +188,6 @@ function getProductsByCategory(category) {
 </script>
 
 <style scoped>
-/* Layout base */
-body {
-  font-family: "Poppins", serif;
-}
 span {
   color: black;
   font-weight: 300;

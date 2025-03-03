@@ -30,9 +30,6 @@
   </script>
   
   <style scoped>
-  body {
-    font-family: "Poppins", serif;
-  }
   .image-wrapper {
   position: relative;
   display: inline-block;

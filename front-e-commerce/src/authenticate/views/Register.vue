@@ -128,7 +128,6 @@ a {
   min-height: 100vh;
 }
 .container {
-  font-family: "Poppins", serif;
   width: 100%;
   display: flex;
   justify-content: space-between;

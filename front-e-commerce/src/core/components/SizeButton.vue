@@ -23,7 +23,6 @@
       
   <style scoped>
  button {
-    font-family: "Poppins", serif;
   width: 32px;
   height: 32px;
   border-radius: 4px;

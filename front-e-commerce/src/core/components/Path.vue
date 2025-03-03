@@ -27,7 +27,6 @@
       
   <style scoped>
   body {
-    font-family: "Poppins", serif;
     font-size: 14px;
   }
   a {

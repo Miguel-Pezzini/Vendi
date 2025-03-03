@@ -106,7 +106,6 @@ import card1 from '@/assets/card1.webp'
   
 <style scoped>
 .container {
-    font-family: "Poppins", serif;
     margin: 80px 135px 140px 135px;
 }
 .button {

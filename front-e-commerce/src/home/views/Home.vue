@@ -112,9 +112,6 @@
 </script>
   
 <style scoped>
-body {
-  font-family: "Poppins", serif;
-}
 button:hover {
   transition: .2s;
   scale: 1.05;

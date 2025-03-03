@@ -129,9 +129,6 @@
       max-height: 100%; 
       object-fit: cover; 
     }
-    span {
-      font-family: "Poppins", serif;
-    }
     .name {
       font-weight: 500;
       font-size: 16px;

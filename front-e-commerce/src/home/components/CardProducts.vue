@@ -50,9 +50,6 @@
     </script>
     
     <style scoped>
-    body {
-      font-family: "Poppins", serif;
-    }
     .title {
       font-size: 16px;
       font-weight: 400;

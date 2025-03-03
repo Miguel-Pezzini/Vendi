@@ -9,6 +9,7 @@
     :icon="icon"
     :flat="flat"
     :density="density"
+    :text="text"
   >
     <template v-if="title">
       {{ title }}

@@ -148,7 +148,6 @@
     
 <style scoped>
 .container {
-  font-family: "Poppins", serif;
   margin-top: 80px;
   padding-right: 135px;
   padding-left: 135px;

@@ -79,9 +79,6 @@
   })
       </script>
   <style scoped>
-  body {
-    font-family: "Poppins", serif;
-  }
   .footer {
     padding-top: 36px;
     padding-bottom: 69px;

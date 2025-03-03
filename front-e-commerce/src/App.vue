@@ -10,3 +10,9 @@
 <script setup>
   import GlobalSnackbar from '@/core/plugins/GlobalSnackbar.vue';
 </script>
+
+<style>
+* {
+  font-family: "Poppins", serif;
+}
+</style>

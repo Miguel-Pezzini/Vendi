@@ -233,7 +233,6 @@
   
   <style scoped>
   .container {
-    font-family: "Poppins", serif;
     margin-top: 80px;
     margin-bottom: 140px;
     margin-right: 135px;

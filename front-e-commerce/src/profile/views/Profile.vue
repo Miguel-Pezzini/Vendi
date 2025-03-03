@@ -101,14 +101,10 @@
 </script>
   
   <style scoped>
-  body {
-    font-family: "Poppins", serif;
-  }
   .container {
     margin-top: 80px;
   }
   .v-card {
-    font-family: "Poppins", serif;
     padding: 40px 80px 40px 80px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   }

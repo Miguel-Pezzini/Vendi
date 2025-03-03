@@ -171,9 +171,6 @@ function pesquisar() {
 </script>
 
 <style scoped>
-body {
-  font-family: "Poppins", serif;
-}
     a {
         font-weight: 600;
         text-decoration: none;
