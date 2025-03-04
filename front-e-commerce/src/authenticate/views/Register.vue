@@ -9,7 +9,7 @@
       >
         <div class="form-container">
           <div class="d-flex flex-column ga-6">
-            <h1>Crie sua Conta</h1>
+            <h1 class="font-weight-medium" style="font-size: 36px;">Crie sua Conta</h1>
             <p>Insira seus dados abaixo</p>
           </div>
           <div class="d-flex flex-column mt-6 w-100">
@@ -44,19 +44,17 @@
           <div class="mt-6 d-flex justify-space-between align-center">
             <v-btn
               height="52"
-              size="large"
+              :size="$vuetify.display.mdAndUp ? 'large' : 'regular'"
               type="submit"
-              class="button-padding w-100"
-              color="#DBB671"
+              :style="$vuetify.display.mdAndUp ? 'padding: 16px 48px;' : 'padding: 12px 24px'"
+              class="w-100"
+              color="golden"
               :loading="!!$loadingState['auth/register']"
-            >
-              Criar Conta
-            </v-btn>
+              text="Criar Conta"
+            />
           </div>
           <div class="d-flex justify-center align-center mt-4">
-            <RouterLink
-              to="/"
-            >
+            <RouterLink to="/">
               Ja possui conta? <span style="color: #DBB671">Logar!</span>
             </RouterLink>
           </div>
@@ -113,10 +111,6 @@ async function registrar() {
 </script>
 
 <style scoped>
-h1 {
-  font-size: 36px;
-  font-weight: 500;
-}
 a {
   text-decoration: none;
   color: #000;
@@ -143,8 +137,5 @@ a {
 }
 .form-container {
   width: 380px;
-}
-.button-padding {
-  padding: 16px 48px 16px 48px;
 }
 </style>
