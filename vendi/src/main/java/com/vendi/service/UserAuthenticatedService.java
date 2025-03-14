@@ -1,6 +1,6 @@
-package com.vendi.services;
+package com.vendi.service;
 
-import com.vendi.domain.user.User;
+import com.vendi.model.user.User;
 import com.vendi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;

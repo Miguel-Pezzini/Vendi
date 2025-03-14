@@ -1,6 +1,6 @@
 package com.vendi.controller;
 
-import com.vendi.services.UserService;
+import com.vendi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

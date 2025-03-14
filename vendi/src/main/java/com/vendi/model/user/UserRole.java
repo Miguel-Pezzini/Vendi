@@ -1,4 +1,4 @@
-package com.vendi.domain.user;
+package com.vendi.model.user;
 
 public enum UserRole {
     ADMIN("admin"),

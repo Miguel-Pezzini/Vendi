@@ -1,15 +1,14 @@
-package com.vendi.services;
+package com.vendi.service;
 
-import com.vendi.domain.product.Product;
-import com.vendi.domain.product.CreateProductRequestDTO;
-import com.vendi.domain.product.UpdateProductRequestDTO;
-import com.vendi.domain.user.User;
+import com.vendi.model.product.Product;
+import com.vendi.dto.CreateProductRequestDTO;
+import com.vendi.dto.UpdateProductRequestDTO;
+import com.vendi.model.user.User;
 import com.vendi.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

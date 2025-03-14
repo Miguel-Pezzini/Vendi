@@ -1,4 +1,4 @@
-package com.vendi.domain.user;
+package com.vendi.dto;
 
 public record LoginResponseDTO(String token) {
 }

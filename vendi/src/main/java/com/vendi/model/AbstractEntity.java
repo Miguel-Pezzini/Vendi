@@ -1,4 +1,4 @@
-package com.vendi.domain;
+package com.vendi.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

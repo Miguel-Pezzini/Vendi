@@ -1,6 +1,6 @@
-package com.vendi.domain.purchase;
+package com.vendi.model.purchase;
 
-import com.vendi.domain.product.Product;
+import com.vendi.model.product.Product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;

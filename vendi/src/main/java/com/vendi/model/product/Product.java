@@ -1,21 +1,17 @@
-package com.vendi.domain.product;
+package com.vendi.model.product;
 
-import com.vendi.domain.AbstractEditableEntity;
-import com.vendi.domain.photo.Photo;
-import com.vendi.domain.purchase.Purchase;
-import com.vendi.domain.purchase.PurchaseItem;
-import com.vendi.domain.rating.Rating;
-import com.vendi.domain.user.User;
+import com.vendi.model.AbstractEditableEntity;
+import com.vendi.model.photo.Photo;
+import com.vendi.model.purchase.PurchaseItem;
+import com.vendi.model.rating.Rating;
+import com.vendi.model.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
-import java.util.UUID;
-import java.util.Date;
 
 
 @Getter

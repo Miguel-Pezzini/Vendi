@@ -1,10 +1,10 @@
 package com.vendi.controller;
 
-import com.vendi.domain.product.Product;
-import com.vendi.domain.product.CreateProductRequestDTO;
-import com.vendi.domain.product.ProductResponseDTO;
-import com.vendi.domain.product.UpdateProductRequestDTO;
-import com.vendi.services.ProductService;
+import com.vendi.model.product.Product;
+import com.vendi.dto.CreateProductRequestDTO;
+import com.vendi.dto.ProductResponseDTO;
+import com.vendi.dto.UpdateProductRequestDTO;
+import com.vendi.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

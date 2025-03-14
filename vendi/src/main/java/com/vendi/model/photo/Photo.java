@@ -1,13 +1,10 @@
-package com.vendi.domain.photo;
+package com.vendi.model.photo;
 
-import com.vendi.domain.AbstractEditableEntity;
-import com.vendi.domain.product.Product;
+import com.vendi.model.AbstractEditableEntity;
+import com.vendi.model.product.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Date;
-import java.util.UUID;
 
 @Getter
 @Setter

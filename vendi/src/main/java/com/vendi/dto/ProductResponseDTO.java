@@ -1,6 +1,6 @@
-package com.vendi.domain.product;
+package com.vendi.dto;
 
-import com.vendi.domain.user.User;
+import com.vendi.model.product.Product;
 
 import java.util.UUID;
 

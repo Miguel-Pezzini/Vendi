@@ -1,7 +1,7 @@
-package com.vendi.domain.purchase;
+package com.vendi.model.purchase;
 
-import com.vendi.domain.AbstractEditableEntity;
-import com.vendi.domain.user.User;
+import com.vendi.model.AbstractEditableEntity;
+import com.vendi.model.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,12 +1,11 @@
-package com.vendi.domain.user;
+package com.vendi.model.user;
 
-import com.vendi.domain.AbstractEditableEntity;
-import com.vendi.domain.address.Address;
-import com.vendi.domain.product.Product;
-import com.vendi.domain.purchase.Purchase;
-import com.vendi.domain.rating.Rating;
+import com.vendi.model.AbstractEditableEntity;
+import com.vendi.model.address.Address;
+import com.vendi.model.product.Product;
+import com.vendi.model.purchase.Purchase;
+import com.vendi.model.rating.Rating;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

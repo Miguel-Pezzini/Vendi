@@ -1,16 +1,13 @@
-package com.vendi.domain.rating;
+package com.vendi.model.rating;
 
-import com.vendi.domain.AbstractEditableEntity;
-import com.vendi.domain.product.Product;
-import com.vendi.domain.user.User;
+import com.vendi.model.AbstractEditableEntity;
+import com.vendi.model.product.Product;
+import com.vendi.model.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Date;
-import java.util.UUID;
 
 @Getter
 @Setter

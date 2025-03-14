@@ -1,4 +1,4 @@
-package com.vendi.domain;
+package com.vendi.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -8,7 +8,6 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
-import java.util.UUID;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
