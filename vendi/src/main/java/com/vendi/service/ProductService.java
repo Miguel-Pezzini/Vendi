@@ -7,6 +7,7 @@ import com.vendi.model.user.User;
 import com.vendi.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,7 @@ public class ProductService {
     @Autowired
     PhotoService photoService;
 
+    @Transactional
     public Product create(CreateProductRequestDTO CreateproductDTO) {
         User user = userAuthenticatedService.getAuthenticatedUser();
         Product product = new Product();

@@ -6,6 +6,7 @@ import com.vendi.model.product.Product;
 import com.vendi.repository.PhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Base64;
 import java.util.List;
@@ -21,6 +22,7 @@ public class PhotoService {
         return Base64.getDecoder().decode(base64String);
     }
 
+    @Transactional
     public void createPhotos(List<CreatePhotoRequestDTO> createPhotoRequestDTO, Product product) {
         createPhotoRequestDTO.forEach(photoDTO -> {
             byte[] imageData = this.decodeBase64ToBytes(photoDTO.data());
