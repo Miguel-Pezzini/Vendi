@@ -1,5 +1,7 @@
 package com.vendi.service;
 
+import com.vendi.dto.photo.CreatePhotoRequestDTO;
+import com.vendi.model.photo.Photo;
 import com.vendi.model.product.Product;
 import com.vendi.dto.product.CreateProductRequestDTO;
 import com.vendi.dto.product.UpdateProductRequestDTO;
@@ -26,25 +28,33 @@ public class ProductService {
     PhotoService photoService;
 
     @Transactional
-    public Product create(CreateProductRequestDTO CreateproductDTO) {
+    public Product create(CreateProductRequestDTO createproductDTO) {
         User user = userAuthenticatedService.getAuthenticatedUser();
         Product product = new Product();
-        product.setName(CreateproductDTO.name());
-        product.setPrice(CreateproductDTO.price());
-        product.setQuantity(CreateproductDTO.quantity());
-        product.setInstallment(CreateproductDTO.installment());
-        product.setDiscount(CreateproductDTO.discount());
+        product.setName(createproductDTO.name());
+        product.setPrice(createproductDTO.price());
+        product.setQuantity(createproductDTO.quantity());
+        product.setInstallment(createproductDTO.installment());
+        product.setDiscount(createproductDTO.discount());
         product.setUser(user);
 
-        product = repository.save(product);
+        Product savedProduct = repository.save(product);
 
-        this.photoService.createPhotos(CreateproductDTO.photos(), product);
+        createproductDTO.photos().stream().filter(CreatePhotoRequestDTO::isMainPhoto).findFirst().ifPresent(photoDTO -> {
+            Photo mainPhoto = this.photoService.createMainPhoto(photoDTO, savedProduct);
+            savedProduct.setMainPhoto(mainPhoto);
+        });
 
-        return product;
+        repository.save(savedProduct);
+
+        this.photoService.createPhotos(createproductDTO.photos(), savedProduct);
+
+        return savedProduct;
     }
 
     public List<Product> getUserProducts() {
         User user = userAuthenticatedService.getAuthenticatedUser();
+
         return user.getProducts();
     }
 
