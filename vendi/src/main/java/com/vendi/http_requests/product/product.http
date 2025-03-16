@@ -1,5 +1,5 @@
-POST http://localhost:8080/product
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQHRlc3R0LmNvbSIsImV4cCI6MTc0MjA4MzgwNH0.xSWqaPbmJfZ0WognvDnlidjWWgBGX4LmCF4MnTm1pIk
+POST {{base_url}}/product
+Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json
 
@@ -13,8 +13,8 @@ Accept: application/json
 
 ###
 
-PUT http://localhost:8080/product?productId=00c7a28d-0a30-4287-999f-b74324afe90d
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQHRlc3R0LmNvbSIsImV4cCI6MTc0MjA5MTA4Nn0.NbKHa3ujXxXBUXuXF6_IH4KbF8lXXy4qo7wVWllQsos
+PUT {{base_url}}/product?productId=37e5f9a3-056d-4918-ac3e-b8918f657938
+Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json
 
@@ -24,14 +24,14 @@ Accept: application/json
 
 ###
 
-GET http://localhost:8080/product
+GET {{base_url}}/product
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json
 
 ###
 
-DELETE http://localhost:8080/product?productId=00c7a28d-0a30-4287-999f-b74324afe90d
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhQHRlc3R0LmNvbSIsImV4cCI6MTc0MjA5MTM3OX0.O5m2UevfW3Gw8qQT8XyoRvgi9KtMJWs2VRkwyyx61Bo
+DELETE {{base_url}}/product?productId=00c7a28d-0a30-4287-999f-b74324afe90d
+Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json
