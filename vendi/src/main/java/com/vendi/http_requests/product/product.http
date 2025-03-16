@@ -10,9 +10,15 @@ Accept: application/json
   "installment": 2,
   "discount": 3,
   "photos": [{
+    "isMainPhoto": true,
     "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/5YfZUEAAAAASUVORK5CYII=",
     "contentType": "image/png",
     "filename": "example.png"
+    },
+    {
+      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/5YfZUEAAAAASUVORK5CYII=",
+      "contentType": "image/png",
+      "filename": "example.png"
     }]
 }
 
@@ -36,14 +42,14 @@ Accept: application/json
 
 ###
 
-DELETE {{base_url}}/product/e744ba95-dbbe-4b36-8666-07684b3edbdc
+DELETE {{base_url}}/product/5b68615b-0bd2-4379-93b8-44295e618754
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json
 
 ###
 
-GET {{base_url}}/product/e744ba95-dbbe-4b36-8666-07684b3edbdc
+GET {{base_url}}/product/cd1492f1-b393-4a2f-bcca-4e07a4848048
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json

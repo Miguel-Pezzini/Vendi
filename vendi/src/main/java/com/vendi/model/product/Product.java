@@ -1,5 +1,6 @@
 package com.vendi.model.product;
 
+import com.vendi.dto.photo.PhotoResponseDTO;
 import com.vendi.model.AbstractEditableEntity;
 import com.vendi.model.photo.Photo;
 import com.vendi.model.purchase.PurchaseItem;
@@ -29,6 +30,10 @@ public class Product extends AbstractEditableEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Photo> photos;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "main_photo_id")
+    private Photo mainPhoto;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rating> ratings;
 
@@ -44,4 +49,12 @@ public class Product extends AbstractEditableEntity {
     @Min(0)
     @Max(100)
     private int discount;
+
+    public PhotoResponseDTO getMainPhotoResponseDTO() {
+        return new PhotoResponseDTO(
+                this.getMainPhoto().getId(),
+                this.getMainPhoto().getContentType(),
+                this.getMainPhoto().getFilename()
+        );
+    }
 }

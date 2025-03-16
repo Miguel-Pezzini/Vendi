@@ -25,14 +25,22 @@ public class PhotoService {
     @Transactional
     public void createPhotos(List<CreatePhotoRequestDTO> createPhotoRequestDTO, Product product) {
         createPhotoRequestDTO.forEach(photoDTO -> {
-            byte[] imageData = this.decodeBase64ToBytes(photoDTO.data());
-
             Photo photo = new Photo();
             photo.setFilename(photoDTO.filename());
             photo.setContentType(photoDTO.contentType());
-            photo.setData(imageData);
+            photo.setData(this.decodeBase64ToBytes(photoDTO.data()));
             photo.setProduct(product);
             photoRepository.save(photo);
         });
+    }
+    @Transactional
+    public Photo createMainPhoto(CreatePhotoRequestDTO createPhotoRequestDTO, Product product) {
+        Photo photo = new Photo();
+        photo.setFilename(createPhotoRequestDTO.filename());
+        photo.setContentType(createPhotoRequestDTO.contentType());
+        photo.setData(this.decodeBase64ToBytes(createPhotoRequestDTO.data()));
+        photo.setProduct(product);
+        photo = photoRepository.save(photo);
+        return photo;
     }
 }
