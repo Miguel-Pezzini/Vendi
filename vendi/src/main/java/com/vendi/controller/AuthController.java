@@ -1,10 +1,10 @@
 package com.vendi.controller;
 
 import com.vendi.model.user.*;
-import com.vendi.dto.LoginRequestDTO;
-import com.vendi.dto.LoginResponseDTO;
-import com.vendi.dto.RegisterResponseDTO;
-import com.vendi.dto.RegisterUserDTO;
+import com.vendi.dto.user.LoginRequestDTO;
+import com.vendi.dto.user.LoginResponseDTO;
+import com.vendi.dto.user.RegisterResponseDTO;
+import com.vendi.dto.user.RegisterUserDTO;
 import com.vendi.infra.security.TokenService;
 import com.vendi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.vendi.service;
 
-import com.vendi.dto.RegisterUserDTO;
+import com.vendi.dto.user.RegisterUserDTO;
 import com.vendi.model.user.User;
 import com.vendi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
