@@ -21,24 +21,24 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping()
-    public ResponseEntity createProduct(@RequestBody @Valid CreateProductRequestDTO body) {
+    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody @Valid CreateProductRequestDTO body) {
         Product savedProduct = productService.create(body);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new ProductResponseDTO(savedProduct));
     }
 
     @GetMapping()
-    public ResponseEntity getUserProducts() {
+    public ResponseEntity<List<ProductResponseDTO>> getUserProducts() {
         List<ProductResponseDTO> products = productService.getUserProducts().stream().map(ProductResponseDTO::new).toList();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(products);
     }
 
     @PutMapping()
-    public ResponseEntity updateProduct(@RequestParam("productId") UUID productId, @RequestBody UpdateProductRequestDTO body) {
+    public ResponseEntity<ProductResponseDTO> updateProduct(@RequestParam("productId") UUID productId, @RequestBody UpdateProductRequestDTO body) {
         Product updatedProduct = productService.update(productId, body);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(updatedProduct);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ProductResponseDTO(updatedProduct));
     }
 
     @DeleteMapping()
