@@ -8,12 +8,17 @@ Accept: application/json
   "price": 10.5,
   "quantity": 1,
   "installment": 2,
-  "discount": 3
+  "discount": 3,
+  "photos": [{
+    "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/5YfZUEAAAAASUVORK5CYII=",
+    "contentType": "image/png",
+    "filename": "example.png"
+    }]
 }
 
 ###
 
-PUT {{base_url}}/product?productId=37e5f9a3-056d-4918-ac3e-b8918f657938
+PUT {{base_url}}/product/e744ba95-dbbe-4b36-8666-07684b3edbdc
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json
@@ -31,7 +36,14 @@ Accept: application/json
 
 ###
 
-DELETE {{base_url}}/product?productId=00c7a28d-0a30-4287-999f-b74324afe90d
+DELETE {{base_url}}/product/e744ba95-dbbe-4b36-8666-07684b3edbdc
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+Accept: application/json
+
+###
+
+GET {{base_url}}/product/e744ba95-dbbe-4b36-8666-07684b3edbdc
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json

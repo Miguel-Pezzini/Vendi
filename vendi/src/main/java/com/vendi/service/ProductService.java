@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -20,6 +21,9 @@ public class ProductService {
     @Autowired
     ProductRepository repository;
 
+    @Autowired
+    PhotoService photoService;
+
     public Product create(CreateProductRequestDTO CreateproductDTO) {
         User user = userAuthenticatedService.getAuthenticatedUser();
         Product product = new Product();
@@ -30,12 +34,20 @@ public class ProductService {
         product.setDiscount(CreateproductDTO.discount());
         product.setUser(user);
 
-        return repository.save(product);
+        product = repository.save(product);
+
+        this.photoService.createPhotos(CreateproductDTO.photos(), product);
+
+        return product;
     }
 
     public List<Product> getUserProducts() {
         User user = userAuthenticatedService.getAuthenticatedUser();
         return user.getProducts();
+    }
+
+    public Optional<Product> getById(UUID productId) {
+        return repository.findById(productId);
     }
 
     public Product update(UUID productId, UpdateProductRequestDTO productDTO) {
