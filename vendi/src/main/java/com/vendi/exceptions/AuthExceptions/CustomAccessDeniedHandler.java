@@ -1,4 +1,4 @@
-package com.vendi.exceptions;
+package com.vendi.exceptions.AuthExceptions;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +14,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        response.getWriter().write("Acesso negado. Você não tem permissão para acessar este recurso.");
+        response.getWriter().write("Access denied. You don't have permission to access this resource.");
     }
 }
