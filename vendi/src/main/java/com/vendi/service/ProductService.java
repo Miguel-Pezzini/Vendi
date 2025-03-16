@@ -1,8 +1,8 @@
 package com.vendi.service;
 
 import com.vendi.model.product.Product;
-import com.vendi.dto.CreateProductRequestDTO;
-import com.vendi.dto.UpdateProductRequestDTO;
+import com.vendi.dto.product.CreateProductRequestDTO;
+import com.vendi.dto.product.UpdateProductRequestDTO;
 import com.vendi.model.user.User;
 import com.vendi.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +48,9 @@ public class ProductService {
         if (productDTO.discount() != null) product.setDiscount(productDTO.discount());
 
         return repository.save(product);
+    }
+
+    public void delete(UUID productId) {
+        repository.deleteById(productId);
     }
 }

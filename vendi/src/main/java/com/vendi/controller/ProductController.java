@@ -1,10 +1,11 @@
 package com.vendi.controller;
 
 import com.vendi.model.product.Product;
-import com.vendi.dto.CreateProductRequestDTO;
-import com.vendi.dto.ProductResponseDTO;
-import com.vendi.dto.UpdateProductRequestDTO;
+import com.vendi.dto.product.CreateProductRequestDTO;
+import com.vendi.dto.product.ProductResponseDTO;
+import com.vendi.dto.product.UpdateProductRequestDTO;
 import com.vendi.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/product")
 public class ProductController {
-
     @Autowired
     ProductService productService;
 
     @PostMapping()
-    public ResponseEntity createProduct(@RequestBody CreateProductRequestDTO body) {
+    public ResponseEntity createProduct(@RequestBody @Valid CreateProductRequestDTO body) {
         Product savedProduct = productService.create(body);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new ProductResponseDTO(savedProduct));
@@ -39,5 +39,11 @@ public class ProductController {
         Product updatedProduct = productService.update(productId, body);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(updatedProduct);
+    }
+
+    @DeleteMapping()
+    public ResponseEntity<Void> updateProduct(@RequestParam("productId") UUID productId) {
+        productService.delete(productId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
