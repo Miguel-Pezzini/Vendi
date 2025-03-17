@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
+// TODO IMPLEMENT ENTITYGRAPHS
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -24,33 +24,30 @@ public class ProductController {
 
     @PostMapping()
     public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody @Valid CreateProductRequestDTO body) {
-        Product savedProduct = productService.create(body);
+        ProductResponseDTO savedProduct = productService.create(body);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ProductResponseDTO(savedProduct));
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
     }
 
     @GetMapping()
     public ResponseEntity<List<ProductResponseDTO>> getUserProducts() {
-        List<ProductResponseDTO> products = productService.getUserProducts().stream().map(ProductResponseDTO::new).toList();
+        List<ProductResponseDTO> products = productService.getUserProducts();
 
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable UUID productId) throws ResourceNotFoundException {
-        Optional<Product> product = productService.getById(productId);
+        ProductResponseDTO product = productService.getById(productId);
 
-        if(product.isEmpty()) {
-            throw new ResourceNotFoundException("This product does not exists");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(new ProductResponseDTO(product.get()));
+        return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
     @PutMapping("/{productId}")
     public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable UUID productId, @RequestBody UpdateProductRequestDTO body) {
-        Product updatedProduct = productService.update(productId, body);
+        ProductResponseDTO updatedProduct = productService.update(productId, body);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ProductResponseDTO(updatedProduct));
+        return ResponseEntity.status(HttpStatus.OK).body(updatedProduct);
     }
 
     @DeleteMapping("/{productId}")

@@ -1,6 +1,8 @@
 package com.vendi.service;
 
 import com.vendi.dto.photo.CreatePhotoRequestDTO;
+import com.vendi.dto.product.ProductResponseDTO;
+import com.vendi.exceptions.ResourceNotFoundException;
 import com.vendi.model.photo.Photo;
 import com.vendi.model.product.Product;
 import com.vendi.dto.product.CreateProductRequestDTO;
@@ -28,7 +30,7 @@ public class ProductService {
     PhotoService photoService;
 
     @Transactional
-    public Product create(CreateProductRequestDTO createproductDTO) {
+    public ProductResponseDTO create(CreateProductRequestDTO createproductDTO) {
         User user = userAuthenticatedService.getAuthenticatedUser();
         Product product = new Product();
         product.setName(createproductDTO.name());
@@ -49,20 +51,26 @@ public class ProductService {
 
         this.photoService.createPhotos(createproductDTO.photos(), savedProduct);
 
-        return savedProduct;
+        return new ProductResponseDTO(savedProduct);
     }
 
-    public List<Product> getUserProducts() {
+    public List<ProductResponseDTO> getUserProducts() {
         User user = userAuthenticatedService.getAuthenticatedUser();
 
-        return user.getProducts();
+        return user.getProducts().stream().map(ProductResponseDTO::new).toList();
     }
 
-    public Optional<Product> getById(UUID productId) {
-        return repository.findById(productId);
+    public ProductResponseDTO getById(UUID productId) throws ResourceNotFoundException {
+        Optional<Product> product = repository.findById(productId);
+
+        if(product.isEmpty()) {
+            throw new ResourceNotFoundException("This product does not exists");
+        }
+
+        return new ProductResponseDTO(product.get());
     }
 
-    public Product update(UUID productId, UpdateProductRequestDTO productDTO) {
+    public ProductResponseDTO update(UUID productId, UpdateProductRequestDTO productDTO) {
         Product product = repository.findById(productId).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         if (productDTO.name() != null) product.setName(productDTO.name());
@@ -71,7 +79,8 @@ public class ProductService {
         if (productDTO.installment() != null) product.setInstallment(productDTO.installment());
         if (productDTO.discount() != null) product.setDiscount(productDTO.discount());
 
-        return repository.save(product);
+        Product savedProduct = repository.save(product);
+        return new ProductResponseDTO(savedProduct);
     }
 
     public void delete(UUID productId) {
