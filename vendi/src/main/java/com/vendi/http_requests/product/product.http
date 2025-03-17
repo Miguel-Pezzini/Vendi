@@ -49,7 +49,7 @@ Accept: application/json
 
 ###
 
-GET {{base_url}}/product/e0085ce7-f434-44f0-9e72-49fe67a302cb
+GET {{base_url}}/product/7168f589-7d4a-4a72-a1ce-44214409b8be
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json
