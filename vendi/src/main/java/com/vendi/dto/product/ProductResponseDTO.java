@@ -15,7 +15,7 @@ public record ProductResponseDTO(UUID id, String name, Float price, int quantity
                 product.getQuantity(),
                 product.getInstallment(),
                 product.getDiscount(),
-                product.getMainPhotoResponseDTO()
+                new PhotoResponseDTO(product.getMainPhoto())
         );
     }
 }

@@ -30,7 +30,7 @@ public class Product extends AbstractEditableEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Photo> photos;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "main_photo_id")
     private Photo mainPhoto;
 
@@ -49,12 +49,4 @@ public class Product extends AbstractEditableEntity {
     @Min(0)
     @Max(100)
     private int discount;
-
-    public PhotoResponseDTO getMainPhotoResponseDTO() {
-        return new PhotoResponseDTO(
-                this.getMainPhoto().getId(),
-                this.getMainPhoto().getContentType(),
-                this.getMainPhoto().getFilename()
-        );
-    }
 }

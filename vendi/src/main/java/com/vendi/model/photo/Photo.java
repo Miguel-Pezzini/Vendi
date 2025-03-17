@@ -1,11 +1,11 @@
 package com.vendi.model.photo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vendi.model.AbstractEditableEntity;
 import com.vendi.model.product.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 
 @Getter
 @Setter
@@ -13,6 +13,8 @@ import org.hibernate.annotations.Type;
 @Table(name = "photo")
 public class Photo extends AbstractEditableEntity {
     @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @JsonIgnore
     private byte[] data;
 
     private String contentType;
