@@ -1,6 +1,7 @@
-package com.vendi.model.cart;
+package com.vendi.model.wishlist;
 
 import com.vendi.model.AbstractEditableEntity;
+import com.vendi.model.cart.Cart;
 import com.vendi.model.product.Product;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -13,16 +14,16 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "cart_item")
-public class CartItem extends AbstractEditableEntity {
+@Table(name = "wishlist_item")
+public class WishlistItem extends AbstractEditableEntity {
     @ManyToOne
-    @JoinColumn(name = "cart_id", nullable = false)
-    private Cart cart;
+    @JoinColumn(name = "wishlist_id", nullable = false)
+    private Wishlist wishlist;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @Min(1)
-    private int quantity;
+    int quantity;
 }

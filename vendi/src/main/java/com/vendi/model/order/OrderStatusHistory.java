@@ -13,7 +13,7 @@ import java.util.Date;
 @Table(name = "order_status_history")
 public class OrderStatusHistory extends AbstractEditableEntity {
     @ManyToOne
-    @JoinColumn(name = "orders_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     @Column(name = "changed_at")

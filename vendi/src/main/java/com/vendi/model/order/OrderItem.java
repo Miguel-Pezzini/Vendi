@@ -20,7 +20,7 @@ import lombok.Setter;
 @Entity
 public class OrderItem extends AbstractEditableEntity {
     @ManyToOne
-    @JoinColumn(name = "orders_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     @ManyToOne

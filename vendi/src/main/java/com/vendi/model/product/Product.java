@@ -1,10 +1,12 @@
 package com.vendi.model.product;
 
 import com.vendi.model.AbstractEditableEntity;
+import com.vendi.model.cart.CartItem;
 import com.vendi.model.order.OrderItem;
 import com.vendi.model.photo.Photo;
 import com.vendi.model.rating.Rating;
 import com.vendi.model.user.User;
+import com.vendi.model.wishlist.WishlistItem;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -38,6 +40,12 @@ public class Product extends AbstractEditableEntity {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> cartItems;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WishlistItem> wishlistItems;
 
     @Min(1)
     private int quantity;
