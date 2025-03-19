@@ -53,13 +53,13 @@ public class ProductService {
 
         return new ProductResponseDTO(savedProduct);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProductResponseDTO> getUserProducts() {
         User user = userAuthenticatedService.getAuthenticatedUser();
 
         return user.getProducts().stream().map(ProductResponseDTO::new).toList();
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public ProductResponseDTO getById(UUID productId) throws ResourceNotFoundException {
         Optional<Product> product = repository.findById(productId);
 
