@@ -19,12 +19,6 @@ public class AbstractEditableEntity extends AbstractEntity {
     @Column(name = "updated_by")
     private String updatedBy;
 
-    @Column(name = "deleted_at")
-    private Date deletedAt;
-
-    @Column(name = "deleted_by")
-    private Date deletedBy;
-
     public AbstractEditableEntity() {
         super(); // Chama o construtor que define createdAt automaticamente
     }
