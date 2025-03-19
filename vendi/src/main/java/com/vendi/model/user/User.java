@@ -2,8 +2,9 @@ package com.vendi.model.user;
 
 import com.vendi.model.AbstractEditableEntity;
 import com.vendi.model.address.Address;
+import com.vendi.model.cart.Cart;
+import com.vendi.model.order.Order;
 import com.vendi.model.product.Product;
-import com.vendi.model.purchase.Purchase;
 import com.vendi.model.rating.Rating;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -36,13 +37,16 @@ public class User extends AbstractEditableEntity implements UserDetails {
     private List<Rating> ratings = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Purchase> purchases = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
 
     @OneToOne
-    @JoinColumn(name = "current_address_id")
+    @JoinColumn(name = "current_address_id", unique = true)
     private Address currentAddress;
 
     @Override

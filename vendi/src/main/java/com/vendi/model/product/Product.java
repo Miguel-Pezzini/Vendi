@@ -1,9 +1,8 @@
 package com.vendi.model.product;
 
-import com.vendi.dto.photo.PhotoResponseDTO;
 import com.vendi.model.AbstractEditableEntity;
+import com.vendi.model.order.OrderItem;
 import com.vendi.model.photo.Photo;
-import com.vendi.model.purchase.PurchaseItem;
 import com.vendi.model.rating.Rating;
 import com.vendi.model.user.User;
 import jakarta.persistence.*;
@@ -38,7 +37,7 @@ public class Product extends AbstractEditableEntity {
     private List<Rating> ratings;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PurchaseItem> purchasesItems;
+    private List<OrderItem> orderItems;
 
     @Min(1)
     private int quantity;
