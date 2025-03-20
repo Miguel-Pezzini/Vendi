@@ -96,12 +96,14 @@ async function logar() {
   await api.carregar("auth/login", {
         email: email.value, 
         password: password.value 
+  }).then(response => {
+    saveTokenJWT(response.token)
+    proxy.$showMessage('success', 'Login feito com sucesso.');
+    router.push({name: 'Home'})
   }).catch(err => {
     proxy.$showMessage('error', err);
   }) 
 
-  saveTokenJWT(response.token)
-  proxy.$showMessage('success', 'Login feito com sucesso.');
-  router.push({name: 'Home'})
+
 }
 </script>
