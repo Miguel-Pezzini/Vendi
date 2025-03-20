@@ -10,6 +10,8 @@ import com.vendi.dto.product.UpdateProductRequestDTO;
 import com.vendi.model.user.User;
 import com.vendi.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +61,7 @@ public class ProductService {
 
         return user.getProducts().stream().map(ProductResponseDTO::new).toList();
     }
+
     @Transactional(readOnly = true)
     public ProductResponseDTO getById(UUID productId) throws ResourceNotFoundException {
         Optional<Product> product = repository.findById(productId);
@@ -68,6 +71,12 @@ public class ProductService {
         }
 
         return new ProductResponseDTO(product.get());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductResponseDTO> getLatestProducts(int limit) {
+        Pageable pageable = PageRequest.of(0, limit);
+        return this.repository.findRecentProducts(pageable).stream().map(ProductResponseDTO::new).toList();
     }
 
     public ProductResponseDTO update(UUID productId, UpdateProductRequestDTO productDTO) {

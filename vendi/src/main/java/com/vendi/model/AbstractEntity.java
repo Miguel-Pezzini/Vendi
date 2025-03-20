@@ -3,6 +3,7 @@ package com.vendi.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -13,10 +14,11 @@ public class AbstractEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "created_at")
-    private final Date createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", updatable = false)
+    private final LocalDateTime createdAt;
 
     protected AbstractEntity() {
-        this.createdAt = new Date(); // Define a data automaticamente
+        this.createdAt = LocalDateTime.now();
     }
 }
