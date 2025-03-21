@@ -41,14 +41,6 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
-
-    @GetMapping("/search-latest")
-    public ResponseEntity<List<ProductResponseDTO>> getLatestProducts(@RequestParam(required = false) Integer limit) {
-        List<ProductResponseDTO> products = productService.getLatestProducts(limit);
-
-        return ResponseEntity.status(HttpStatus.OK).body(products);
-    }
-
     @PutMapping("/{productId}")
     public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable UUID productId, @RequestBody UpdateProductRequestDTO body) {
         ProductResponseDTO updatedProduct = productService.update(productId, body);
