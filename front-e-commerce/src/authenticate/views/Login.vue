@@ -101,7 +101,7 @@ async function logar() {
     proxy.$showMessage('success', 'Login feito com sucesso.');
     router.push({name: 'Home'})
   }).catch(err => {
-    proxy.$showMessage('error', err);
+    proxy.$showMessage('error', 'Invalid credentials, try again');
   }) 
 
 

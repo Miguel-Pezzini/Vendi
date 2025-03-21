@@ -10,6 +10,7 @@
     :max-width="maxWidth"
     :density="density"
     :required=" required"
+    :validate-on="validateOn"
     @click:append-inner="show = !show"
   />
 </template>
@@ -88,6 +89,10 @@ const props = defineProps({
           minLength: {
             type: Number,
             default: null
+          },
+          validateOn: {
+            type: String,
+            default: undefined
           }
     })
 

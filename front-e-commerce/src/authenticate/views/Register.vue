@@ -22,19 +22,22 @@
               v-model="email"
               label="E-mail"
               required
+              validate-on="blur"
+              :rules="emailRules"
             />
             <Input
               v-model="password"
               append-icon="mdi-eye"
               label="Senha"
               required
-              :rules="passwordRules"
+               validate-on="blur"
               :min-length="6"
               type="password"
             />
             <Input
               v-model="repeatPassword"
               append-icon="mdi-eye"
+              :rules="passwordRules"
               label="Repita sua Senha"
               :min-length="6"
               required
@@ -74,20 +77,37 @@ import api from '@/core/plugins/api';
 import { saveTokenJWT } from '@/core/utils/saveTokenJWT';
 
 const { proxy } = getCurrentInstance();
-
+// TODO REFACTOR
 const name = ref("")
 const email = ref("")
 const password = ref("")
 const repeatPassword = ref("")
 const form = ref(null)
 
+function validarEmail(email) {
+    if (!email.includes("@")) return false;
+    let [local, dominio] = email.split("@");
+    if (!local || !dominio) return false;
+    if (dominio.split(".").length < 2) return false;
+    if (local.length > 64 || dominio.length > 255) return false; 
+    return true;
+}
+
 const passwordRules = [
         value => {
-          if (repeatPassword.value == value) return true
+          if (password.value == value) return true
 
-          return 'As senhas tem que ser iguais'
+          return 'The passwords must match!'
         },
       ]
+
+const emailRules = [
+value => {
+          if (validarEmail(value)) return true
+
+          return 'Please enter a valid email address.'
+        },
+]
 
 
 async function registrar() {
