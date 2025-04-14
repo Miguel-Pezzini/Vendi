@@ -5,5 +5,13 @@ Accept: application/json
 
 {
   "name": "Category example",
-  "description": "category description"
+  "description": "category description",
+  "category_father_id": "f05bcd33-7699-4f37-a12d-ec90718fac6f"
 }
+
+###
+
+GET {{base_url}}/category
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+Accept: application/json
