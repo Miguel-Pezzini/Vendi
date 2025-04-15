@@ -19,7 +19,8 @@ Accept: application/json
       "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/5YfZUEAAAAASUVORK5CYII=",
       "contentType": "image/png",
       "filename": "example.png"
-    }]
+    }],
+  "categoriesIds": ["5a934c84-a776-4fbe-acb3-b2ea22387ad0", "f05bcd33-7699-4f37-a12d-ec90718fac6f"]
 }
 
 ###

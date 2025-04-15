@@ -22,7 +22,7 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping()
-    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody @Valid CreateProductRequestDTO body) {
+    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody @Valid CreateProductRequestDTO body) throws ResourceNotFoundException {
         ProductResponseDTO savedProduct = productService.create(body);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);

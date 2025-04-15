@@ -101,6 +101,16 @@
   import CardTransparent from '@/home/components/CardTransparent.vue';
   import CardProducts from '@/home/components/CardProducts.vue';
   import Footer from '@/core/components/Footer.vue';
+  import api from '@/core/plugins/api';
+  import { onMounted } from 'vue';
+
+  async function loadRecentProducts() {
+    await api.listar()
+  }
+
+  onMounted(() => {
+    loadRecentProducts();
+  })   
 
   const images = [banner1, banner2, banner3]
   const cardOne = {image: card1, title: "DECORAÇÃO"}

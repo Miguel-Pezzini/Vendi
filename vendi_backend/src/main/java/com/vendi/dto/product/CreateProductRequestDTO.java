@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
+import java.util.UUID;
 
 public record CreateProductRequestDTO(
         @NotNull  @Size(min = 1, max = 100) String name,
@@ -14,5 +15,6 @@ public record CreateProductRequestDTO(
         @NotNull @Min(1) int quantity,
         @Min(0) int installment,
         @Min(0) int discount,
-        @NotNull List<CreatePhotoRequestDTO> photos
+        @NotNull List<CreatePhotoRequestDTO> photos,
+        @NotNull List<UUID> categoriesIds
 ) {}

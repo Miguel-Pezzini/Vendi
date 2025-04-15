@@ -4,6 +4,7 @@ import com.vendi.dto.photo.CreatePhotoRequestDTO;
 import com.vendi.dto.product.ProductResponseDTO;
 import com.vendi.exceptions.ResourceNotFoundException;
 import com.vendi.model.photo.Photo;
+import com.vendi.model.product.Category;
 import com.vendi.model.product.Product;
 import com.vendi.dto.product.CreateProductRequestDTO;
 import com.vendi.dto.product.UpdateProductRequestDTO;
@@ -15,9 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ProductService {
@@ -31,10 +30,21 @@ public class ProductService {
     @Autowired
     PhotoService photoService;
 
+    @Autowired
+    CategoryService categoryService;
+
     @Transactional
-    public ProductResponseDTO create(CreateProductRequestDTO createproductDTO) {
+    public ProductResponseDTO create(CreateProductRequestDTO createproductDTO) throws ResourceNotFoundException {
         User user = userAuthenticatedService.getAuthenticatedUser();
         Product product = new Product();
+
+        Set<Category> categories = new HashSet<>(categoryService.findAllById(createproductDTO.categoriesIds()));
+
+        if (categories.size() != createproductDTO.categoriesIds().size()) {
+            throw new ResourceNotFoundException("Uma ou mais categorias não foram encontradas.");
+        }
+
+        product.setCategories(categories);
         product.setName(createproductDTO.name());
         product.setPrice(createproductDTO.price());
         product.setQuantity(createproductDTO.quantity());

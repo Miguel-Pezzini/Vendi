@@ -5,11 +5,14 @@ import com.vendi.dto.category.CreateCategoryDTO;
 import com.vendi.model.product.Category;
 import com.vendi.repository.CategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,4 +46,7 @@ public class CategoryService {
     }
 
 
+    public HashSet<Category> findAllById(@NotNull List<UUID> uuids) {
+        return new HashSet<>(categoryRepository.findAllById(uuids));
+    }
 }

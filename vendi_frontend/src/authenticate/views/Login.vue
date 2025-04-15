@@ -98,9 +98,9 @@ async function logar() {
         password: password.value 
   }).then(response => {
     saveTokenJWT(response.token)
-    proxy.$showMessage('success', 'Login feito com sucesso.');
+    proxy.$showMessage('success', 'Login successful. Welcome back!');
     router.push({name: 'Home'})
-  }).catch(err => {
+  }).catch(() => {
     proxy.$showMessage('error', 'Invalid credentials, try again');
   }) 
 

@@ -9,7 +9,9 @@ const server = axios.create({
     headers: {"Content-Type": "application/json" }
 });
 
-
+async function listar(resource, params) {
+    const response = await server.get(`${BASE_URL}${resource}`, params)
+}
 
 async function carregar(resource, data) {
     const response = await server.post(`${BASE_URL}${resource}`, data);

@@ -1,5 +1,7 @@
 package com.vendi.dto.category;
 
+import com.vendi.model.product.Category;
+
 import java.util.UUID;
 
 public record CategoryResponseDTO(
@@ -7,4 +9,7 @@ public record CategoryResponseDTO(
         String name,
         String description
 ) {
+    public CategoryResponseDTO(Category category) {
+        this(category.getId(), category.getName(), category.getDescription());
+    }
 }
