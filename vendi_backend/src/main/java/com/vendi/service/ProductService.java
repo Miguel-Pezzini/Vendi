@@ -59,8 +59,6 @@ public class ProductService {
             savedProduct.setMainPhoto(mainPhoto);
         });
 
-        repository.save(savedProduct);
-
         this.photoService.createPhotos(createproductDTO.photos(), savedProduct);
 
         return new ProductResponseDTO(savedProduct);
