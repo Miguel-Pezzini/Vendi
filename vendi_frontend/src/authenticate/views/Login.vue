@@ -93,10 +93,7 @@ async function logar() {
   const isValid = await form.value.validate()
   if(!isValid.valid) return
 
-  await api.carregar("auth/login", {
-        email: email.value, 
-        password: password.value 
-  }).then(response => {
+  await api.login(email.value, password.value).then(response => {
     saveTokenJWT(response.token)
     proxy.$showMessage('success', 'Login successful. Welcome back!');
     router.push({name: 'Home'})

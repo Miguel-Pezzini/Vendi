@@ -9,12 +9,20 @@ const server = axios.create({
     headers: {"Content-Type": "application/json" }
 });
 
-async function listar(resource, params) {
+async function getAll(resource, params) {
     const response = await server.get(`${BASE_URL}${resource}`, params)
+
+    return response.data
 }
 
-async function carregar(resource, data) {
+async function create(resource, data) {
     const response = await server.post(`${BASE_URL}${resource}`, data);
+
+    return response.data
+}
+
+async function login(email, password) {
+    const response = await server.post(`${BASE_URL}auth/login`, {email, password});
 
     return response.data
 }
@@ -35,7 +43,9 @@ server.interceptors.response.use(res => {
     })
 
 const api = {
-    carregar,
+    login,
+    getAll,
+    create,
 };
 
 export default api;
