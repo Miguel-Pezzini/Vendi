@@ -114,7 +114,7 @@ async function registrar() {
   const isValid = await form.value.validate()
   if(!isValid.valid) return
 
-  api.criar("auth/register", {
+  api.create("auth/register", {
         name: name.value,
         email: email.value, 
         password: password.value,
