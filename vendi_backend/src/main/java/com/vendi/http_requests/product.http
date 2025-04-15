@@ -36,10 +36,21 @@ Accept: application/json
 
 ###
 
+GET {{base_url}}/product/user
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+Accept: application/json
+
+###
+
 GET {{base_url}}/product
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json
+
+{
+  "limit": 1
+}
 
 ###
 

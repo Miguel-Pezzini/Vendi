@@ -1,6 +1,7 @@
 package com.vendi.service;
 
 import com.vendi.dto.photo.CreatePhotoRequestDTO;
+import com.vendi.dto.product.ProductRequestDTO;
 import com.vendi.dto.product.ProductResponseDTO;
 import com.vendi.exceptions.ResourceNotFoundException;
 import com.vendi.model.photo.Photo;
@@ -9,7 +10,7 @@ import com.vendi.model.product.Product;
 import com.vendi.dto.product.CreateProductRequestDTO;
 import com.vendi.dto.product.UpdateProductRequestDTO;
 import com.vendi.model.user.User;
-import com.vendi.repository.ProductRepository;
+import com.vendi.repository.product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -63,6 +64,14 @@ public class ProductService {
 
         return new ProductResponseDTO(savedProduct);
     }
+
+    @Transactional(readOnly = true)
+    public List<ProductResponseDTO>getProducts(ProductRequestDTO productRequestDTO) {
+        List<Product> products = this.repository.findAllByCustomFilter(productRequestDTO);
+
+        return products.stream().map(ProductResponseDTO::new).toList();
+    }
+
     @Transactional(readOnly = true)
     public List<ProductResponseDTO> getUserProducts() {
         User user = userAuthenticatedService.getAuthenticatedUser();

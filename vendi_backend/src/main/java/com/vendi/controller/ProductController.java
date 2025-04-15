@@ -1,5 +1,6 @@
 package com.vendi.controller;
 
+import com.vendi.dto.product.ProductRequestDTO;
 import com.vendi.exceptions.ResourceNotFoundException;
 import com.vendi.model.product.Product;
 import com.vendi.dto.product.CreateProductRequestDTO;
@@ -28,9 +29,16 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
     }
 
-    @GetMapping()
+    @GetMapping("/user")
     public ResponseEntity<List<ProductResponseDTO>> getUserProducts() {
         List<ProductResponseDTO> products = productService.getUserProducts();
+
+        return ResponseEntity.status(HttpStatus.OK).body(products);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<ProductResponseDTO>> getProducts(@RequestBody ProductRequestDTO body) {
+        List<ProductResponseDTO> products = productService.getProducts(body);
 
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
