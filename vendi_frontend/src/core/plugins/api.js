@@ -7,22 +7,15 @@ const server = axios.create({
     baseURL: BASE_URL,
     timeout: 1000,
   });
-
-  function getHeaders() {
-    if(localStorage.getItem("token")) {
-        return {"Authorization": localStorage.getItem("token")}
-    }
-    return {}
-  }
   
   server.interceptors.request.use(
     (req) => {
-        // const token = localStorage.getItem("token");
-        // req.headers["Content-Type"] = "application/json"
+        const token = localStorage.getItem("token");
+        req.headers["Content-Type"] = "application/json"
 
-        // if (token) {
-        //   req.headers["Authorization"] = `Bearer ${token}`;
-        // }
+        if (token) {
+          req.headers["Authorization"] = `Bearer ${token}`;
+        }
   
       store.commit("startLoading", req.url);
       return req;
@@ -40,8 +33,7 @@ const server = axios.create({
     })
   
     async function getAll(resource, params = {}) {
-        console.log({params: params, headers: getHeaders()})
-        const response = await server.get(resource, {params: params, headers: getHeaders()});
+        const response = await server.get(resource, {params});
         return response.data;
       }
   
