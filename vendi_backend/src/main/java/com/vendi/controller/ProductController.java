@@ -37,8 +37,8 @@ public class ProductController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ProductResponseDTO>> getProducts(@RequestBody ProductRequestDTO body) {
-        List<ProductResponseDTO> products = productService.getProducts(body);
+    public ResponseEntity<List<ProductResponseDTO>> getProducts(@ModelAttribute ProductRequestDTO dto) {
+        List<ProductResponseDTO> products = productService.getProducts(dto);
 
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }

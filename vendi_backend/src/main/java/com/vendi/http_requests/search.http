@@ -1,4 +1,0 @@
-GET {{base_url}}/search/latest?limit=5
-Authorization: Bearer {{auth_token}}
-Content-Type: application/json
-Accept: application/json

@@ -105,7 +105,10 @@
   import { onMounted } from 'vue';
 
   async function loadRecentProducts() {
-    await api.listar()
+    console.log("a")
+    await api.getAll("product", {
+      limit: 5
+    })
   }
 
   onMounted(() => {
