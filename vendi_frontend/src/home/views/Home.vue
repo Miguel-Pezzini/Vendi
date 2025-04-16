@@ -103,12 +103,15 @@
   import Footer from '@/core/components/Footer.vue';
   import api from '@/core/plugins/api';
   import { onMounted } from 'vue';
+import loadProductPhoto from '@/core/utils/loadProductPhoto';
 
   async function loadRecentProducts() {
-    console.log("a")
-    await api.getAll("product", {
+    const recentProducts = await api.getAll("product", {
       limit: 5
     })
+    recentProducts.forEach(async (product) => {
+      await loadProductPhoto(product.mainPhoto.id);
+    });
   }
 
   onMounted(() => {

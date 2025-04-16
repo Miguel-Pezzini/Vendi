@@ -36,6 +36,12 @@ const server = axios.create({
         const response = await server.get(resource, {params});
         return response.data;
       }
+
+      async function get(resource, id = null) {
+        const response = await server.get(`${resource}/${id}`);
+        return response.data;
+      }
+  
   
   async function create(resource, data) {
     const response = await server.post(resource, data);
@@ -51,6 +57,7 @@ const server = axios.create({
 
 const api = {
     login,
+    get,
     getAll,
     create,
 };
