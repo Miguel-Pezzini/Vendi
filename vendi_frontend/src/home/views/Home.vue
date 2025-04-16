@@ -105,14 +105,13 @@
   import { onMounted } from 'vue';
 import loadProductPhoto from '@/core/utils/loadProductPhoto';
 
-  async function loadRecentProducts() {
-    const recentProducts = await api.getAll("product", {
-      limit: 5
-    })
-    recentProducts.forEach(async (product) => {
-      await loadProductPhoto(product.mainPhoto.id);
-    });
-  }
+async function loadRecentProducts() {
+  const recentProducts = await api.getAll("product", { limit: 5 });
+  const photoPromises = recentProducts.map((product) =>
+    loadProductPhoto(product.mainPhoto.id)
+  );
+  await Promise.all(photoPromises);
+}
 
   onMounted(() => {
     loadRecentProducts();
