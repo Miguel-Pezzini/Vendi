@@ -43,9 +43,10 @@ const router = createRouter({
       component: Cart
     },
     {
-      path: '/product',
+      path:'/product/:productId',
       name: 'Product',
-      component: Product
+      component: Product,
+      props: true,
     },
     {
       path: '/wishlist',

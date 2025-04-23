@@ -37,7 +37,8 @@
         :key="product.id"
       >
         <CardProducts
-          :prop="product"
+          :origin="['Home']"
+          :product="product"
           class="mx-2"
         />
       </v-slide-group-item>

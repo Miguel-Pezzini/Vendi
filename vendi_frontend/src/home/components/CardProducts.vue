@@ -7,17 +7,17 @@
     <v-img
       class="image"
       height="350"
-      :src="`data:${prop.mainPhoto.contentType};base64,${prop.mainPhoto.data}`"
+      :src="`data:${product.mainPhoto.contentType};base64,${product.mainPhoto.data}`"
     />
     <v-card-item class="pb-0">
       <v-card-text class="text-center title pb-2">
-        {{ prop.name }}
+        {{ product.name }}
       </v-card-text>
       <v-card-subtitle class="text-center pa-0 descount">
-        {{ prop.installment }}x de R${{ mostrarPriceDescontado(prop.price, prop.installment) }}
+        {{ product.installment }}x de R${{ mostrarPriceDescontado(product.price, product.installment) }}
       </v-card-subtitle>
       <v-card-subtitle class="text-center price">
-        R${{ mostrarPrice(prop.price) }}
+        R${{ mostrarPrice(product.price) }}
       </v-card-subtitle>
     </v-card-item>
     <v-card-actions class="d-flex justify-center pa-0">
@@ -25,6 +25,7 @@
         title="Ver mais"
         class="button"
         bg-color="#DBB671"
+        @click="goToProduct"
       />
     </v-card-actions>
   </v-card>
@@ -33,10 +34,15 @@
     <script setup>
     import Button from '@/core/components/Button.vue';
     import mostrarPrice from '@/core/utils/mostrarPrice';
-    defineProps({
-    prop: {
+    import router from '@/core/router';
+    const props = defineProps({
+    product: {
       type: Object,
       default: null
+    },
+    origin: {
+      type: Array,
+      default: () => []
     }
     })
 
@@ -46,6 +52,10 @@
     let priceFormatado = priceDescontado.toFixed(2)
 
     return priceFormatado.replace('.', ',')
+  }
+
+  function goToProduct() {
+    router.push({ path: `/product/${props.product.id}`, query: { origin: props.origin}})
   }
     </script>
     

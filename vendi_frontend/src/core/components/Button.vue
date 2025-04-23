@@ -7,9 +7,9 @@
     :variant="variant"
     :style="{ backgroundColor: bgColor }"
     :icon="icon"
+    :to="to"
     :flat="flat"
     :density="density"
-    :text="text"
   >
     <template v-if="title">
       {{ title }}
@@ -22,6 +22,10 @@
     
   <script setup>
       defineProps({
+        to: {
+          type: String,
+        default: "null"
+      },
         title: {
               type: String,
               default: null
@@ -64,8 +68,3 @@
           }
       })
   </script>
-    
-    <style scoped>
-    
-    </style>
-    
