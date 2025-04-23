@@ -7,14 +7,14 @@
     <v-img
       class="image"
       height="350"
-      :src="prop.image"
+      :src="`data:${prop.mainPhoto.contentType};base64,${prop.mainPhoto.data}`"
     />
     <v-card-item class="pb-0">
       <v-card-text class="text-center title pb-2">
-        {{ prop.title }}
+        {{ prop.name }}
       </v-card-text>
       <v-card-subtitle class="text-center pa-0 descount">
-        {{ prop.subdivision }}x de R${{ mostrarPriceDescontado(prop.price, prop.subdivision) }}
+        {{ prop.installment }}x de R${{ mostrarPriceDescontado(prop.price, prop.installment) }}
       </v-card-subtitle>
       <v-card-subtitle class="text-center price">
         R${{ mostrarPrice(prop.price) }}

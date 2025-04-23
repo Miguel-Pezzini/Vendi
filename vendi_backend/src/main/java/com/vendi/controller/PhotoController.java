@@ -1,9 +1,7 @@
 package com.vendi.controller;
 
 
-import com.vendi.dto.photo.PhotoResponseDTO;
-import com.vendi.dto.photo.PhotoWithDataDTO;
-import com.vendi.dto.product.ProductResponseDTO;
+import com.vendi.dto.photo.PhotoData;
 import com.vendi.exceptions.ResourceNotFoundException;
 import com.vendi.service.PhotoService;
 import org.springframework.http.HttpStatus;
@@ -26,8 +24,8 @@ public class PhotoController {
     }
 
     @GetMapping("/{photoId}")
-    public ResponseEntity<PhotoWithDataDTO> getPhotoById(@PathVariable UUID photoId) throws ResourceNotFoundException {
-        PhotoWithDataDTO photo = photoService.getById(photoId);
+    public ResponseEntity<PhotoData> getPhotoById(@PathVariable UUID photoId) throws ResourceNotFoundException {
+        PhotoData photo = photoService.getById(photoId);
 
         return ResponseEntity.status(HttpStatus.OK).body(photo);
     }

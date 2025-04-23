@@ -1,13 +1,10 @@
 package com.vendi.service;
 
 import com.vendi.dto.photo.CreatePhotoRequestDTO;
-import com.vendi.dto.photo.PhotoResponseDTO;
-import com.vendi.dto.photo.PhotoWithDataDTO;
-import com.vendi.exceptions.ResourceNotFoundException;
+import com.vendi.dto.photo.PhotoData;
 import com.vendi.model.photo.Photo;
 import com.vendi.model.product.Product;
 import com.vendi.repository.PhotoRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class PhotoService {
@@ -50,9 +46,9 @@ public class PhotoService {
     }
 
     @Transactional(readOnly = true)
-    public PhotoWithDataDTO getById(UUID photoId) {
+    public PhotoData getById(UUID photoId) {
         Photo photo = this.photoRepository.findById(photoId).orElseThrow();
 
-        return new PhotoWithDataDTO(photo);
+        return new PhotoData(photo);
     }
 }

@@ -33,11 +33,11 @@
   <v-sheet>
     <v-slide-group show-arrows>
       <v-slide-group-item
-        v-for="n in 6"
-        :key="n"
+        v-for="product in recentProducts"
+        :key="product.id"
       >
         <CardProducts
-          :prop="productOne"
+          :prop="product"
           class="mx-2"
         />
       </v-slide-group-item>
@@ -102,19 +102,26 @@
   import CardProducts from '@/home/components/CardProducts.vue';
   import Footer from '@/core/components/Footer.vue';
   import api from '@/core/plugins/api';
-  import { onMounted } from 'vue';
-import loadProductPhoto from '@/core/utils/loadProductPhoto';
+  import { onMounted, ref } from 'vue';
+  import loadProductPhoto from '@/core/utils/loadProductPhoto';
+
+  let recentProducts = ref([])
 
 async function loadRecentProducts() {
-  const recentProducts = await api.getAll("product", { limit: 5 });
-  const photoPromises = recentProducts.map((product) =>
-    loadProductPhoto(product.mainPhoto.id)
-  );
-  await Promise.all(photoPromises);
+  const products = await api.getAll("product", { limit: 7 });
+
+  await Promise.all(
+    products.map(async (product) => {
+        const photo = await loadProductPhoto(product.mainPhoto.id);
+        product.mainPhoto = {...product.mainPhoto, data: photo};
+    })  
+  )
+  recentProducts.value = products
 }
 
   onMounted(() => {
     loadRecentProducts();
+    console.log(recentProducts)
   })   
 
   const images = [banner1, banner2, banner3]
@@ -122,8 +129,6 @@ async function loadRecentProducts() {
   const cardTwo = {image: card2, title: "COMPUTADORES"}
   const cardThree = {image: card3, title: "COZINHA"}
   const cardFour = {image: card4, title: "BANHEIRO"}
-
-  const productOne = {image: card4, title: "Interruptor inteligente Sonoff Mini R2 - Wifi - Automação Residencial", price: 10.5, subdivision: 10}
 </script>
   
 <style scoped>

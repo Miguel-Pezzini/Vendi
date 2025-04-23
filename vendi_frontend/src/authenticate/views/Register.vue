@@ -9,7 +9,12 @@
       >
         <div class="form-container">
           <div class="d-flex flex-column ga-6">
-            <h1 class="font-weight-medium" style="font-size: 36px;">Crie sua Conta</h1>
+            <h1
+              class="font-weight-medium"
+              style="font-size: 36px;"
+            >
+              Crie sua Conta
+            </h1>
             <p>Insira seus dados abaixo</p>
           </div>
           <div class="d-flex flex-column mt-6 w-100">
@@ -30,7 +35,7 @@
               append-icon="mdi-eye"
               label="Senha"
               required
-               validate-on="blur"
+              validate-on="blur"
               :min-length="6"
               type="password"
             />
