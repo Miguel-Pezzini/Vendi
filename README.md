@@ -59,7 +59,7 @@ O **Vendi** é um sistema de e-commerce completo, desenvolvido para oferecer uma
   npm run dev
 ```
 
-Acesse no navegador: `http://localhost:5173`
+Acesse no navegador: `http://localhost:3000`
 
 ---
 
@@ -87,13 +87,3 @@ O **Vendi** usa **JWT (JSON Web Token)** para autenticação. Para acessar rotas
 ```sh
 Authorization: Bearer <seu-token-aqui>
 ```
-
-## 📜 Licença
-Este projeto está sob a licença **MIT**. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
----
-
-## 👨‍💻 Equipe
-- [Seu Nome](https://github.com/seu-usuario) - **Desenvolvedor Full Stack**
-- [Colaborador 1](https://github.com/colaborador1) - **Frontend**
-- [Colaborador 2](https://github.com/colaborador2) - **Backend**
