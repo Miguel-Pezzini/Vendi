@@ -1,6 +1,6 @@
 package com.vendi.infra.security;
 
-import com.vendi.repository.UserRepository;
+import com.vendi.user.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

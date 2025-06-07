@@ -1,0 +1,16 @@
+POST {{base_url}}/category
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Category example",
+  "description": "category description"
+}
+
+###
+
+GET {{base_url}}/category
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+Accept: application/json

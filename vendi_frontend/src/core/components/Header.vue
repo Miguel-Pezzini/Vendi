@@ -165,7 +165,7 @@ const showCart = ref(false)
 const dadoPesquisa = ref(null)
 
 function pesquisar() {
-  router.push({ path: "/products", query: { products: dadoPesquisa.value  }})
+  router.push({ path: "/store", query: { products: dadoPesquisa.value  }})
 }
 
 </script>

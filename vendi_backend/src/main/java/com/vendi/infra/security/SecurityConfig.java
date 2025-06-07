@@ -1,7 +1,7 @@
 package com.vendi.infra.security;
 
-import com.vendi.exceptions.AuthExceptions.CustomAccessDeniedHandler;
-import com.vendi.exceptions.AuthExceptions.CustomAuthenticationEntryPoint;
+import com.vendi.shared.exception.AuthExceptions.CustomAccessDeniedHandler;
+import com.vendi.shared.exception.AuthExceptions.CustomAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
