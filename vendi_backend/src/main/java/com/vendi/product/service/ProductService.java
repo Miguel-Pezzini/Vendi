@@ -52,12 +52,10 @@ public class ProductService {
         product.setCategories(categories);
 
         List<Photo> photos = PhotoMapper.mapToPhotos(createproductDTO.photos());
+        this.validateMainPhoto(photos);
         for (Photo photo : photos) {
             product.addPhoto(photo);
         }
-        CreatePhotoRequestDTO mainPhotoDTO = this.getMainPhotoDTO(createproductDTO.photos());
-        Photo mainPhoto = PhotoMapper.mapToPhoto(mainPhotoDTO);
-        product.setMainPhoto(mainPhoto);
 
         Product saved = this.repository.save(product);
 
@@ -70,9 +68,9 @@ public class ProductService {
         }
     }
 
-    CreatePhotoRequestDTO getMainPhotoDTO(List<CreatePhotoRequestDTO> dto) throws IllegalArgumentException {
-        return dto.stream()
-                .filter(CreatePhotoRequestDTO::isMainPhoto)
+    void validateMainPhoto(List<Photo> photos) throws IllegalArgumentException {
+        photos.stream()
+                .filter(Photo::getIsMain)
                 .findFirst().orElseThrow(() -> new IllegalArgumentException("The product must contain only one main photo."));
     }
 

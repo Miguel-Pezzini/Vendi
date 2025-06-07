@@ -42,10 +42,6 @@ public class Product extends AbstractEditableEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Photo> photos = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "main_photo_id")
-    private Photo mainPhoto;
-
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rating> ratings;
 
@@ -71,10 +67,5 @@ public class Product extends AbstractEditableEntity {
     public void addPhoto(Photo photo) {
         photo.setProduct(this);
         this.photos.add(photo);
-    }
-
-    public void setMainPhoto(Photo mainPhoto) {
-        mainPhoto.setProduct(this);
-        this.mainPhoto = mainPhoto;
     }
 }
