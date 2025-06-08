@@ -4,7 +4,7 @@
   <v-container class="container">
     <v-row>
       <Path
-        :old-paths="loadPastPaths(route)"
+        :old-paths="['Home']"
         active-path="Minha Conta"
       />
       <v-spacer />
@@ -16,7 +16,7 @@
         class="pa-0"
         cols="4"
       >
-        <SideMenu active-minha-conta="true" />
+        <SideMenu active-my-account />
       </v-col>
 
       <v-col>
@@ -92,12 +92,7 @@
     import Input from '@/core/components/Input.vue';
     import Button from '@/core/components/Button.vue';
     import Footer from '@/core/components/Footer.vue';
-    import { useRoute } from 'vue-router';
-    import loadPastPaths from '@/core/utils/loadPastPaths';
 
-    const route = useRoute();
-
-   
 </script>
   
   <style scoped>

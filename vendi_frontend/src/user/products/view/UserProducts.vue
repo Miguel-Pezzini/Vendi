@@ -4,14 +4,15 @@
   <v-container class="container">
     <v-row>
       <Path
-        :old-paths="loadPastPaths(route)"
+        :old-paths="['Home']"
         active-path="My Products"
       />
       <v-spacer />
       <Button
-        title="Create Product"
+        title="Add Product"
         variant="outlined"
         color="#DBB671"
+        to="/user/products/create"
       />
     </v-row>
   
@@ -20,13 +21,21 @@
         class="pa-0"
         cols="4"
       >
-        <SideMenu active-minha-conta="true" />
+        <SideMenu active-my-products />
       </v-col>
       <v-row>
         <v-row>
           <UserProduct
+            v-for="product in products"
+            :key="product.id"
             :product="prod1"
           />
+          <span
+            v-if="!products.length"
+            class="opacity-50"
+          >
+            You haven't created any products yet. Click "Add Product" to get started!
+          </span>
         </v-row>
       </v-row>
     </v-row>
@@ -41,12 +50,10 @@
       import SideMenu from '@/user/profile/components/SideMenu.vue';
       import Footer from '@/core/components/Footer.vue';
       import Button from '@/core/components/Button.vue';
-      import { useRoute } from 'vue-router';
       import UserProduct from '../components/UserProduct.vue';
-      import loadPastPaths from '@/core/utils/loadPastPaths';
       import { ref } from 'vue';
-  
-      const route = useRoute();
+
+      const products = ref([]);
 
       const prod1 = ref({
         discount: 35,
@@ -64,16 +71,6 @@
     <style scoped>
     .container {
       margin-top: 80px;
-    }
-    .v-card {
-      padding: 40px 80px 40px 80px;
-      box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
-    }
-    .title {
-      padding-bottom: 16px;
-      color: #DBB671;
-      font-size: 20px;
-      font-weight: 500;
     }
     .margin {
       margin-bottom: 146px;

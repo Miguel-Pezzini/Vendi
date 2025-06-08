@@ -35,14 +35,16 @@
           @click="addToCart"
         />
       </div>
-      
     </v-card>
     <div class="mt-4">
       <span class="font-weight-medium">{{ product.name }}</span>
       <div class="d-flex ga-3 mt-3">
         <v-row class="pa-0 ma-0">
           <span class="text-golden font-weight-medium pr-2">R${{ product.price }} </span>
-          <span v-if="product.discount" class="price font-weight-medium">
+          <span
+            v-if="product.discount"
+            class="price font-weight-medium"
+          >
             R${{ product.fullPrice }}
           </span>
           <v-spacer />
@@ -52,37 +54,18 @@
         </v-row>
       </div>
     </div>
-   
   </div>
 </template>
           
   <script setup>
         import Button from '@/core/components/Button'
-        import { useRoute } from 'vue-router';
   
-        const route = useRoute();
-  
-        const emit = defineEmits(['toggleWishList', 'addToCart']);
-  
-        const props = defineProps({
+        defineProps({
           product: {
             type: Object,
             default: null
           },
-          activePage: {
-            type: String,
-            default: null
-          }
       })
-  
-      function toggleWishList() {
-        //props.product.isInWishList = !props.product.isInWishList;
-        emit('toggleWishList', props.product.isInWishList)
-      }
-  
-      function addToCart() {
-        emit('addToCart', props.product)
-      }
   
       function verProduct() {
         

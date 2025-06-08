@@ -10,6 +10,7 @@ import WishList from '@/wishlist/views/WishList.vue'
 import Checkout from '@/checkout/views/Checkout.vue'
 import Admin from '@/admin/view/Admin.vue'
 import UserProducts from '@/user/products/view/UserProducts.vue'
+import CreateProduct from '@/user/products/view/AddProduct.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
       path: '/user/products',
       name: 'User Products',
       component: UserProducts
+    },
+    {
+      path: '/user/products/create',
+      name: 'Create Product',
+      component: CreateProduct
     },
     {
       path: '/store',

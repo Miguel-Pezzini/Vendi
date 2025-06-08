@@ -1,47 +1,99 @@
 <template>
   <ul class="d-flex flex-column ga-4">
-    <div class="d-flex flex-column ga-3">
-      <li><RouterLink><h1>Manage my account</h1></RouterLink></li>
-      <div class="d-flex flex-column ga-2">
+    <div
+      v-for="item in menu"
+      :key="item.title"
+      class="d-flex flex-column ga-3"
+    >
+      <li>
+        <RouterLink :to="item.to">
+          <h1 :class="item.marked ? 'text-golden' : 'text-black'">
+            {{ item.title }}
+          </h1>
+        </RouterLink>
+      </li>
+      <div
+        v-for="subMenu in item.subMenus"
+        :key="subMenu.title"
+        class="d-flex flex-column ga-2"
+      >
         <li>
-          <RouterLink>
-            <p :style="{color: activeMinhaConta ? '#DBB671' : black}">
-              My Account
+          <RouterLink :to="subMenu.to">
+            <p :class="subMenu.marked ? 'text-golden' : 'text-grey-darken-1'">
+              {{ subMenu.title }}
             </p>
           </RouterLink>
         </li>
-        <li><RouterLink><p>My payment forms</p></RouterLink></li>
       </div>
     </div>
-            
-    <div class="d-flex flex-column ga-3">
-      <li><RouterLink><h1>My Orders</h1></RouterLink></li>
-      <div class="d-flex flex-column ga-2">
-        <li><RouterLink><p>Returns</p></RouterLink></li>
-        <li><RouterLink><p>My cancellations</p></RouterLink></li>
-      </div>
-    </div>
-        
-    <li>
-      <RouterLink to="/wishlist">
-        <h1>Wishlist</h1>
-      </RouterLink>
-    </li>
-    <li>
-      <RouterLink to="/user/products">
-        <h1>My products</h1>
-      </RouterLink>
-    </li>
   </ul>
 </template>
     
   <script setup>
-  defineProps({
-    activeMinhaConta: {
+  const props = defineProps({
+    activeMyAccount: {
+        type: Boolean,
+        default: false
+    },
+    activeMyProducts: {
+        type: Boolean,
+        default: false
+    },
+    activeAddProduct: {
         type: Boolean,
         default: false
     }
   })
+
+  const menu = [
+    {
+      title: "Manage my account",
+      to: "/#",
+      subMenus: [
+        {
+          title: "My Account",
+          to: "/profile",
+          marked: props.activeMyAccount
+        },
+        {
+          title: "My Payment Forms",
+          to: "/#",
+        }
+      ]
+    },
+    {
+      title: "My Orders",
+      to: "/#",
+      subMenus: [
+        {
+          title: "Returns",
+          to: "/#",
+        },
+        {
+          title: "My Cancellations",
+          to: "/#",
+        }
+      ]
+    },
+    {
+      title: "Wishlist",
+      to: "/#",
+    },
+    {
+      title: "My Products",
+      to: "/user/products",
+      marked: props.activeMyProducts,
+      subMenus: [
+        {
+          title: "Add Product",
+          to: "/user/products/create",
+          marked: props.activeAddProduct
+        },
+      ]
+    },
+
+
+  ]
   </script>
     
     <style scoped>
@@ -59,7 +111,6 @@
     p {
         margin-left: 35px;
         font-size: 16px;
-        opacity: 0.5;
     }
     
     </style>
