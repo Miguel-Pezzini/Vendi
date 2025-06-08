@@ -1,4 +1,8 @@
 package com.vendi.user.dto;
 
-public record RegisterResponseDTO(String token) {
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.List;
+
+public record RegisterResponseDTO(String token, String roles) {
 }

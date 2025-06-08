@@ -7,16 +7,15 @@ const server = axios.create({
     baseURL: BASE_URL,
     timeout: 1000,
   });
+
+  const getHeaders = {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`
+    }
+  }
   
   server.interceptors.request.use(
     (req) => {
-        const token = localStorage.getItem("token");
-        req.headers["Content-Type"] = "application/json"
-
-        if (token) {
-          req.headers["Authorization"] = `Bearer ${token}`;
-        }
-  
       store.commit("startLoading", req.url);
       return req;
     },
@@ -33,23 +32,34 @@ const server = axios.create({
     })
   
     async function getAll(resource, params = {}) {
-        const response = await server.get(resource, {params});
+        const response = await server.get(resource, {
+          params, 
+          ...getHeaders
+        });
         return response.data;
-      }
+    }
 
       async function get(resource, id = null) {
-        const response = await server.get(`${resource}/${id}`);
+        const response = await server.get(`${resource}/${id}`, getHeaders);
         return response.data;
       }
   
   
   async function create(resource, data) {
-    const response = await server.post(resource, data);
+    const response = await server.post(resource, data, getHeaders);
     return response.data;
   }
   
   async function login(email, password) {
     const response = await server.post("auth/login", { email, password });
+    localStorage.setItem("token", response.data.token);
+    localStorage.setItem("roles", response.data.roles)
+    return response.data;
+  }
+
+  async function register(email, name, password, role) {
+    const response = await server.post("auth/register", { email, name, role, password });
+    localStorage.setItem("roles", response.data.roles)
     localStorage.setItem("token", response.data.token);
     return response.data;
   }
@@ -57,6 +67,7 @@ const server = axios.create({
 
 const api = {
     login,
+    register,
     get,
     getAll,
     create,

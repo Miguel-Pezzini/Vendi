@@ -38,7 +38,7 @@ public class AuthController {
 
         var token = tokenService.generateToken((User) auth.getPrincipal());
 
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        return ResponseEntity.ok(new LoginResponseDTO(token, auth.getAuthorities().toString()));
     }
 
     @PostMapping("/register")
@@ -52,7 +52,7 @@ public class AuthController {
 
         var token = tokenService.generateToken(newUser);
 
-        return ResponseEntity.ok(new RegisterResponseDTO(token));
+        return ResponseEntity.ok(new RegisterResponseDTO(token, newUser.getAuthorities().toString()));
 
 
     }

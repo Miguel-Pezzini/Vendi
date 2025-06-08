@@ -81,7 +81,6 @@ import router from '@/core/router';
 import Input from '@/core/components/Input'
 import Footer from '@/core/components/Footer.vue';
 import api from '@/core/plugins/api';
-import { saveTokenJWT } from '@/core/utils/saveTokenJWT';
 
 const { proxy } = getCurrentInstance();
 
@@ -93,8 +92,7 @@ async function logar() {
   const isValid = await form.value.validate()
   if(!isValid.valid) return
 
-  await api.login(email.value, password.value).then(response => {
-    saveTokenJWT(response.token)
+  api.login(email.value, password.value).then(() => {
     proxy.$showMessage('success', 'Login successful. Welcome back!');
     router.push({name: 'Home'})
   }).catch(() => {

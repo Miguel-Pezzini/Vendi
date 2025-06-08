@@ -2,12 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Register from '@/authenticate/views/Register.vue'
 import Login from '@/authenticate/views/Login.vue'
 import Home from '@/home/views/Home.vue'
-import Profile from '@/profile/views/Profile.vue'
+import Profile from '@/user/profile/views/Profile.vue'
 import Products from '@/store/views/Products.vue'
 import Product from '@/product/views/Product.vue'
 import Cart from '@/cart/views/Cart.vue'
 import WishList from '@/wishlist/views/WishList.vue'
 import Checkout from '@/checkout/views/Checkout.vue'
+import Admin from '@/admin/view/Admin.vue'
+import UserProducts from '@/user/products/view/UserProducts.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +33,11 @@ const router = createRouter({
       path: '/profile',
       name: 'Profile',
       component: Profile
+    },
+    {
+      path: '/user/products',
+      name: 'User Products',
+      component: UserProducts
     },
     {
       path: '/store',
@@ -58,6 +65,12 @@ const router = createRouter({
      name: 'Checkout',
       component: Checkout
     },
+    {
+      path: '/admin',
+      name: 'Admin',
+      component: Admin
+    },
+    
 
   ]
 })

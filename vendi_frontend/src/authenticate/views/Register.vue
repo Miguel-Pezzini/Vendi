@@ -5,7 +5,7 @@
       <v-form
         ref="form"
         class="form"
-        @submit.prevent="registrar()"
+        @submit.prevent="register()"
       >
         <div class="form-container">
           <div class="d-flex flex-column ga-6">
@@ -79,7 +79,6 @@ import router from '@/core/router';
 import Input from '@/core/components/Input'
 import Footer from '@/core/components/Footer.vue';
 import api from '@/core/plugins/api';
-import { saveTokenJWT } from '@/core/utils/saveTokenJWT';
 
 const { proxy } = getCurrentInstance();
 // TODO REFACTOR
@@ -115,18 +114,12 @@ value => {
 ]
 
 
-async function registrar() {
+async function register() {
   const isValid = await form.value.validate()
   if(!isValid.valid) return
 
-  api.create("auth/register", {
-        name: name.value,
-        email: email.value, 
-        password: password.value,
-        role: "USER"
-  }).then(response => {
-    proxy.$showMessage('success', 'Conta registrada com sucesso.');
-    saveTokenJWT(response.token);
+  api.register(email.value, name.value, password.value, "USER").then(() => {
+    proxy.$showMessage('success', 'Your account was registered with success!');
     router.push({name: 'Home'})
   }) .catch(err => {
     proxy.$showMessage('error', err);

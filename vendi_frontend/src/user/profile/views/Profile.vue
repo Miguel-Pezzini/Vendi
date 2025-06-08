@@ -88,7 +88,7 @@
 <script setup>
     import Header from '@/core/components/Header.vue';
     import Path from '@/core/components/Path.vue';
-    import SideMenu from '@/profile/components/SideMenu.vue';
+    import SideMenu from '../components/SideMenu.vue';
     import Input from '@/core/components/Input.vue';
     import Button from '@/core/components/Button.vue';
     import Footer from '@/core/components/Footer.vue';

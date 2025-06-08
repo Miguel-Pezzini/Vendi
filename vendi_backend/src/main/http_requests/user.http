@@ -4,7 +4,7 @@ Accept: application/json
 
 {
   "name": "Miguel",
-  "email": "a@testt.com",
+  "email": "a@test.commm",
   "password": "123456",
   "role": "USER"
 }
@@ -16,7 +16,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "a@testt.com",
+  "email": "a@test.com",
   "password": "123456"
 }
 

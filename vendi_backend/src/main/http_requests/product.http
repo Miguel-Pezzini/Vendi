@@ -20,7 +20,7 @@ Accept: application/json
       "contentType": "image/png",
       "filename": "example.png"
     }],
-  "categoriesIds": ["c193ec8c-ae84-41eb-b6c1-0c91448a4f8d"]
+  "categoriesIds": ["3c78e06a-f9d5-429a-8c18-cc90d08a7616"]
 }
 
 ###

@@ -57,9 +57,7 @@ public class ProductService {
             product.addPhoto(photo);
         }
 
-        Product saved = this.repository.save(product);
-
-        return new ProductResponseDTO(saved);
+        return new ProductResponseDTO(this.repository.save(product));
     }
 
     void validateCategories(Set<Category> categories, List<UUID> categoriesIds) throws ResourceNotFoundException {

@@ -152,7 +152,7 @@
       font-size: 16px;
     }
     .actualPrice {
-      color: #DBB671;
+      color: golden;
       font-weight: 500;
       font-size: 16px;
     }

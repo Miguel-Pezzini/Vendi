@@ -100,7 +100,7 @@
             <v-col
               v-for="n in 8"
               :key="n"
-              cols="3"
+              cols="auto"
             >
               <ResultsProduct
                 :product="prod1"

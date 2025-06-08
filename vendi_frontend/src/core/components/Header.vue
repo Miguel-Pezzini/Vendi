@@ -108,11 +108,11 @@
           />
         </RouterLink>
 
-        <RouterLink :to="{ path: '/profile', query: { origin: ['Home'] } }">
+        <RouterLink :to="{ path: isAdmin() ? '/admin' : '/profile', query: { origin: ['Home'] } }">
           <v-icon
             :color="accountActive ? '#DBB671' : 'black'"
             size="x-large"
-            :icon="accountActive ? 'mdi-account-circle-outline' : 'mdi-account-outline'"
+            :icon="isAdmin() ? adminIcon : accountIcon "
           />
         </RouterLink>
 
@@ -129,12 +129,13 @@
       
 <script setup>
     import { ref } from 'vue';
+    import isAdmin from '../utils/isAdmin';
     import router from '@/core/router';
     import Input from '@/core/components/Input.vue';
     import Button from '@/core/components/Button.vue';
     import CartMenu from '@/cart/components/CartMenu.vue';
 
-defineProps({
+const props = defineProps({
   accountActive: {
     type: Boolean,
     default: false
@@ -160,6 +161,9 @@ defineProps({
 //   fullPrice: "1160",
 //   isInWishList: true,
 // })
+
+const accountIcon = props.accountActive ? "mdi-account-circle-outline" : "mdi-account-outline";
+const adminIcon = props.accountActive ? "mdi-shield-account" : "mdi-shield-account-outline"
 
 const showCart = ref(false)
 const dadoPesquisa = ref(null)
