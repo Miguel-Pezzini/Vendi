@@ -9,6 +9,7 @@
     :hide-details="hideDetails"
     :max-width="maxWidth"
     :density="density"
+    :prefix="prefix"
     :required=" required"
     :validate-on="validateOn"
     @click:append-inner="show = !show"
@@ -93,6 +94,10 @@ const props = defineProps({
           validateOn: {
             type: String,
             default: undefined
+          },
+          prefix: {
+            type: String,
+            default: null,
           }
     })
 

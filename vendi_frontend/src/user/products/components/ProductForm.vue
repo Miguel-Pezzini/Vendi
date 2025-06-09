@@ -9,17 +9,22 @@
       <v-row>
         <Input
           variant="outlined"
-          label="Nome"
+          label="Name"
         />
       </v-row>
       <v-row class="ga-4">
-        <Input
+        <NumberInput
+          prefix="$"
+          v-model="price"
           variant="outlined"
-          label="E-mail"
+          label="Price"
+          min="0"
         />
-        <Input
+        <NumberInput
           variant="outlined"
-          label="Endereco"
+          label="Quantity"
+          v-model="quantity"
+          min="1"
         />
       </v-row>
       <v-row>
@@ -63,6 +68,11 @@
     <script setup>
         import Input from '@/core/components/Input.vue';
         import Button from '@/core/components/Button.vue';
+        import NumberInput from '@/core/components/NumberInput.vue';
+        import { ref } from 'vue';
+
+        const price = ref(0)
+        const quantity = ref(1);
     
        
     </script>
