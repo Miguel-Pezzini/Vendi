@@ -1,7 +1,6 @@
 package com.vendi.product.service;
 
-import com.vendi.photo.dto.CreatePhotoRequestDTO;
-import com.vendi.photo.mapper.PhotoMapper;
+import com.vendi.photo.service.PhotoService;
 import com.vendi.product.dto.ProductRequestDTO;
 import com.vendi.product.dto.ProductResponseDTO;
 import com.vendi.product.mapper.ProductMapper;
@@ -16,7 +15,6 @@ import com.vendi.user.model.User;
 import com.vendi.product.repository.ProductRepository;
 import com.vendi.category.service.CategoryService;
 import com.vendi.user.service.UserAuthenticatedService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,15 +28,17 @@ public class ProductService {
     private final CategoryService categoryService;
     private final ProductRepository repository;
     private final UserAuthenticatedService userAuthenticatedService;
+    private final PhotoService photoService;
 
     public ProductService(
             CategoryService categoryService,
             ProductRepository repository,
-            UserAuthenticatedService userAuthenticatedService
-    ) {
+            UserAuthenticatedService userAuthenticatedService,
+            PhotoService photoService) {
         this.categoryService = categoryService;
         this.repository = repository;
         this.userAuthenticatedService = userAuthenticatedService;
+        this.photoService = photoService;
     }
 
     @Transactional
@@ -51,7 +51,7 @@ public class ProductService {
         product.setUser(this.userAuthenticatedService.getAuthenticatedUser());
         product.setCategories(categories);
 
-        List<Photo> photos = PhotoMapper.mapToPhotos(createproductDTO.photos());
+        List<Photo> photos = photoService.createPhotos(createproductDTO.photos());
         this.validateMainPhoto(photos);
         for (Photo photo : photos) {
             product.addPhoto(photo);

@@ -14,17 +14,19 @@
       </v-row>
       <v-row class="ga-4">
         <NumberInput
-          prefix="$"
           v-model="price"
+          prefix="$"
           variant="outlined"
           label="Price"
-          min="0"
+          :min="0"
+          :precision="2"
         />
         <NumberInput
+          v-model="quantity"
           variant="outlined"
           label="Quantity"
-          v-model="quantity"
-          min="1"
+          :min="1"
+          :precision="0"
         />
       </v-row>
       <v-row>
@@ -71,7 +73,7 @@
         import NumberInput from '@/core/components/NumberInput.vue';
         import { ref } from 'vue';
 
-        const price = ref(0)
+        const price = ref(0.00)
         const quantity = ref(1);
     
        

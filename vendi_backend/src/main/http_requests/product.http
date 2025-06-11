@@ -18,9 +18,10 @@ Accept: application/json
     {
       "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/5YfZUEAAAAASUVORK5CYII=",
       "contentType": "image/png",
-      "filename": "example.png"
+      "filename": "example.png",
+      "isMainPhoto": false
     }],
-  "categoriesIds": ["3c78e06a-f9d5-429a-8c18-cc90d08a7616"]
+  "categoriesIds": ["4363cc93-0d97-4b1f-8142-720973284bc5"]
 }
 
 ###

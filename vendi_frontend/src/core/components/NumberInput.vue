@@ -1,36 +1,31 @@
 <template>
-  <v-text-field
-    type="number"
-    :label="localLabel"
+  <v-number-input
     v-model="formattedValue"
+    :label="localLabel"
     :variant="variant"
     :prepend-inner-icon="prependIcon"
     :rules="computedRules"
     :hide-details="hideDetails"
     :max-width="maxWidth"
     :density="density"
-    @input="onInput()"
     :prefix="prefix"
     :required=" required"
     :validate-on="validateOn"
-    @click:append-inner="show = !show"
+    :min="min"
+    :max="max"
+    :precision="precision"
   />
 </template>
     
   <script setup>
-  import { ref, computed } from 'vue';
-  const show = ref(false)
-  let formattedValue = ref();
+  import { computed } from 'vue';
 
-  function onInput() {
-    console.log(formattedValue.value)
-    if(Number(formattedValue.value) > props.max) {
-        formattedValue = props.max
-    }
-    if(Number(formattedValue.value)  < props.min) {
-        formattedValue = props.min
-    }
-  }
+  const emit = defineEmits(['update:modelValue'])
+
+const formattedValue = computed({
+  get: () => props.modelValue,
+  set: (val) => emit('update:modelValue', val)
+})
   
   const localLabel = computed(() => {
     return props.required ? `${props.label}*` : props.label;
@@ -47,7 +42,7 @@
   });
   
   const props = defineProps({
-          value: {
+          modelValue: {
             type: Number,
             default: null,
           },
@@ -101,17 +96,17 @@
             },
             min: {
                 type: Number,
-                default: null
+                default: undefined
             },
             max: {
                 type: Number,
-                default: null,
+                default: undefined,
+            },
+            precision: {
+              type: Number,
+              default: 0
             }
       })
   
   </script>
-    
-    <style scoped>
-    
-    </style>
     

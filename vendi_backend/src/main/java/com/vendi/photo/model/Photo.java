@@ -21,7 +21,7 @@ public class Photo extends AbstractEditableEntity {
 
     private String filename;
 
-    private Boolean isMain;
+    private Boolean isMain = false;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
