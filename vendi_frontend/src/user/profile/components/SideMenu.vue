@@ -1,10 +1,6 @@
 <template>
   <ul class="d-flex flex-column ga-4">
-    <div
-      v-for="item in menu"
-      :key="item.title"
-      class="d-flex flex-column ga-3"
-    >
+    <div v-for="item in menu" :key="item.title" class="d-flex flex-column ga-3">
       <li>
         <RouterLink :to="item.to">
           <h1 :class="item.marked ? 'text-golden' : 'text-black'">
@@ -12,11 +8,7 @@
           </h1>
         </RouterLink>
       </li>
-      <div
-        v-for="subMenu in item.subMenus"
-        :key="subMenu.title"
-        class="d-flex flex-column ga-2"
-      >
+      <div v-for="subMenu in item.subMenus" :key="subMenu.title" class="d-flex flex-column ga-2">
         <li>
           <RouterLink :to="subMenu.to">
             <p :class="subMenu.marked ? 'text-golden' : 'text-grey-darken-1'">
@@ -28,90 +20,86 @@
     </div>
   </ul>
 </template>
-    
-  <script setup>
+
+<script setup>
   const props = defineProps({
     activeMyAccount: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
     activeMyProducts: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
     activeAddProduct: {
-        type: Boolean,
-        default: false
-    }
+      type: Boolean,
+      default: false,
+    },
   })
 
   const menu = [
     {
-      title: "Manage my account",
-      to: "/#",
+      title: 'Manage my account',
+      to: '/#',
       subMenus: [
         {
-          title: "My Account",
-          to: "/profile",
-          marked: props.activeMyAccount
+          title: 'My Account',
+          to: '/profile',
+          marked: props.activeMyAccount,
         },
         {
-          title: "My Payment Forms",
-          to: "/#",
-        }
-      ]
+          title: 'My Payment Forms',
+          to: '/#',
+        },
+      ],
     },
     {
-      title: "My Orders",
-      to: "/#",
+      title: 'My Orders',
+      to: '/#',
       subMenus: [
         {
-          title: "Returns",
-          to: "/#",
+          title: 'Returns',
+          to: '/#',
         },
         {
-          title: "My Cancellations",
-          to: "/#",
-        }
-      ]
+          title: 'My Cancellations',
+          to: '/#',
+        },
+      ],
     },
     {
-      title: "Wishlist",
-      to: "/#",
+      title: 'Wishlist',
+      to: '/#',
     },
     {
-      title: "My Products",
-      to: "/user/products",
+      title: 'My Products',
+      to: '/user/products',
       marked: props.activeMyProducts,
       subMenus: [
         {
-          title: "Add Product",
-          to: "/user/products/create",
-          marked: props.activeAddProduct
+          title: 'Add Product',
+          to: '/user/products/create',
+          marked: props.activeAddProduct,
         },
-      ]
+      ],
     },
-
-
   ]
-  </script>
-    
-    <style scoped>
-    a {
-        text-decoration: none;
-        color: black;
-    }
-    ul {
-      list-style: none;
-    }
-    h1 {
-      font-size: 16px;
-      font-weight: 500;
-    }
-    p {
-        margin-left: 35px;
-        font-size: 16px;
-    }
-    
-    </style>
-    
+</script>
+
+<style scoped>
+  a {
+    text-decoration: none;
+    color: black;
+  }
+  ul {
+    list-style: none;
+  }
+  h1 {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  p {
+    margin-left: 35px;
+    font-size: 16px;
+  }
+</style>

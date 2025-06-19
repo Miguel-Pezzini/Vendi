@@ -18,67 +18,65 @@ const router = createRouter({
     {
       path: '/register',
       name: 'Register',
-      component: Register
+      component: Register,
     },
     {
       path: '/',
       name: 'Login',
-      component: Login
+      component: Login,
     },
     {
       path: '/home',
       name: 'Home',
-      component: Home
+      component: Home,
     },
     {
       path: '/profile',
       name: 'Profile',
-      component: Profile
+      component: Profile,
     },
     {
       path: '/user/products',
       name: 'User Products',
-      component: UserProducts
+      component: UserProducts,
     },
     {
       path: '/user/products/create',
       name: 'Create Product',
-      component: CreateProduct
+      component: CreateProduct,
     },
     {
       path: '/store',
       name: 'Store',
-      component: Products
+      component: Products,
     },
     {
       path: '/cart',
       name: 'Cart',
-      component: Cart
+      component: Cart,
     },
     {
-      path:'/product/:productId',
+      path: '/product/:productId',
       name: 'Product',
       component: Product,
       props: true,
     },
     {
       path: '/wishlist',
-     name: 'Wishlist',
-      component: WishList
+      name: 'Wishlist',
+      component: WishList,
     },
     {
       path: '/checkout',
-     name: 'Checkout',
-      component: Checkout
+      name: 'Checkout',
+      component: Checkout,
     },
     {
       path: '/admin',
       name: 'Admin',
-      component: Admin
+      component: Admin,
     },
-    
-
-  ]
+  ],
 })
 
 // router.beforeEach((to, from, next) => {

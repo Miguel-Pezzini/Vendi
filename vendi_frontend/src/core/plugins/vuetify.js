@@ -26,9 +26,9 @@ export default createVuetify({
     themes: {
       light: {
         colors: {
-            golden: '#DBB671',
-        }
-      }
-    }
+          golden: '#DBB671',
+        },
+      },
+    },
   },
 })
