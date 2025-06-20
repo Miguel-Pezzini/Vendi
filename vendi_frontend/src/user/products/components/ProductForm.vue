@@ -40,7 +40,7 @@
 
   import { ref } from 'vue'
   const price = ref(0.0)
-  const quantity = ref(1)
+  const quantity = ref(4.052)
 </script>
 
 <style scoped>
