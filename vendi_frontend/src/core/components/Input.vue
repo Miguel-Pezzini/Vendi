@@ -68,7 +68,7 @@
     },
     variant: {
       type: String,
-      default: 'underlined',
+      default: 'outlined',
     },
     hideDetails: {
       type: Boolean,

@@ -11,23 +11,15 @@
         <NumberInput
           v-model="product.price"
           prefix="$"
-          variant="outlined"
           label="Price"
           required
           :min="0"
           :precision="2" />
-        <NumberInput
-          v-model="product.quantity"
-          variant="outlined"
-          label="Quantity"
-          :min="1"
-          required
-          :precision="0" />
+        <NumberInput v-model="product.quantity" label="Quantity" :min="1" required :precision="0" />
       </v-row>
       <v-row class="ga-4">
         <NumberInput
           v-model="product.installment"
-          variant="outlined"
           required
           label="Installment"
           :min="0"
@@ -35,7 +27,6 @@
         <NumberInput
           v-model="product.discount"
           prefix="%"
-          variant="outlined"
           label="Discount"
           :min="0"
           required
@@ -43,16 +34,15 @@
           :precision="0" />
       </v-row>
       <v-row>
-        <v-select
+        <Select
           v-model="product.categories"
-          variant="outlined"
           :items="categories"
           label="Categories"
           item-title="name"
           item-value="category_id"
           chips
           required
-          multiple></v-select>
+          multiple />
       </v-row>
       <v-row>
         <FileInput
@@ -60,7 +50,6 @@
           prepend-inner-icon="mdi-camera"
           :prepend-icon="null"
           accept="image/png, image/jpeg, image/bmp"
-          variant="outlined"
           label="Main photo"
           showSize
           required />
@@ -70,7 +59,6 @@
           v-model="product.photos"
           prepend-inner-icon="mdi-camera"
           :prepend-icon="null"
-          variant="outlined"
           accept="image/png, image/jpeg, image/bmp"
           label="Photos"
           multiple
@@ -92,6 +80,7 @@
   import Input from '@/core/components/Input.vue'
   import FileInput from '@/core/components/FileInput.vue'
   import NumberInput from '@/core/components/NumberInput.vue'
+  import Select from '@/core/components/Select.vue'
 
   import Button from '@/core/components/Button.vue'
 
