@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <v-card :hover="false" width="270" height="294" @click="verProduct()">
+  <div class="card-container">
+    <v-card :hover="false" @click="verProduct()">
       <div>
         <v-row align="center">
           <v-col cols="auto mt-3 ml-3">
-            <span class="icon-discount text-white bg-golden py-1 px-3">
+            <span v-if="product.discount" class="icon-discount text-white bg-golden py-1 px-3">
               -{{ product.discount }}%
             </span>
           </v-col>
@@ -14,7 +14,7 @@
           </v-col>
         </v-row>
         <div class="image-container">
-          <img :src="product.image" />
+          <img :src="`data:${product.mainPhoto.contentType};base64,${product.mainPhoto.data}`" />
         </div>
         <v-btn
           color="black"
@@ -22,7 +22,7 @@
           :rounded="false"
           class="w-100 rounded-b"
           text="Modify Product"
-          @click="addToCart" />
+          @click="editProduct" />
       </div>
     </v-card>
     <div class="mt-4">
@@ -31,7 +31,7 @@
         <v-row class="pa-0 ma-0">
           <span class="text-golden font-weight-medium pr-2">R${{ product.price }} </span>
           <span v-if="product.discount" class="price font-weight-medium">
-            R${{ product.fullPrice }}
+            R${{ product.price }}
           </span>
           <v-spacer />
           <span style="opacity: 0.5"> {{ product.quantity }} remaining </span>
@@ -55,20 +55,15 @@
 </script>
 
 <style scoped>
-  .image-container {
-    box-sizing: content-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .card-container {
     width: 270px;
-    height: 180px;
+  }
+  .image-container {
+    display: flex;
     padding: 15px 0px 15px 0px;
-    overflow: hidden;
   }
   .image-container img {
     max-width: 100%;
-    max-height: 100%;
-    object-fit: cover;
   }
   .icons-container {
     display: flex;

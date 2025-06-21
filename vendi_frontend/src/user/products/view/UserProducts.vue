@@ -1,7 +1,7 @@
 <template>
   <Header account-active />
   <v-divider />
-  <v-container class="container">
+  <div class="container">
     <v-row>
       <Path :old-paths="['Home']" active-path="My Products" />
       <v-spacer />
@@ -12,16 +12,19 @@
       <v-col class="pa-0" cols="4">
         <SideMenu active-my-products />
       </v-col>
-      <v-row>
+      <v-col cols="8">
         <v-row>
-          <UserProduct v-for="product in products" :key="product.id" :product="prod1" />
+          <v-col v-for="product in products" :key="product.id">
+            <UserProduct :product="product" />
+          </v-col>
+
           <span v-if="!products.length" class="opacity-50">
             You haven't created any products yet. Click "Add Product" to get started!
           </span>
         </v-row>
-      </v-row>
+      </v-col>
     </v-row>
-  </v-container>
+  </div>
   <Footer />
 </template>
 
@@ -33,24 +36,33 @@
   import Footer from '@/core/components/Footer.vue'
   import Button from '@/core/components/Button.vue'
   import UserProduct from '../components/UserProduct.vue'
+  import { onMounted } from 'vue'
   import { ref } from 'vue'
+  import api from '@/core/plugins/api'
+  import loadProductPhoto from '@/core/utils/loadProductPhoto'
 
-  const products = ref([])
+  let products = ref([])
 
-  const prod1 = ref({
-    discount: 35,
-    name: 'Laptop',
-    price: '960',
-    fullPrice: '1160',
-    isInWishList: false,
-    quantity: 10,
-    image: card1,
+  onMounted(async () => {
+    await getUserProducts()
   })
+
+  async function getUserProducts() {
+    const userProducts = await api.getAll('product/user')
+
+    await Promise.all(
+      userProducts.map(async (product) => {
+        const photo = await loadProductPhoto(product.mainPhoto.id)
+        product.mainPhoto = { ...product.mainPhoto, data: photo }
+      })
+    )
+    products.value = userProducts
+  }
 </script>
 
 <style scoped>
   .container {
-    margin-top: 80px;
+    margin: 80px 100px 146px 100px;
   }
   .margin {
     margin-bottom: 146px;
