@@ -57,7 +57,7 @@ public class Product extends AbstractEditableEntity {
     @Min(1)
     private int quantity;
 
-    @Min(1)
+    @Min(0)
     private int installment;
 
     @Min(0)

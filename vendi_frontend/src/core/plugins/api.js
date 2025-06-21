@@ -51,6 +51,11 @@ async function create(resource, data) {
   return response.data
 }
 
+async function save(resource, data) {
+  const response = await server.put(resource, data, getHeaders)
+  return response.data
+}
+
 async function login(email, password) {
   const response = await server.post('auth/login', { email, password })
   localStorage.setItem('token', response.data.token)
@@ -71,6 +76,7 @@ const api = {
   get,
   getAll,
   create,
+  save,
 }
 
 export default api

@@ -23,7 +23,7 @@
   defineProps({
     to: {
       type: String,
-      default: 'null',
+      default: undefined,
     },
     title: {
       type: String,

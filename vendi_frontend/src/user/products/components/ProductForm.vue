@@ -1,13 +1,13 @@
 <template>
   <v-card>
-    <v-form class="rounded">
+    <v-form @submit.prevent="saveProduct()" ref="form" class="rounded">
       <v-row>
         <h1 class="title">Add a Product</h1>
       </v-row>
       <v-row>
-        <Input variant="outlined" label="Name" />
+        <Input v-model="product.name" class="mb-2" required label="Name" />
       </v-row>
-      <v-row class="ga-4">
+      <v-row class="ga-4 my-2">
         <NumberInput
           v-model="product.price"
           prefix="$"
@@ -17,7 +17,7 @@
           :precision="2" />
         <NumberInput v-model="product.quantity" label="Quantity" :min="1" required :precision="0" />
       </v-row>
-      <v-row class="ga-4">
+      <v-row class="ga-4 my-2">
         <NumberInput
           v-model="product.installment"
           required
@@ -33,7 +33,7 @@
           :max="100"
           :precision="0" />
       </v-row>
-      <v-row>
+      <v-row class="my-2">
         <Select
           v-model="product.categories"
           :items="categories"
@@ -44,7 +44,7 @@
           required
           multiple />
       </v-row>
-      <v-row>
+      <v-row class="my-2">
         <FileInput
           v-model="product.mainPhoto"
           prepend-inner-icon="mdi-camera"
@@ -54,7 +54,7 @@
           showSize
           required />
       </v-row>
-      <v-row>
+      <v-row class="mt-2">
         <FileInput
           v-model="product.photos"
           prepend-inner-icon="mdi-camera"
@@ -70,7 +70,7 @@
       <v-row>
         <v-spacer />
         <Button title="CANCELAR" variant="text" />
-        <Button title="SALVAR MUDANçAS" bg-color="#DBB671" />
+        <Button title="SALVAR MUDANçAS" type="submit" bg-color="#DBB671" />
       </v-row>
     </v-form>
   </v-card>
@@ -81,12 +81,17 @@
   import FileInput from '@/core/components/FileInput.vue'
   import NumberInput from '@/core/components/NumberInput.vue'
   import Select from '@/core/components/Select.vue'
-
   import Button from '@/core/components/Button.vue'
 
-  import { reactive, onMounted, ref } from 'vue'
+  import toBase64 from '@/core/utils/fileBlobToBase64'
+
+  import { reactive, onMounted, ref, getCurrentInstance } from 'vue'
   import api from '@/core/plugins/api'
+  import router from '@/core/router'
+
+  const { proxy } = getCurrentInstance()
   const product = reactive({
+    name: null,
     price: 0.0,
     quantity: 4.052,
     installment: 0,
@@ -95,6 +100,7 @@
     mainPhoto: null,
     photos: [],
   })
+  const form = ref(null)
   const categories = ref([])
 
   onMounted(() => {
@@ -103,6 +109,51 @@
 
   async function loadCategories() {
     categories.value = await api.getAll('/category')
+  }
+  async function saveProduct() {
+    const isValid = await form.value.validate()
+    if (!isValid.valid) return
+
+    const mainPhotoData = await toBase64(product.mainPhoto)
+    const mainPhoto = {
+      isMainPhoto: true,
+      filename: product.mainPhoto.name,
+      contentType: product.mainPhoto.type,
+      data: mainPhotoData,
+    }
+
+    let photos = [mainPhoto]
+    for (const photo of product.photos) {
+      const photoData = await toBase64(photo)
+      photos.push({
+        isMainPhoto: false,
+        filename: photo.name,
+        contentType: photo.type,
+        data: photoData,
+      })
+    }
+    const method = product.id ? 'save' : 'create'
+    await api[method]('/product', {
+      name: product.name,
+      price: product.price,
+      quantity: product.quantity,
+      installment: product.installment,
+      discount: product.discount,
+      photos,
+      categoriesIds: product.categories,
+    })
+      .then((res) => {
+        if (product.id) {
+          proxy.$showMessage('success', 'Your product was updated with success')
+          product = res
+        } else {
+          proxy.$showMessage('success', 'Your product was created with success')
+          router.push({ path: '/user/products' })
+        }
+      })
+      .catch((err) => {
+        proxy.$showMessage('error', err)
+      })
   }
 </script>
 

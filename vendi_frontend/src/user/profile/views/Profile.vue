@@ -1,5 +1,5 @@
 <template>
-  <Header account-active="true" />
+  <Header account-active />
   <v-divider />
   <v-container class="container">
     <v-row>

@@ -11,7 +11,6 @@
     :max-width="maxWidth"
     :density="density"
     :accept="accept"
-    :prefix="prefix"
     :required="required"
     :show-size="showSize"
     :multiple="multiple"
@@ -49,7 +48,12 @@
     const maxSize = 5000000
 
     if (props.required) {
-      autoRules.push((value) => !!value || 'This field is required.')
+      autoRules.push((value) => {
+        if (props.multiple) {
+          return (Array.isArray(value) && value.length > 0) || 'This field is required.'
+        }
+        return !!value || 'This field is required.'
+      })
     }
     if (props.multiple) {
       autoRules.push((value) => {
@@ -82,7 +86,6 @@
     maxWidth: { type: Number, default: null },
     modelValue: { type: [File, Array], default: null },
     multiple: { type: Boolean, default: false },
-    prefix: { type: String, default: null },
     prependIcon: { type: String, default: null },
     prependInnerIcon: { type: String, default: null },
     required: { type: Boolean, default: false },

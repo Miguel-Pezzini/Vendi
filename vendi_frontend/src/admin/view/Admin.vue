@@ -1,5 +1,5 @@
 <template>
-  <Header account-active="true" />
+  <Header account-active />
   <v-divider />
   <v-container class="container">
     <Path :old-paths="loadPastPaths(route)" active-path="Admin Dashboard" />

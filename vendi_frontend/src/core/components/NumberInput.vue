@@ -34,7 +34,10 @@
     const autoRules = []
 
     if (props.required) {
-      autoRules.push((value) => !!value || 'Este campo é obrigatório.')
+      autoRules.push((value) => {
+        if (value || value == 0) return true
+        return 'Este campo é obrigatório.'
+      })
     }
 
     return [...autoRules, ...props.rules]
