@@ -1,10 +1,7 @@
 package com.vendi.product.controller;
 
-import com.vendi.product.dto.ProductRequestDTO;
+import com.vendi.product.dto.*;
 import com.vendi.shared.exception.ResourceNotFoundException;
-import com.vendi.product.dto.CreateProductRequestDTO;
-import com.vendi.product.dto.ProductResponseDTO;
-import com.vendi.product.dto.UpdateProductRequestDTO;
 import com.vendi.product.service.ProductService;
 import com.vendi.shared.exception.ValidationExceptions.IllegalArgumentException;
 import jakarta.validation.Valid;
@@ -48,6 +45,14 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
+
+    @GetMapping("/{productId}/details")
+    public ResponseEntity<ProductDetailsResponseDTO> getProductDetailsById(@PathVariable UUID productId) throws ResourceNotFoundException {
+        ProductDetailsResponseDTO product = productService.getDetailsById(productId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(product);
+    }
+
     @PutMapping("/{productId}")
     public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable UUID productId, @RequestBody UpdateProductRequestDTO body) {
         ProductResponseDTO updatedProduct = productService.update(productId, body);

@@ -1,15 +1,12 @@
 package com.vendi.product.service;
 
 import com.vendi.photo.service.PhotoService;
-import com.vendi.product.dto.ProductRequestDTO;
-import com.vendi.product.dto.ProductResponseDTO;
+import com.vendi.product.dto.*;
 import com.vendi.product.mapper.ProductMapper;
 import com.vendi.shared.exception.ResourceNotFoundException;
 import com.vendi.photo.model.Photo;
 import com.vendi.category.model.Category;
 import com.vendi.product.model.Product;
-import com.vendi.product.dto.CreateProductRequestDTO;
-import com.vendi.product.dto.UpdateProductRequestDTO;
 import com.vendi.shared.exception.ValidationExceptions.IllegalArgumentException;
 import com.vendi.user.model.User;
 import com.vendi.product.repository.ProductRepository;
@@ -96,6 +93,19 @@ public class ProductService {
 
         return new ProductResponseDTO(product.get());
     }
+
+    @Transactional(readOnly = true)
+    public ProductDetailsResponseDTO getDetailsById(UUID productId) throws ResourceNotFoundException {
+        Optional<Product> product = repository.findById(productId);
+
+        if(product.isEmpty()) {
+            throw new ResourceNotFoundException("This product does not exists");
+        }
+
+        return new ProductDetailsResponseDTO(product.get());
+    }
+
+
 
     @Transactional(readOnly = true)
     public List<ProductResponseDTO> getLatestProducts(int limit) {
