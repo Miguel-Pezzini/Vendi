@@ -125,6 +125,7 @@ public class ProductService {
         return this.repository.findRecentProducts(pageable).stream().map(ProductResponseDTO::new).toList();
     }
 
+    @Transactional
     public ProductResponseDTO update(UUID productId,  ProductRequestDTO productRequestDTO) throws ResourceNotFoundException, IllegalArgumentException {
         Product product = repository.findById(productId).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
@@ -139,14 +140,23 @@ public class ProductService {
 
         this.validatePhotos(productRequestDTO.photosToCreate(), productRequestDTO.photosToKeep());
 
-        List<Photo> createdPhotos = photoService.createPhotos(productRequestDTO.photosToCreate());
-        List<Photo> currentPhotos = product.getPhotos();
+        List<Photo> createdPhotos = productRequestDTO.photosToCreate().isEmpty()
+                ? Collections.emptyList()
+                : photoService.createPhotos(productRequestDTO.photosToCreate());
 
-        Set<UUID> idsToKeep = productRequestDTO.photosToKeep().stream()
+        List<Photo> currentPhotos = product.getPhotos();
+        Set<UUID> idsToKeep = (productRequestDTO.photosToKeep() == null)
+                ? Collections.emptySet()
+                : productRequestDTO.photosToKeep().stream()
                 .map(PhotoToKeepDTO::id)
                 .collect(Collectors.toSet());
 
-        currentPhotos.removeIf(photo -> !idsToKeep.contains(photo.getId()));
+        for (Photo photo : new ArrayList<>(currentPhotos)) {
+            if (!idsToKeep.contains(photo.getId())) {
+                photoService.deleteById(photo.getId());
+                currentPhotos.remove(photo);
+            }
+        }
 
         for (Photo photo : createdPhotos) {
             product.addPhoto(photo);
@@ -156,18 +166,21 @@ public class ProductService {
     }
 
     private void validatePhotos(List<PhotoToCreateDTO> photosToCreate, List<PhotoToKeepDTO> photosToKeep) throws IllegalArgumentException {
-        if(photosToCreate.size() + photosToKeep.size() > Product.MAX_PHOTO_LIMIT) {
+        List<PhotoToCreateDTO> createList = photosToCreate != null ? photosToCreate : Collections.emptyList();
+        List<PhotoToKeepDTO> keepList = photosToKeep != null ? photosToKeep : Collections.emptyList();
+
+        if (createList.size() + keepList.size() > Product.MAX_PHOTO_LIMIT) {
             throw new MaxPhotoLimitExceededException(Product.MAX_PHOTO_LIMIT);
         }
 
         long mainPhotoCount = Stream.concat(
-                        photosToCreate.stream(),
-                        photosToKeep.stream()
+                        createList.stream(),
+                        keepList.stream()
                 )
                 .filter(IsMainPhoto::isMainPhoto)
                 .count();
-        if (mainPhotoCount > 1) {
-            throw new IllegalArgumentException("Only one photo can be marked as the main photo.");
+        if (mainPhotoCount != 1) {
+            throw new IllegalArgumentException("There must be exactly one photo marked as main.");
         }
     }
 

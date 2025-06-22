@@ -28,4 +28,8 @@ public class PhotoService {
 
         return new PhotoData(photo);
     }
+
+    public void deleteById(UUID photoId) {
+        this.photoRepository.deleteById(photoId);
+    }
 }

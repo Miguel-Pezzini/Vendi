@@ -41,12 +41,12 @@ Accept: application/json
       "isMainPhoto": true
     }
   ],
-  "categoriesIds": ["74e9c28b-275e-418f-bb41-c5e226beab64"]
+  "categoriesIds": ["fe2739e9-759d-46d5-b408-0999e75f5e77"]
 }
 
 ###
 
-PUT {{base_url}}/product/e744ba95-dbbe-4b36-8666-07684b3edbdc
+PUT {{base_url}}/product/39d47bf0-8c24-4787-b9e1-380997625394
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json
@@ -89,7 +89,8 @@ Accept: application/json
       "isMainPhoto": true
     }
   ],
-  "categoriesIds": ["74e9c28b-275e-418f-bb41-c5e226beab64"]
+  "photosToKeep": [],
+  "categoriesIds": ["fe2739e9-759d-46d5-b408-0999e75f5e77"]
 }
 
 ###
