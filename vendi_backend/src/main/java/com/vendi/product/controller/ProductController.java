@@ -19,7 +19,7 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping()
-    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody @Valid CreateProductRequestDTO body) throws ResourceNotFoundException, IllegalArgumentException {
+    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody @Valid ProductRequestDTO body) throws ResourceNotFoundException, IllegalArgumentException {
         ProductResponseDTO savedProduct = productService.create(body);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
@@ -33,8 +33,8 @@ public class ProductController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ProductResponseDTO>> getProducts(@ModelAttribute ProductRequestDTO dto) {
-        List<ProductResponseDTO> products = productService.getProducts(dto);
+    public ResponseEntity<List<ProductResponseDTO>> getProducts(@ModelAttribute ProductQueryParams params) {
+        List<ProductResponseDTO> products = productService.getProducts(params);
 
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
@@ -54,7 +54,7 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable UUID productId, @RequestBody UpdateProductRequestDTO body) {
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable UUID productId, @RequestBody @Valid ProductRequestDTO body) throws ResourceNotFoundException, IllegalArgumentException {
         ProductResponseDTO updatedProduct = productService.update(productId, body);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedProduct);

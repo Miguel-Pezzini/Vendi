@@ -1,9 +1,6 @@
 <template>
   <v-card class="ma-4" height="560" width="400">
-    <v-img
-      class="image"
-      height="350"
-      :src="`data:${product.mainPhoto.contentType};base64,${product.mainPhoto.data}`" />
+    <v-img class="image" height="350" :src="product.mainPhoto.dataURI" />
     <v-card-item class="pb-0">
       <v-card-text class="text-center title pb-2">
         {{ product.name }}

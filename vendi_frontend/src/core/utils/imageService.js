@@ -11,15 +11,19 @@ function fileToDataBase64(fileOrBlob) {
   })
 }
 
-function base64ToFile(photo) {
-  const byteString = atob(photo.data.split(',')[1] || photo.data)
+function base64ToFile(dataURI, filename = 'photo.jpg') {
+  const [header, base64] = dataURI.split(',')
+  const contentTypeMatch = header.match(/data:(.*);base64/)
+  const contentType = contentTypeMatch ? contentTypeMatch[1] : 'application/octet-stream'
+
+  const byteString = atob(base64)
   const byteArray = new Uint8Array(byteString.length)
 
   for (let i = 0; i < byteString.length; i++) {
     byteArray[i] = byteString.charCodeAt(i)
   }
 
-  return new File([byteArray], photo.filename, { type: photo.contentType })
+  return new File([byteArray], filename, { type: contentType })
 }
 
 const imageService = {

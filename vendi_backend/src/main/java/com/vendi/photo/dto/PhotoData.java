@@ -2,8 +2,10 @@ package com.vendi.photo.dto;
 
 import com.vendi.photo.model.Photo;
 
-public record PhotoData(byte[] data) {
+import java.util.Base64;
+
+public record PhotoData(String dataURI) {
     public PhotoData(Photo photo) {
-        this(photo.getData());
+        this("data:" + photo.getContentType() + ";base64," + Base64.getEncoder().encodeToString(photo.getData()));
     }
 }

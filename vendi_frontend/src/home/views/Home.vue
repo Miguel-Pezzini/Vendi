@@ -69,22 +69,13 @@
   import CardTransparent from '@/home/components/CardTransparent.vue'
   import CardProducts from '@/home/components/CardProducts.vue'
   import Footer from '@/core/components/Footer.vue'
-  import api from '@/core/plugins/api'
   import { onMounted, ref } from 'vue'
-  import loadProductPhoto from '@/core/utils/loadProductPhoto'
+  import productService from '@/core/utils/productService'
 
   let recentProducts = ref([])
 
   async function loadRecentProducts() {
-    const products = await api.getAll('product', { limit: 7 })
-
-    await Promise.all(
-      products.map(async (product) => {
-        const photo = await loadProductPhoto(product.mainPhoto.id)
-        product.mainPhoto = { ...product.mainPhoto, data: photo }
-      })
-    )
-    recentProducts.value = products
+    recentProducts.value = await productService.loadProducts(`/product?limit=7`)
   }
 
   onMounted(() => {

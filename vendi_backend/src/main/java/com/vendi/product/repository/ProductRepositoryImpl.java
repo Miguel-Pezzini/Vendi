@@ -1,5 +1,6 @@
 package com.vendi.product.repository;
 
+import com.vendi.product.dto.ProductQueryParams;
 import com.vendi.product.dto.ProductRequestDTO;
 import com.vendi.product.model.Product;
 import jakarta.persistence.EntityManager;
@@ -18,7 +19,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public List<Product> findAllByCustomFilter(ProductRequestDTO dto) {
+    public List<Product> findAllByCustomFilter(ProductQueryParams dto) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Product> query = cb.createQuery(Product.class);
         Root<Product> product = query.from(Product.class);

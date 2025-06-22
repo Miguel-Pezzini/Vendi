@@ -53,12 +53,6 @@
         clearable
         v-model="product.mainPhoto"
         showSize />
-
-      <!-- <v-row>
-        <v-img
-      height="350"
-      :src="`data:${mainPhoto.contentType};base64,${mainPhoto.data}`" />
-      </v-row> -->
       <v-alert
         text="Here you can select up to 4 additional photos. These images will appear in your product gallery, but not as the main photo."
         type="info"></v-alert>
@@ -124,10 +118,6 @@
 
   const product = reactive(defaultProduct())
 
-  async function setPhoto() {
-    mainPhoto.value = await imageService.fileToDataBase64(product.mainPhoto)
-  }
-
   watch(
     () => props.productProp,
     (newProduct) => {
@@ -164,7 +154,7 @@
       })
     }
     const method = product.id ? 'save' : 'create'
-    await api[method]('/product', {
+    await api[method](product.id ? `/product/${product.id}` : '/product', {
       name: product.name,
       price: product.price,
       quantity: product.quantity,

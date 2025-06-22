@@ -24,6 +24,10 @@ import java.util.Set;
 @Table(name = "product")
 @Entity
 public class Product extends AbstractEditableEntity {
+
+    @Transient
+    public static final int MAX_PHOTO_LIMIT = 5;
+
     private String name;
     private Float price;
 

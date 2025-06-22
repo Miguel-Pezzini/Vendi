@@ -1,7 +1,11 @@
 package com.vendi.product.service;
 
+import com.vendi.photo.dto.IsMainPhoto;
+import com.vendi.photo.dto.PhotoToCreateDTO;
+import com.vendi.photo.dto.PhotoToKeepDTO;
 import com.vendi.photo.service.PhotoService;
 import com.vendi.product.dto.*;
+import com.vendi.product.exception.MaxPhotoLimitExceededException;
 import com.vendi.product.mapper.ProductMapper;
 import com.vendi.shared.exception.ResourceNotFoundException;
 import com.vendi.photo.model.Photo;
@@ -18,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ProductService {
@@ -39,16 +45,16 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponseDTO create(CreateProductRequestDTO createproductDTO) throws ResourceNotFoundException, IllegalArgumentException {
-        Product product = ProductMapper.mapToProduct(createproductDTO);
+    public ProductResponseDTO create(ProductRequestDTO productRequestDTO) throws ResourceNotFoundException, IllegalArgumentException {
+        Product product = ProductMapper.mapToProduct(productRequestDTO);
 
-        Set<Category> categories = new HashSet<>(this.categoryService.findAllById(createproductDTO.categoriesIds()));
-        this.validateCategories(categories, createproductDTO.categoriesIds());
+        Set<Category> categories = new HashSet<>(this.categoryService.findAllById(productRequestDTO.categoriesIds()));
+        this.validateCategories(categories, productRequestDTO.categoriesIds());
 
         product.setUser(this.userAuthenticatedService.getAuthenticatedUser());
         product.setCategories(categories);
 
-        List<Photo> photos = photoService.createPhotos(createproductDTO.photos());
+        List<Photo> photos = photoService.createPhotos(productRequestDTO.photosToCreate());
         this.validateMainPhoto(photos);
         for (Photo photo : photos) {
             product.addPhoto(photo);
@@ -70,8 +76,8 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductResponseDTO>getProducts(ProductRequestDTO productRequestDTO) {
-        List<Product> products = this.repository.findAllByCustomFilter(productRequestDTO);
+    public List<ProductResponseDTO>getProducts(ProductQueryParams productQueryParams) {
+        List<Product> products = this.repository.findAllByCustomFilter(productQueryParams);
 
         return products.stream().map(ProductResponseDTO::new).toList();
     }
@@ -113,17 +119,50 @@ public class ProductService {
         return this.repository.findRecentProducts(pageable).stream().map(ProductResponseDTO::new).toList();
     }
 
-    public ProductResponseDTO update(UUID productId, UpdateProductRequestDTO productDTO) {
+    public ProductResponseDTO update(UUID productId,  ProductRequestDTO productRequestDTO) throws ResourceNotFoundException, IllegalArgumentException {
         Product product = repository.findById(productId).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
-        if (productDTO.name() != null) product.setName(productDTO.name());
-        if (productDTO.price() != null) product.setPrice(productDTO.price());
-        if (productDTO.quantity() != null) product.setQuantity(productDTO.quantity());
-        if (productDTO.installment() != null) product.setInstallment(productDTO.installment());
-        if (productDTO.discount() != null) product.setDiscount(productDTO.discount());
+        Set<Category> categories = new HashSet<>(this.categoryService.findAllById(productRequestDTO.categoriesIds()));
+        this.validateCategories(categories, productRequestDTO.categoriesIds());
+        product.setCategories(categories);
+        product.setName(productRequestDTO.name());
+        product.setPrice(productRequestDTO.price());
+        product.setQuantity(productRequestDTO.quantity());
+        product.setInstallment(productRequestDTO.installment());
+        product.setDiscount(productRequestDTO.discount());
 
-        Product savedProduct = repository.save(product);
-        return new ProductResponseDTO(savedProduct);
+        this.validatePhotos(productRequestDTO.photosToCreate(), productRequestDTO.photosToKeep());
+
+        List<Photo> createdPhotos = photoService.createPhotos(productRequestDTO.photosToCreate());
+        List<Photo> currentPhotos = product.getPhotos();
+
+        Set<UUID> idsToKeep = productRequestDTO.photosToKeep().stream()
+                .map(PhotoToKeepDTO::id)
+                .collect(Collectors.toSet());
+
+        currentPhotos.removeIf(photo -> !idsToKeep.contains(photo.getId()));
+
+        for (Photo photo : createdPhotos) {
+            product.addPhoto(photo);
+        }
+
+        return new ProductResponseDTO(repository.save(product));
+    }
+
+    private void validatePhotos(List<PhotoToCreateDTO> photosToCreate, List<PhotoToKeepDTO> photosToKeep) throws IllegalArgumentException {
+        if(photosToCreate.size() + photosToKeep.size() > Product.MAX_PHOTO_LIMIT) {
+            throw new MaxPhotoLimitExceededException(Product.MAX_PHOTO_LIMIT);
+        }
+
+        long mainPhotoCount = Stream.concat(
+                        photosToCreate.stream(),
+                        photosToKeep.stream()
+                )
+                .filter(IsMainPhoto::isMainPhoto)
+                .count();
+        if (mainPhotoCount > 1) {
+            throw new IllegalArgumentException("Only one photo can be marked as the main photo.");
+        }
     }
 
     public void delete(UUID productId) {

@@ -3,12 +3,12 @@ import imageService from './imageService'
 
 async function getPhotoData(photoId) {
   const res = await api.get('photo', photoId)
-  return res.data
+  return res.dataURI
 }
 
 async function loadProduct(productId) {
   let product = await api.get('/product', productId)
-  product.mainPhoto = { data: await getPhotoData(product.mainPhoto.id), ...product.mainPhoto }
+  product.mainPhoto = { dataURI: await getPhotoData(product.mainPhoto.id), ...product.mainPhoto }
   return product
 }
 
@@ -18,7 +18,7 @@ async function loadProductDetails(productId) {
   const mainPhoto = product.photos.find((photo) => photo.isMainPhoto)
   product.mainPhoto = {
     ...mainPhoto,
-    data: await getPhotoData(mainPhoto.id),
+    dataURI: await getPhotoData(mainPhoto.id),
   }
 
   const photos = await Promise.all(
@@ -26,7 +26,7 @@ async function loadProductDetails(productId) {
       .filter((photo) => !photo.isMainPhoto)
       .map(async (photo) => ({
         ...photo,
-        data: await getPhotoData(photo.id),
+        dataURI: await getPhotoData(photo.id),
       }))
   )
 
@@ -39,21 +39,15 @@ async function loadProductDetailsPhotosToFile(productId) {
   const product = await api.get(`/product/${productId}/details`)
 
   let mainPhoto = product.photos.find((photo) => photo.isMainPhoto)
-  mainPhoto = {
-    ...mainPhoto,
-    data: await getPhotoData(mainPhoto.id),
-  }
-  product.mainPhoto = imageService.base64ToFile(mainPhoto)
+  product.mainPhoto = imageService.base64ToFile(
+    await getPhotoData(mainPhoto.id),
+    mainPhoto.filename
+  )
 
   const photos = await Promise.all(
     product.photos
       .filter((photo) => !photo.isMainPhoto)
-      .map(async (photo) =>
-        imageService.base64ToFile({
-          ...photo,
-          data: await getPhotoData(photo.id),
-        })
-      )
+      .map(async (photo) => imageService.base64ToFile(await getPhotoData(photo.id), photo.filename))
   )
 
   product.photos = photos
@@ -66,8 +60,8 @@ async function loadProducts(recurso) {
 
   await Promise.all(
     products.map(async (product) => {
-      const photo = await getPhotoData(product.mainPhoto.id)
-      product.mainPhoto = { ...product.mainPhoto, data: photo }
+      const dataURI = await getPhotoData(product.mainPhoto.id)
+      product.mainPhoto = { ...product.mainPhoto, dataURI }
     })
   )
 

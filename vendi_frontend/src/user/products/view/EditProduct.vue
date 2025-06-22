@@ -46,6 +46,7 @@
 
   async function loadProduct() {
     product.value = await productService.loadProductDetailsPhotosToFile(props.id)
+    console.log(product.value)
   }
 </script>
 

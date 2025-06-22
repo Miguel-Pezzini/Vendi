@@ -14,7 +14,7 @@
           </v-col>
         </v-row>
         <div class="image-container">
-          <img :src="`data:${product.mainPhoto.contentType};base64,${product.mainPhoto.data}`" />
+          <img :src="product.mainPhoto.dataURI" />
         </div>
         <v-btn
           color="black"
