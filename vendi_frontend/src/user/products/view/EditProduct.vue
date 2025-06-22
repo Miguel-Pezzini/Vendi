@@ -28,6 +28,7 @@
   import Footer from '@/core/components/Footer.vue'
 
   import { onMounted, ref } from 'vue'
+  import productService from '@/core/utils/productService'
   import api from '@/core/plugins/api'
 
   const props = defineProps({
@@ -44,7 +45,7 @@
   })
 
   async function loadProduct() {
-    product.value = await api.get(`/product/${props.id}/details`)
+    product.value = await productService.loadProductDetailsPhotosToFile(props.id)
   }
 </script>
 

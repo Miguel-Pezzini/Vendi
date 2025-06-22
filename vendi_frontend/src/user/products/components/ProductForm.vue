@@ -83,7 +83,7 @@
   import Select from '@/core/components/Select.vue'
   import Button from '@/core/components/Button.vue'
 
-  import toBase64 from '@/core/utils/fileBlobToBase64'
+  import imageService from '@/core/utils/imageService'
 
   import { reactive, onMounted, ref, getCurrentInstance, watch } from 'vue'
   import api from '@/core/plugins/api'
@@ -138,7 +138,7 @@
     const isValid = await form.value.validate()
     if (!isValid.valid) return
 
-    const mainPhotoData = await toBase64(product.mainPhoto)
+    const mainPhotoData = await imageService.fileToBase64(product.mainPhoto)
     const mainPhoto = {
       isMainPhoto: true,
       filename: product.mainPhoto.name,
@@ -148,7 +148,7 @@
 
     let photos = [mainPhoto]
     for (const photo of product.photos) {
-      const photoData = await toBase64(photo)
+      const photoData = await imageService.fileToBase64(photo)
       photos.push({
         isMainPhoto: false,
         filename: photo.name,

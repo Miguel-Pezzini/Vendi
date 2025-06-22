@@ -37,26 +37,13 @@
   import UserProduct from '../components/UserProduct.vue'
   import { onMounted } from 'vue'
   import { ref } from 'vue'
-  import api from '@/core/plugins/api'
-  import loadProductPhoto from '@/core/utils/loadProductPhoto'
+  import productService from '@/core/utils/productService'
 
   let products = ref([])
 
   onMounted(async () => {
-    await getUserProducts()
+    products.value = await productService.loadProducts('product/user')
   })
-
-  async function getUserProducts() {
-    const userProducts = await api.getAll('product/user')
-
-    await Promise.all(
-      userProducts.map(async (product) => {
-        const photo = await loadProductPhoto(product.mainPhoto.id)
-        product.mainPhoto = { ...product.mainPhoto, data: photo }
-      })
-    )
-    products.value = userProducts
-  }
 </script>
 
 <style scoped>
