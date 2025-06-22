@@ -44,29 +44,31 @@
           required
           multiple />
       </v-row>
-      <v-row class="my-2">
-        <FileInput
-          v-model="product.mainPhoto"
-          prepend-inner-icon="mdi-camera"
-          :prepend-icon="null"
-          accept="image/png, image/jpeg, image/bmp"
-          label="Main photo"
-          showSize
-          required />
-      </v-row>
-      <v-row class="mt-2">
-        <FileInput
-          v-model="product.photos"
-          prepend-inner-icon="mdi-camera"
-          :prepend-icon="null"
-          accept="image/png, image/jpeg, image/bmp"
-          label="Photos"
-          multiple
-          counter
-          showSize
-          :max="4"
-          required />
-      </v-row>
+      <v-alert
+        text="Select your main photo. It will appear as the product cover."
+        type="info"></v-alert>
+      <FileUpload
+        density="compact"
+        title="Drop your Main photo here"
+        clearable
+        v-model="product.mainPhoto"
+        showSize />
+
+      <!-- <v-row>
+        <v-img
+      height="350"
+      :src="`data:${mainPhoto.contentType};base64,${mainPhoto.data}`" />
+      </v-row> -->
+      <v-alert
+        text="Here you can select up to 4 additional photos. These images will appear in your product gallery, but not as the main photo."
+        type="info"></v-alert>
+      <FileUpload
+        clearable
+        density="compact"
+        title="Add product photos"
+        v-model="product.photos"
+        showSize
+        multiple />
       <v-row>
         <v-spacer />
         <Button title="CANCELAR" variant="text" />
@@ -78,10 +80,10 @@
 
 <script lang="js" setup>
   import Input from '@/core/components/Input.vue'
-  import FileInput from '@/core/components/FileInput.vue'
   import NumberInput from '@/core/components/NumberInput.vue'
   import Select from '@/core/components/Select.vue'
   import Button from '@/core/components/Button.vue'
+  import FileUpload from '@/core/components/FileUpload.vue'
 
   import imageService from '@/core/utils/imageService'
 
@@ -92,6 +94,7 @@
   const { proxy } = getCurrentInstance()
   const form = ref(null)
   const categories = ref([])
+  const mainPhoto = ref({})
 
   const props = defineProps({
     productProp: {
@@ -102,6 +105,10 @@
       type: Boolean,
       default: false,
     },
+  })
+
+  onMounted(() => {
+    loadCategories()
   })
 
   const defaultProduct = () => ({
@@ -117,6 +124,10 @@
 
   const product = reactive(defaultProduct())
 
+  async function setPhoto() {
+    mainPhoto.value = await imageService.fileToDataBase64(product.mainPhoto)
+  }
+
   watch(
     () => props.productProp,
     (newProduct) => {
@@ -127,10 +138,6 @@
     { immediate: true }
   )
 
-  onMounted(() => {
-    loadCategories()
-  })
-
   async function loadCategories() {
     categories.value = await api.getAll('/category')
   }
@@ -138,7 +145,7 @@
     const isValid = await form.value.validate()
     if (!isValid.valid) return
 
-    const mainPhotoData = await imageService.fileToBase64(product.mainPhoto)
+    const mainPhotoData = await imageService.fileToDataBase64(product.mainPhoto)
     const mainPhoto = {
       isMainPhoto: true,
       filename: product.mainPhoto.name,
@@ -148,7 +155,7 @@
 
     let photos = [mainPhoto]
     for (const photo of product.photos) {
-      const photoData = await imageService.fileToBase64(photo)
+      const photoData = await imageService.fileToDataBase64(photo)
       photos.push({
         isMainPhoto: false,
         filename: photo.name,

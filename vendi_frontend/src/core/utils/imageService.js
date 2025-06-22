@@ -1,4 +1,4 @@
-function fileToBase64(fileOrBlob) {
+function fileToDataBase64(fileOrBlob) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.readAsDataURL(fileOrBlob)
@@ -23,7 +23,7 @@ function base64ToFile(photo) {
 }
 
 const imageService = {
-  fileToBase64,
+  fileToDataBase64,
   base64ToFile,
 }
 export default imageService
