@@ -11,6 +11,7 @@ import Checkout from '@/checkout/views/Checkout.vue'
 import Admin from '@/admin/view/Admin.vue'
 import UserProducts from '@/user/products/view/UserProducts.vue'
 import CreateProduct from '@/user/products/view/AddProduct.vue'
+import EditProduct from '@/user/products/view/EditProduct.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +40,12 @@ const router = createRouter({
       path: '/user/products',
       name: 'User Products',
       component: UserProducts,
+    },
+    {
+      path: '/user/products/:id',
+      name: 'Edit Product',
+      component: EditProduct,
+      props: true,
     },
     {
       path: '/user/products/create',

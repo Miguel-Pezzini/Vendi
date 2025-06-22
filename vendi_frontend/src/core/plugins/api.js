@@ -42,7 +42,8 @@ async function getAll(resource, params = {}) {
 }
 
 async function get(resource, id = null) {
-  const response = await server.get(`${resource}/${id}`, getHeaders)
+  const url = id ? `${resource}/${id}` : resource
+  const response = await server.get(url, getHeaders)
   return response.data
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div class="card-container">
-    <v-card :hover="false" @click="verProduct()">
+    <v-card :hover="false">
       <div>
         <v-row align="center">
           <v-col cols="auto mt-3 ml-3">
@@ -22,14 +22,16 @@
           :rounded="false"
           class="w-100 rounded-b"
           text="Modify Product"
-          @click="editProduct" />
+          @click="editProduct()" />
       </div>
     </v-card>
     <div class="mt-4">
       <span class="font-weight-medium">{{ product.name }}</span>
       <div class="d-flex ga-3 mt-3">
         <v-row class="pa-0 ma-0">
-          <span class="text-golden font-weight-medium pr-2">R${{ product.price }} </span>
+          <span class="text-golden font-weight-medium pr-2"
+            >R${{ product.price * (product.discount ? product.discount / 100 : 1) }}
+          </span>
           <span v-if="product.discount" class="price font-weight-medium">
             R${{ product.price }}
           </span>
@@ -44,14 +46,18 @@
 <script setup>
   import Button from '@/core/components/Button'
 
-  defineProps({
+  import router from '@/core/router'
+
+  const props = defineProps({
     product: {
       type: Object,
       default: null,
     },
   })
 
-  function verProduct() {}
+  function editProduct() {
+    router.push({ path: `user/products/${props.product.id}` })
+  }
 </script>
 
 <style scoped>

@@ -8,7 +8,7 @@
       <Button title="Add Product" variant="outlined" color="#DBB671" to="/user/products/create" />
     </v-row>
 
-    <v-row class="container margin">
+    <v-row class="row-page">
       <v-col class="pa-0" cols="4">
         <SideMenu active-my-products />
       </v-col>
@@ -29,7 +29,6 @@
 </template>
 
 <script setup>
-  import card1 from '@/assets/card1.webp'
   import Header from '@/core/components/Header.vue'
   import Path from '@/core/components/Path.vue'
   import SideMenu from '@/user/profile/components/SideMenu.vue'
@@ -64,7 +63,7 @@
   .container {
     margin: 80px 100px 146px 100px;
   }
-  .margin {
-    margin-bottom: 146px;
+  .row-page {
+    margin: 80px 0px 150px 0px;
   }
 </style>

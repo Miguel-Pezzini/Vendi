@@ -2,7 +2,7 @@
   <v-card>
     <v-form @submit.prevent="saveProduct()" ref="form" class="rounded">
       <v-row>
-        <h1 class="title">Add a Product</h1>
+        <h1 class="title">{{ edit ? 'Edit this product' : 'Add a Product' }}</h1>
       </v-row>
       <v-row>
         <Input v-model="product.name" class="mb-2" required label="Name" />
@@ -85,23 +85,47 @@
 
   import toBase64 from '@/core/utils/fileBlobToBase64'
 
-  import { reactive, onMounted, ref, getCurrentInstance } from 'vue'
+  import { reactive, onMounted, ref, getCurrentInstance, watch } from 'vue'
   import api from '@/core/plugins/api'
   import router from '@/core/router'
 
   const { proxy } = getCurrentInstance()
-  const product = reactive({
+  const form = ref(null)
+  const categories = ref([])
+
+  const props = defineProps({
+    productProp: {
+      type: Object,
+      default: null,
+    },
+    edit: {
+      type: Boolean,
+      default: false,
+    },
+  })
+
+  const defaultProduct = () => ({
     name: null,
     price: 0.0,
-    quantity: 4.052,
+    quantity: 1,
     installment: 0,
     discount: 0,
     categories: [],
     mainPhoto: null,
     photos: [],
   })
-  const form = ref(null)
-  const categories = ref([])
+
+  const product = reactive(defaultProduct())
+
+  watch(
+    () => props.productProp,
+    (newProduct) => {
+      if (newProduct) {
+        Object.assign(product, newProduct)
+      }
+    },
+    { immediate: true }
+  )
 
   onMounted(() => {
     loadCategories()
