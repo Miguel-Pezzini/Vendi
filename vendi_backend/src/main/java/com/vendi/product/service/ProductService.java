@@ -5,6 +5,7 @@ import com.vendi.photo.dto.PhotoToCreateDTO;
 import com.vendi.photo.dto.PhotoToKeepDTO;
 import com.vendi.photo.service.PhotoService;
 import com.vendi.product.dto.*;
+import com.vendi.product.exception.InvalidMainPhotoException;
 import com.vendi.product.exception.MaxPhotoLimitExceededException;
 import com.vendi.product.mapper.ProductMapper;
 import com.vendi.shared.exception.ResourceNotFoundException;
@@ -45,7 +46,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponseDTO create(ProductRequestDTO productRequestDTO) throws ResourceNotFoundException, IllegalArgumentException {
+    public ProductResponseDTO create(ProductRequestDTO productRequestDTO) throws ResourceNotFoundException {
         Product product = ProductMapper.mapToProduct(productRequestDTO);
 
         Set<Category> categories = new HashSet<>(this.categoryService.findAllById(productRequestDTO.categoriesIds()));
@@ -54,8 +55,8 @@ public class ProductService {
         product.setUser(this.userAuthenticatedService.getAuthenticatedUser());
         product.setCategories(categories);
 
+        this.validateMainPhoto(productRequestDTO.photosToCreate());
         List<Photo> photos = photoService.createPhotos(productRequestDTO.photosToCreate());
-        this.validateMainPhoto(photos);
         for (Photo photo : photos) {
             product.addPhoto(photo);
         }
@@ -69,10 +70,15 @@ public class ProductService {
         }
     }
 
-    void validateMainPhoto(List<Photo> photos) throws IllegalArgumentException {
-        photos.stream()
-                .filter(Photo::getIsMain)
-                .findFirst().orElseThrow(() -> new IllegalArgumentException("The product must contain only one main photo."));
+    void validateMainPhoto(List<PhotoToCreateDTO> photosToCreateDTO) {
+        long mainPhotoCount = photosToCreateDTO.stream()
+                .filter(PhotoToCreateDTO::isMainPhoto)
+                .count();
+
+        if (mainPhotoCount != 1) {
+            throw new InvalidMainPhotoException(
+                    "There must be exactly one main photo, but found " + mainPhotoCount + ".");
+        }
     }
 
     @Transactional(readOnly = true)
