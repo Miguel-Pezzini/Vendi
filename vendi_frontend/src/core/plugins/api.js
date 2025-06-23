@@ -16,7 +16,7 @@ const getHeaders = {
 
 server.interceptors.request.use(
   (req) => {
-    store.commit('startLoading', req.url)
+    store.commit('startLoading', req)
     return req
   },
   (err) => Promise.reject(err?.response?.data || err)
@@ -24,11 +24,11 @@ server.interceptors.request.use(
 
 server.interceptors.response.use(
   (res) => {
-    store.commit('stopLoading', res.config.url)
+    store.commit('stopLoading', res)
     return res
   },
   (err) => {
-    store.commit('stopLoading', err.config.url)
+    store.commit('stopLoading', err)
     return Promise.reject(err.response.data)
   }
 )

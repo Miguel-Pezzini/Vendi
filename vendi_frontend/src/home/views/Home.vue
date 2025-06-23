@@ -80,7 +80,6 @@
 
   onMounted(() => {
     loadRecentProducts()
-    console.log(recentProducts)
   })
 
   const images = [banner1, banner2, banner3]

@@ -13,7 +13,12 @@
         <SideMenu active-my-products />
       </v-col>
       <v-col cols="8">
-        <v-row>
+        <v-row v-if="!!$loadingState['product/get']">
+            <v-col v-for="n in 8">
+            <v-skeleton-loader type="card"></v-skeleton-loader>
+          </v-col>
+        </v-row>
+        <v-row v-else>
           <v-col v-for="product in products" :key="product.id">
             <UserProduct :product="product" />
           </v-col>

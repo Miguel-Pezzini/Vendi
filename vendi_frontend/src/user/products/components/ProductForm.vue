@@ -160,7 +160,7 @@
       quantity: product.quantity,
       installment: product.installment,
       discount: product.discount,
-      photos,
+      photosToCreate: photos,
       categoriesIds: product.categories,
     })
       .then((res) => {
