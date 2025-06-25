@@ -36,7 +36,7 @@
               :style="$vuetify.display.mdAndUp ? 'padding: 16px 48px;' : 'padding: 12px 24px'"
               class="w-100"
               color="golden"
-              :loading="!!$loadingState['auth/register']"
+              :loading="!!$loadingState['auth/post']"
               text="Criar Conta" />
           </div>
           <div class="d-flex justify-center align-center mt-4">

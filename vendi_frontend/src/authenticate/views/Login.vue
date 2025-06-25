@@ -35,7 +35,7 @@
               type="submit"
               color="golden"
               text="Login"
-              :loading="!!$loadingState['auth/login']" />
+              :loading="!!$loadingState['auth/post']" />
             <v-btn
               color="black"
               variant="text"
