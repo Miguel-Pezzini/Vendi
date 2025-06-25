@@ -3,8 +3,8 @@ package com.vendi.category.dto;
 import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
-public record CreateCategoryDTO(
+public record CategoryRequestDTO(
         @NotNull String name,
         @NotNull String description,
-        UUID category_father_id) {
+        UUID id) {
 }

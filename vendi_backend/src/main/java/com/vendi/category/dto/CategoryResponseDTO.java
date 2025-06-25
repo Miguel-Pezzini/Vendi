@@ -5,11 +5,12 @@ import com.vendi.category.model.Category;
 import java.util.UUID;
 
 public record CategoryResponseDTO(
-        UUID category_id,
+        UUID id,
+        UUID fatherCategoryId,
         String name,
         String description
 ) {
     public CategoryResponseDTO(Category category) {
-        this(category.getId(), category.getName(), category.getDescription());
+        this(category.getId(),  category.getCategoryFather().getId(), category.getName(), category.getDescription());
     }
 }

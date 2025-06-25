@@ -47,7 +47,7 @@ public class ProductService {
 
     @Transactional
     public ProductResponseDTO create(ProductRequestDTO productRequestDTO) throws ResourceNotFoundException {
-        Product product = ProductMapper.mapToProduct(productRequestDTO);
+        Product product = ProductMapper.dtoToProduct(productRequestDTO);
 
         Set<Category> categories = new HashSet<>(this.categoryService.findAllById(productRequestDTO.categoriesIds()));
         this.validateCategories(categories, productRequestDTO.categoriesIds());

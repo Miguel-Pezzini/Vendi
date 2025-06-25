@@ -1,24 +1,53 @@
 package com.vendi.integration;
 
-import com.vendi.category.model.Category;
-import com.vendi.category.repository.CategoryRepository;
+import com.vendi.category.dto.CategoryRequestDTO;
+import com.vendi.category.dto.CategoryResponseDTO;
+import com.vendi.category.service.CategoryService;
+import com.vendi.dtoMocks.CategoryMocker;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CategoryIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
     @Test
-    void testSaveProduct() {
-        Category category = new Category("Test", "description");
-        Category saved = categoryRepository.save(category);
+    void testSaveCategoryWithoutCategoryFatherId() {
+        CategoryRequestDTO categoryRequestDTO = CategoryMocker.getRequestCategoryDTOWithoutCategoryFatherId();
+        CategoryResponseDTO saved = categoryService.create(categoryRequestDTO);
 
-        assertNotNull(saved.getId());
-        assertEquals("Test", saved.getName());
+        assertNotNull(saved.id());
+        assertEquals("Category Test", saved.name());
+    }
+
+    @Test
+    void testSaveCategoryWithInvalidCategoryFatherId() {
+        CategoryRequestDTO categoryRequestDTO = CategoryMocker.getRequestCategoryDTO(new UUID(0, 10));
+
+        Exception exception = assertThrows(EntityNotFoundException.class, () -> {
+            categoryService.create(categoryRequestDTO);
+        });
+
+        String expectedMessage = "Father category not found";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testSaveCategoryWithCategoryFatherId() {
+        CategoryRequestDTO fatherCategoryRequestDTO = CategoryMocker.getRequestCategoryDTOWithoutCategoryFatherId();
+        CategoryResponseDTO fatherCategoryResponseDTO = categoryService.create(fatherCategoryRequestDTO);
+
+        CategoryRequestDTO childCategoryRequestDTO = CategoryMocker.getRequestCategoryDTO(fatherCategoryResponseDTO.id());
+        CategoryResponseDTO childCategoryResponseDTO = categoryService.create(childCategoryRequestDTO);
+
+        assertNotNull(childCategoryResponseDTO.id());
+        assertEquals(childCategoryResponseDTO.fatherCategoryId(), fatherCategoryResponseDTO.id());
     }
 }

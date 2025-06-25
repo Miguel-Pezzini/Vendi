@@ -1,6 +1,6 @@
 package com.vendi.category.controller;
 import com.vendi.category.dto.CategoryResponseDTO;
-import com.vendi.category.dto.CreateCategoryDTO;
+import com.vendi.category.dto.CategoryRequestDTO;
 import com.vendi.category.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class CategoryController {
     CategoryService categoryService;
 
     @PostMapping()
-    public ResponseEntity<CategoryResponseDTO> createCategory(@RequestBody @Valid CreateCategoryDTO body) {
+    public ResponseEntity<CategoryResponseDTO> createCategory(@RequestBody @Valid CategoryRequestDTO body) {
         CategoryResponseDTO savedCategory = categoryService.create(body);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);

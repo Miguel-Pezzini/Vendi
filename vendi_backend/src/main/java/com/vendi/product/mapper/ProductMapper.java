@@ -5,7 +5,7 @@ import com.vendi.product.model.Product;
 
 public class ProductMapper {
 
-    public static Product mapToProduct(ProductRequestDTO productRequestDTO) {
+    public static Product dtoToProduct(ProductRequestDTO productRequestDTO) {
         Product product = new Product();
         product.setQuantity(productRequestDTO.quantity());
         product.setPrice(productRequestDTO.price());

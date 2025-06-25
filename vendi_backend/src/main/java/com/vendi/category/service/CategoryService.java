@@ -1,7 +1,7 @@
 package com.vendi.category.service;
 
 import com.vendi.category.dto.CategoryResponseDTO;
-import com.vendi.category.dto.CreateCategoryDTO;
+import com.vendi.category.dto.CategoryRequestDTO;
 import com.vendi.category.model.Category;
 import com.vendi.category.repository.CategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,18 +20,18 @@ public class CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
-    public CategoryResponseDTO create(CreateCategoryDTO createCategoryDTO) {
+    public CategoryResponseDTO create(CategoryRequestDTO createCategoryDTO) {
         Category category = new Category();
         category.setName(createCategoryDTO.name());
         category.setDescription(createCategoryDTO.description());
-        if(createCategoryDTO.category_father_id() != null) {
-            Category categoryFather = categoryRepository.findById(createCategoryDTO.category_father_id())
+        if(createCategoryDTO.id() != null) {
+            Category categoryFather = categoryRepository.findById(createCategoryDTO.id())
                     .orElseThrow(() -> new EntityNotFoundException("Father category not found"));
             category.setCategoryFather(categoryFather);
         }
 
         Category savedCategory = categoryRepository.save(category);
-        return new CategoryResponseDTO(savedCategory.getId(), savedCategory.getName(), savedCategory.getDescription());
+        return new CategoryResponseDTO(savedCategory.getId(), savedCategory.getCategoryFather().getId(),savedCategory.getName(), savedCategory.getDescription());
     }
 
     public List<CategoryResponseDTO> findAll() {
@@ -39,6 +39,7 @@ public class CategoryService {
                 .stream()
                 .map(category -> new CategoryResponseDTO(
                         category.getId(),
+                        category.getCategoryFather().getId(),
                         category.getName(),
                         category.getDescription()))
                 .collect(Collectors.toList());
