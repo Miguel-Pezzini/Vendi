@@ -11,6 +11,10 @@ public record CategoryResponseDTO(
         String description
 ) {
     public CategoryResponseDTO(Category category) {
-        this(category.getId(),  category.getCategoryFather().getId(), category.getName(), category.getDescription());
+        this(
+                category.getId(),
+                category.getCategoryFather() != null ? category.getCategoryFather().getId() : null,
+                category.getName(),
+                category.getDescription());
     }
 }

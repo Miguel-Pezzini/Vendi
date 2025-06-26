@@ -2,6 +2,7 @@ package com.vendi.category.service;
 
 import com.vendi.category.dto.CategoryResponseDTO;
 import com.vendi.category.dto.CategoryRequestDTO;
+import com.vendi.category.mapper.CategoryMapper;
 import com.vendi.category.model.Category;
 import com.vendi.category.repository.CategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,27 +22,21 @@ public class CategoryService {
     CategoryRepository categoryRepository;
 
     public CategoryResponseDTO create(CategoryRequestDTO createCategoryDTO) {
-        Category category = new Category();
-        category.setName(createCategoryDTO.name());
-        category.setDescription(createCategoryDTO.description());
-        if(createCategoryDTO.id() != null) {
-            Category categoryFather = categoryRepository.findById(createCategoryDTO.id())
+        Category category = CategoryMapper.dtoToCategory(createCategoryDTO);
+        if(createCategoryDTO.father_category_id() != null) {
+            Category categoryFather = categoryRepository.findById(createCategoryDTO.father_category_id())
                     .orElseThrow(() -> new EntityNotFoundException("Father category not found"));
             category.setCategoryFather(categoryFather);
         }
 
         Category savedCategory = categoryRepository.save(category);
-        return new CategoryResponseDTO(savedCategory.getId(), savedCategory.getCategoryFather().getId(),savedCategory.getName(), savedCategory.getDescription());
+        return new CategoryResponseDTO(savedCategory);
     }
 
     public List<CategoryResponseDTO> findAll() {
         return categoryRepository.findAll()
                 .stream()
-                .map(category -> new CategoryResponseDTO(
-                        category.getId(),
-                        category.getCategoryFather().getId(),
-                        category.getName(),
-                        category.getDescription()))
+                .map(CategoryResponseDTO::new)
                 .collect(Collectors.toList());
     }
 

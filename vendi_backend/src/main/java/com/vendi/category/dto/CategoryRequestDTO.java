@@ -6,5 +6,5 @@ import java.util.UUID;
 public record CategoryRequestDTO(
         @NotNull String name,
         @NotNull String description,
-        UUID id) {
+        UUID father_category_id) {
 }
