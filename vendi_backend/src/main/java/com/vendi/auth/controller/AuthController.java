@@ -1,5 +1,6 @@
 package com.vendi.auth.controller;
 
+import com.vendi.auth.service.AuthService;
 import com.vendi.shared.exception.ResourceAlreadyExistsException;
 import com.vendi.user.dto.LoginRequestDTO;
 import com.vendi.user.dto.LoginResponseDTO;
@@ -30,6 +31,9 @@ public class AuthController {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private AuthService authService;
+
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO body) {
@@ -43,17 +47,6 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponseDTO> register(@Valid @RequestBody RegisterUserDTO body) throws ResourceAlreadyExistsException {
-        if(this.repository.findByEmail(body.email()) != null) throw new ResourceAlreadyExistsException("This email is already registered");
-
-        String encryptedPassword = new BCryptPasswordEncoder().encode(body.password());
-        User newUser = new User(body.email(), encryptedPassword, body.name(), body.role());
-
-        this.repository.save(newUser);
-
-        var token = tokenService.generateToken(newUser);
-
-        return ResponseEntity.ok(new RegisterResponseDTO(token, newUser.getAuthorities().toString()));
-
-
+        return ResponseEntity.ok(authService.register(body));
     }
 }
