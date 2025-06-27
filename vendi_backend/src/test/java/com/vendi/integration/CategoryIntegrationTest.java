@@ -19,16 +19,16 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void testSaveCategoryWithoutCategoryFatherId() {
-        CategoryRequestDTO categoryRequestDTO = CategoryMocker.getRequestCategoryDTOWithoutCategoryFatherId();
-        CategoryResponseDTO saved = categoryService.create(categoryRequestDTO);
+        CategoryRequestDTO categoryRequestDTO = CategoryMocker.getCategoryRequestDTOWithoutCategoryFatherId();
+        CategoryResponseDTO categoryResponseDTO = categoryService.create(categoryRequestDTO);
 
-        assertNotNull(saved.id());
-        assertEquals("Category Test", saved.name());
+        assertNotNull(categoryResponseDTO.id());
+        assertEquals(categoryRequestDTO.name(), categoryResponseDTO.name());
     }
 
     @Test
     void testSaveCategoryWithInvalidCategoryFatherId() {
-        CategoryRequestDTO categoryRequestDTO = CategoryMocker.getRequestCategoryDTO(new UUID(0, 10));
+        CategoryRequestDTO categoryRequestDTO = CategoryMocker.getCategoryRequestDTO(new UUID(0, 10));
 
         Exception exception = assertThrows(EntityNotFoundException.class, () -> {
             categoryService.create(categoryRequestDTO);
@@ -41,13 +41,14 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void testSaveCategoryWithCategoryFatherId() {
-        CategoryRequestDTO fatherCategoryRequestDTO = CategoryMocker.getRequestCategoryDTOWithoutCategoryFatherId();
+        CategoryRequestDTO fatherCategoryRequestDTO = CategoryMocker.getCategoryRequestDTOWithoutCategoryFatherId();
         CategoryResponseDTO fatherCategoryResponseDTO = categoryService.create(fatherCategoryRequestDTO);
 
-        CategoryRequestDTO childCategoryRequestDTO = CategoryMocker.getRequestCategoryDTO(fatherCategoryResponseDTO.id());
+        CategoryRequestDTO childCategoryRequestDTO = CategoryMocker.getCategoryRequestDTO(fatherCategoryResponseDTO.id());
         CategoryResponseDTO childCategoryResponseDTO = categoryService.create(childCategoryRequestDTO);
 
         assertNotNull(childCategoryResponseDTO.id());
         assertEquals(childCategoryResponseDTO.fatherCategoryId(), fatherCategoryResponseDTO.id());
+        assertEquals(childCategoryRequestDTO.name(), childCategoryResponseDTO.name());
     }
 }

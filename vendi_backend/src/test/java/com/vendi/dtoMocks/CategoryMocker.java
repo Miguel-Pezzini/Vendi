@@ -6,11 +6,15 @@ import java.util.UUID;
 
 public class CategoryMocker {
 
-    static public CategoryRequestDTO getRequestCategoryDTOWithoutCategoryFatherId() {
-        return new CategoryRequestDTO("Category Test", "Category description", null);
+    private static CategoryRequestDTO getBaseCategoryRequestDTO(String name, String description, UUID fatherCategoryId) {
+        return new CategoryRequestDTO(name, description, fatherCategoryId);
     }
 
-    static public CategoryRequestDTO getRequestCategoryDTO(UUID father_category_id) {
-        return new CategoryRequestDTO("Category Test", "Category description", father_category_id);
+    static public CategoryRequestDTO getCategoryRequestDTOWithoutCategoryFatherId() {
+        return getBaseCategoryRequestDTO("Category Test", "Category description", null);
+    }
+
+    static public CategoryRequestDTO getCategoryRequestDTO(UUID fatherCategoryId) {
+        return getBaseCategoryRequestDTO("Category Test", "Category description", fatherCategoryId);
     }
 }
