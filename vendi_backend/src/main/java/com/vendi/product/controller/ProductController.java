@@ -19,7 +19,7 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping()
-    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody @Valid ProductRequestDTO body) throws ResourceNotFoundException, IllegalArgumentException {
+    public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductRequestDTO body) throws ResourceNotFoundException {
         ProductResponseDTO savedProduct = productService.create(body);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);

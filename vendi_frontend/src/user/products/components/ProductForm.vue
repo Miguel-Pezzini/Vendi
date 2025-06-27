@@ -39,7 +39,7 @@
           :items="categories"
           label="Categories"
           item-title="name"
-          item-value="category_id"
+          item-value="id"
           chips
           required
           multiple />
@@ -57,6 +57,7 @@
         text="Here you can select up to 4 additional photos. These images will appear in your product gallery, but not as the main photo."
         type="info"></v-alert>
       <FileUpload
+        class="mb-6"
         clearable
         density="compact"
         title="Add product photos"
