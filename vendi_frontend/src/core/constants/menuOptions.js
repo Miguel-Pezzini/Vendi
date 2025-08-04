@@ -1,0 +1,48 @@
+export default (context) => [
+  {
+    showOn: 'mdAndUp',
+    isRouterLink: true,
+    to: '/wishlist',
+    tooltip: 'Wish List',
+    icon: () => (context.wishListActive.value ? 'mdi-heart' : 'mdi-heart-outline'),
+    color: () => (context.wishListActive.value ? 'golden' : null),
+  },
+  {
+    showOn: 'mdAndUp',
+    isRouterLink: true,
+    to: '/orders',
+    tooltip: 'My Orders',
+    icon: 'mdi-shopping-outline',
+    color: () => (context.shoppingActive.value ? 'golden' : null),
+  },
+  {
+    isRouterLink: false,
+    icon: 'mdi-cart-outline',
+    tooltip: 'Cart',
+    color: () => (context.cartActive.value ? 'golden' : null),
+    onClick: () => (context.showCart.value = !context.showCart.value),
+  },
+  {
+    showOn: 'mdAndDown',
+    isRouterLink: false,
+    icon: () => (context.showMenu.value ? 'mdi-close' : 'mdi-menu'),
+    color: () => (context.showMenu.value ? 'golden' : null),
+    onClick: () => (context.showMenu.value = !context.showMenu.value),
+  },
+  {
+    showOn: 'mdAndUp',
+    isRouterLink: true,
+    to: () => (context.isAdmin() ? '/admin' : '/profile'),
+    icon: () => (context.isAdmin() ? context.adminIcon.value : context.accountIcon.value),
+    tooltip: 'My Account',
+    color: () => (context.accountActive.value ? 'golden' : 'black'),
+  },
+  {
+    showOn: 'mdAndUp',
+    isRouterLink: true,
+    to: '/login',
+    tooltip: 'Logout',
+    icon: 'mdi-logout',
+    color: 'red',
+  },
+]
