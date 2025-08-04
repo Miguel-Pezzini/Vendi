@@ -1,21 +1,19 @@
 <template>
   <CartMenu v-model:show-cart="showCart" />
 
-  <v-row class="header" justify="center">
-    <v-col class="d-flex justify-center align-center ga-2">
-      <span style="font-size: 14px"
-        >Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!</span
-      >
-      <RouterLink style="color: white; font-size: 14px; text-decoration: underline" to="/products">
-        ShopNow
-      </RouterLink>
-    </v-col>
+  <v-row class="header ma-0" align="center" justify="center">
+    <span class="text-subtitle-2 mr-2">
+      Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!
+    </span>
+    <RouterLink class="text-subtitle-2 text-decoration-underline" to="/products">
+      ShopNow
+    </RouterLink>
   </v-row>
   <v-row class="header-container" align="center" no-gutters>
     <v-col cols="2" class="d-flex justify-center align-center">
-      <router-link to="/home">
+      <RouterLink to="/home">
         <img class="img" src="@/assets/logo.png" alt="Logo" />
-      </router-link>
+      </RouterLink>
     </v-col>
     <v-col v-for="category in categories" class="d-flex justify-center">
       <RouterLink :to="{ path: `${category.path}`, query: category.category }">
@@ -134,13 +132,12 @@
     scale: 1.05;
   }
   .header {
-    height: 48px;
+    height: 30px;
     background-color: #000;
     color: #fff;
   }
   .header-container {
     height: 100px;
-    background-color: #fff;
   }
   .icon {
     cursor: pointer;
