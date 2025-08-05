@@ -26,33 +26,23 @@
             @click:append-inner="pesquisar()" />
         </form>
       </v-col>
-      <v-row class="justify-center ga-6">
-        <template v-for="(item, i) in menuOptions" :key="i">
-          <component
-            :is="item.isRouterLink ? 'RouterLink' : 'div'"
-            v-if="
-              !item.showOn ||
-              (item.showOn === 'mdAndUp' && mdAndUp) ||
-              (item.showOn === 'mdAndDown' && mdAndDown)
-            "
-            :to="typeof item.to === 'function' ? item.to() : item.to">
-            <Icon
-              :size="'x-large'"
-              :tooltip="item.tooltip"
-              :icon="
-                typeof item.reactiveIcon === 'function' ? item.reactiveIcon() : item.icon || ''
-              "
-              :color="
-                typeof item.color === 'function'
-                  ? item.color()
-                  : item.reactiveColor
-                    ? item.reactiveColor()
-                    : item.color || null
-              "
-              @click="item.onClick && item.onClick()" />
-          </component>
-        </template>
-      </v-row>
+      <v-col class="d-flex justify-center align-center">
+        <v-row class="justify-center ga-6">
+          <template v-for="(item, i) in menuOptions" :key="i">
+            <component
+              :is="item.isRouterLink ? 'RouterLink' : 'div'"
+              v-if="item.showOn"
+              :to="typeof item.to === 'function' ? item.to() : item.to">
+              <Icon
+                size="x-large"
+                :tooltip="item.tooltip"
+                :icon="typeof item.icon === 'function' ? item.icon() : item.icon"
+                :color="typeof item.color === 'function' ? item.color() : item.color"
+                @click="item.onClick()" />
+            </component>
+          </template>
+        </v-row>
+      </v-col>
     </v-row>
     <v-row v-if="mdAndUp" class="ma-0 header-container">
       <v-col
@@ -85,17 +75,13 @@
       type: Boolean,
       default: false,
     },
-    cartActive: {
-      type: Boolean,
-      default: false,
-    },
     wishListActive: {
       type: Boolean,
       default: false,
     },
   })
 
-  const { mdAndUp, mdAndDown } = useDisplay()
+  const { mdAndUp, smAndDown } = useDisplay()
   const accountIcon = props.accountActive ? 'mdi-account-circle-outline' : 'mdi-account-outline'
   const adminIcon = props.accountActive ? 'mdi-shield-account' : 'mdi-shield-account-outline'
 
@@ -114,17 +100,55 @@
   const showMenu = ref(false)
   const dadoPesquisa = ref(null)
 
-  const menuOptions = createMenuOptions({
-    wishListActive: props.wishListActive,
-    accountActive: props.accountActive,
-    shoppingActive: props.shoppingActive,
-    cartActive: props.cartActive,
-    showCart: showCart.value,
-    showMenu: showMenu.value,
-    isAdmin,
-    adminIcon,
-    accountIcon,
-  })
+  const menuOptions = ref([
+    {
+      showOn: mdAndUp,
+      isRouterLink: true,
+      to: '/wishlist',
+      tooltip: 'Wish List',
+      icon: () => (props.wishListActive ? 'mdi-heart' : 'mdi-heart-outline'),
+      color: () => (props.wishListActive ? 'golden' : null),
+    },
+    {
+      showOn: mdAndUp,
+      isRouterLink: true,
+      to: '/orders',
+      tooltip: 'My Orders',
+      icon: 'mdi-shopping-outline',
+      color: () => (props.shoppingActive ? 'golden' : null),
+    },
+    {
+      showOn: true,
+      isRouterLink: false,
+      icon: 'mdi-cart-outline',
+      tooltip: 'Cart',
+      color: () => (showCart.value ? 'golden' : null),
+      onClick: () => (showCart.value = !showCart.value),
+    },
+    {
+      showOn: smAndDown,
+      isRouterLink: false,
+      icon: () => (showMenu.value ? 'mdi-close' : 'mdi-menu'),
+      color: () => (showMenu.value ? 'golden' : null),
+      onClick: () =>(showMenu.value = !showMenu.value),
+    },
+    {
+      showOn: mdAndUp,
+      isRouterLink: true,
+      to: () => (isAdmin() ? '/admin' : '/profile'),
+      icon: () => (isAdmin() ? adminIcon : accountIcon),
+      tooltip: 'My Account',
+      color: () => (props.accountActive ? 'golden' : 'black'),
+    },
+    {
+      showOn: mdAndUp,
+      isRouterLink: true,
+      to: '/login',
+      tooltip: 'Logout',
+      icon: 'mdi-logout',
+      color: 'red',
+    },
+  ])
 
   function pesquisar() {
     console.log(display)
