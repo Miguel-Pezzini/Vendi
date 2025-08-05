@@ -121,7 +121,6 @@
       showOn: true,
       isRouterLink: false,
       icon: 'mdi-cart-outline',
-      tooltip: 'Cart',
       color: () => (showCart.value ? 'golden' : null),
       onClick: () => (showCart.value = !showCart.value),
     },
@@ -130,7 +129,7 @@
       isRouterLink: false,
       icon: () => (showMenu.value ? 'mdi-close' : 'mdi-menu'),
       color: () => (showMenu.value ? 'golden' : null),
-      onClick: () =>(showMenu.value = !showMenu.value),
+      onClick: () => (showMenu.value = !showMenu.value),
     },
     {
       showOn: mdAndUp,

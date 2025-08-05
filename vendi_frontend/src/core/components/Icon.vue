@@ -1,7 +1,7 @@
 <template>
   <v-tooltip v-if="tooltip" location="top">
-    <template #activator="{ props: tooltipProps }">
-      <v-icon :color="color" v-bind="tooltipProps" :size="size" :icon="icon" />
+    <template #activator="{ props }">
+      <v-icon :color="color" v-bind="props" :size="size" :icon="icon" />
     </template>
     <span>{{ tooltip }}</span>
   </v-tooltip>
@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-  const props = defineProps({
+  defineProps({
     size: { type: String, default: null },
     icon: { type: String, required: true },
     tooltip: { type: String, default: null },
