@@ -7,9 +7,12 @@
       </v-btn>
     </div>
     <v-divider></v-divider>
-    <v-list-item link title="List Item 1"></v-list-item>
-    <v-list-item link title="List Item 2"></v-list-item>
-    <v-list-item link title="List Item 3"></v-list-item>
+    <v-list-item
+      v-for="(item, i) in mobileMenuOptions"
+      :key="i"
+      :title="item.tooltip"
+      :prepend-icon="typeof item.icon === 'function' ? item.icon() : item.icon">
+    </v-list-item>
     <v-divider />
   </v-navigation-drawer>
 </template>
@@ -19,6 +22,10 @@
     showMenu: {
       type: Boolean,
       default: false,
+    },
+    mobileMenuOptions: {
+      type: Array,
+      default: () => [],
     },
   })
 

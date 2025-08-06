@@ -1,6 +1,6 @@
 <template>
   <CartMenu v-model:show-cart="showCart" />
-  <SideHeaderMenu v-model:show-menu="showMenu" />
+  <MobileHeaderSideMenu :mobileMenuOptions="mobileMenuOptions" v-model:show-menu="showMenu" />
 
   <v-row class="header ma-0" align="center" justify="center">
     <span class="text-subtitle-2 mr-2">
@@ -27,18 +27,19 @@
         </form>
       </v-col>
       <v-col class="d-flex justify-center align-center">
-        <v-row class="justify-center ga-6">
+        <v-row class="justify-center ga-2">
           <template v-for="(item, i) in menuOptions" :key="i">
             <component
               :is="item.isRouterLink ? 'RouterLink' : 'div'"
               v-if="item.showOn"
               :to="typeof item.to === 'function' ? item.to() : item.to">
-              <Icon
-                size="x-large"
-                :tooltip="item.tooltip"
-                :icon="typeof item.icon === 'function' ? item.icon() : item.icon"
-                :color="typeof item.color === 'function' ? item.color() : item.color"
-                @click="item.onClick()" />
+              <v-btn variant="text" icon elevation="0" @click="item.onClick()">
+                <Icon
+                  size="x-large"
+                  :tooltip="item.tooltip"
+                  :icon="typeof item.icon === 'function' ? item.icon() : item.icon"
+                  :color="typeof item.color === 'function' ? item.color() : item.color" />
+              </v-btn>
             </component>
           </template>
         </v-row>
@@ -62,9 +63,10 @@
   import Input from '@/core/components/Input.vue'
   import Icon from '@/core/components/Icon.vue'
   import CartMenu from '@/cart/components/CartMenu.vue'
-  import SideHeaderMenu from './SideHeaderMenu.vue'
+  import MobileHeaderSideMenu from './MobileHeaderSideMenu.vue'
   import { useDisplay } from 'vuetify'
-  import createMenuOptions from '@/core/constants/menuOptions.js'
+  import headerMenuOptionsDesktop from '../constants/headerMenuOptionsDesktop'
+import headerMenuOptionsMobile from '../constants/headerMenuOptionsMobile'
 
   const props = defineProps({
     accountActive: {
@@ -100,54 +102,29 @@
   const showMenu = ref(false)
   const dadoPesquisa = ref(null)
 
-  const menuOptions = ref([
-    {
-      showOn: mdAndUp,
-      isRouterLink: true,
-      to: '/wishlist',
-      tooltip: 'Wish List',
-      icon: () => (props.wishListActive ? 'mdi-heart' : 'mdi-heart-outline'),
-      color: () => (props.wishListActive ? 'golden' : null),
-    },
-    {
-      showOn: mdAndUp,
-      isRouterLink: true,
-      to: '/orders',
-      tooltip: 'My Orders',
-      icon: 'mdi-shopping-outline',
-      color: () => (props.shoppingActive ? 'golden' : null),
-    },
-    {
-      showOn: true,
-      isRouterLink: false,
-      icon: 'mdi-cart-outline',
-      color: () => (showCart.value ? 'golden' : null),
-      onClick: () => (showCart.value = !showCart.value),
-    },
-    {
-      showOn: smAndDown,
-      isRouterLink: false,
-      icon: () => (showMenu.value ? 'mdi-close' : 'mdi-menu'),
-      color: () => (showMenu.value ? 'golden' : null),
-      onClick: () => (showMenu.value = !showMenu.value),
-    },
-    {
-      showOn: mdAndUp,
-      isRouterLink: true,
-      to: () => (isAdmin() ? '/admin' : '/profile'),
-      icon: () => (isAdmin() ? adminIcon : accountIcon),
-      tooltip: 'My Account',
-      color: () => (props.accountActive ? 'golden' : 'black'),
-    },
-    {
-      showOn: mdAndUp,
-      isRouterLink: true,
-      to: '/login',
-      tooltip: 'Logout',
-      icon: 'mdi-logout',
-      color: 'red',
-    },
-  ])
+  const menuOptions = ref(headerMenuOptionsDesktop({
+    mdAndUp: mdAndUp.value,
+    smAndDown: smAndDown.value,
+    showCart,
+    showMenu,
+    wishListActive: props.wishListActive,
+    shoppingActive: props.shoppingActive,
+    accountActive: props.accountActive,
+    accountIcon,
+    adminIcon,
+    isAdmin: isAdmin(),
+  }))
+
+  const mobileMenuOptions = ref(headerMenuOptionsMobile({
+    showCart,
+    showMenu,
+    wishListActive: props.wishListActive,
+    shoppingActive: props.shoppingActive,
+    accountActive: props.accountActive,
+    accountIcon,
+    adminIcon,
+    isAdmin: isAdmin(),
+  }))
 
   function pesquisar() {
     console.log(display)
