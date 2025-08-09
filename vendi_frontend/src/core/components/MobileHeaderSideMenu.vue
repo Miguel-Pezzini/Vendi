@@ -7,13 +7,20 @@
       </v-btn>
     </div>
     <v-divider></v-divider>
-    <v-list-item
-      v-for="(item, i) in mobileMenuOptions"
-      :key="i"
-      :title="item.tooltip"
-      :prepend-icon="typeof item.icon === 'function' ? item.icon() : item.icon">
-    </v-list-item>
+    <v-list nav>
+      <v-list-item
+        v-for="(item, i) in mobileMenuOptions"
+        :key="i"
+        :value="item.value"
+        :title="item.tooltip"
+        :prepend-icon="typeof item.icon === 'function' ? item.icon() : item.icon">
+      </v-list-item>
+    </v-list>
+
     <v-divider />
+    <template v-slot:append>
+      <v-list-item base-color="red" title="Logout" prepend-icon="mdi-logout"></v-list-item>
+    </template>
   </v-navigation-drawer>
 </template>
 

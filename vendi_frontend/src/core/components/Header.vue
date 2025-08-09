@@ -66,7 +66,7 @@
   import MobileHeaderSideMenu from './MobileHeaderSideMenu.vue'
   import { useDisplay } from 'vuetify'
   import headerMenuOptionsDesktop from '../constants/headerMenuOptionsDesktop'
-import headerMenuOptionsMobile from '../constants/headerMenuOptionsMobile'
+  import headerMenuOptionsMobile from '../constants/headerMenuOptionsMobile'
 
   const props = defineProps({
     accountActive: {
@@ -102,29 +102,33 @@ import headerMenuOptionsMobile from '../constants/headerMenuOptionsMobile'
   const showMenu = ref(false)
   const dadoPesquisa = ref(null)
 
-  const menuOptions = ref(headerMenuOptionsDesktop({
-    mdAndUp: mdAndUp.value,
-    smAndDown: smAndDown.value,
-    showCart,
-    showMenu,
-    wishListActive: props.wishListActive,
-    shoppingActive: props.shoppingActive,
-    accountActive: props.accountActive,
-    accountIcon,
-    adminIcon,
-    isAdmin: isAdmin(),
-  }))
+  const menuOptions = ref(
+    headerMenuOptionsDesktop({
+      mdAndUp: mdAndUp.value,
+      smAndDown: smAndDown.value,
+      showCart,
+      showMenu,
+      wishListActive: props.wishListActive,
+      shoppingActive: props.shoppingActive,
+      accountActive: props.accountActive,
+      accountIcon,
+      adminIcon,
+      isAdmin: isAdmin(),
+    })
+  )
 
-  const mobileMenuOptions = ref(headerMenuOptionsMobile({
-    showCart,
-    showMenu,
-    wishListActive: props.wishListActive,
-    shoppingActive: props.shoppingActive,
-    accountActive: props.accountActive,
-    accountIcon,
-    adminIcon,
-    isAdmin: isAdmin(),
-  }))
+  const mobileMenuOptions = ref(
+    headerMenuOptionsMobile({
+      showCart,
+      showMenu,
+      wishListActive: props.wishListActive,
+      shoppingActive: props.shoppingActive,
+      accountActive: props.accountActive,
+      accountIcon,
+      adminIcon,
+      isAdmin: isAdmin(),
+    })
+  )
 
   function pesquisar() {
     console.log(display)
