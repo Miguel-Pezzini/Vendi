@@ -10,7 +10,7 @@
           <button class="button">Mover todos para o carrinho</button>
         </v-row>
         <v-row class="mt-15">
-          <v-col v-for="n in 4" :key="n" cols="3">
+          <v-col v-for="n in 4" :key="n">
             <ResultsProduct active-page="Wishlist" :product="prod1" />
           </v-col>
         </v-row>

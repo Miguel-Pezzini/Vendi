@@ -1,5 +1,5 @@
 <template>
-  <Header :cart-active="true" />
+  <Header cart-active />
   <v-divider />
   <div class="container">
     <Path :old-paths="['Home']" active-path="Cart" style="margin-bottom: 80px" />

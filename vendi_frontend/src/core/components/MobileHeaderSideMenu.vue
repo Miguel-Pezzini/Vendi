@@ -1,7 +1,9 @@
 <template>
   <v-navigation-drawer :model-value="showMenu" width="300" @update:model-value="updateShowMenu">
     <div class="d-flex align-center justify-space-between">
-      <img src="@/assets/logo.png" alt="Logo" height="100" />
+      <RouterLink to="/home">
+        <img class="img" height="100" src="@/assets/logo.png" alt="Logo" />
+      </RouterLink>
       <v-btn elevation="0" icon @click="updateShowMenu(false)">
         <v-icon>mdi-close</v-icon>
       </v-btn>
@@ -13,9 +15,24 @@
         :key="i"
         :title="item.title"
         :color="item.color"
-        :prepend-icon="typeof item.icon === 'function' ? item.icon() : item.icon"
+        :prepend-icon="item.prependIcon"
+        :append-icon="item.appendIcon"
         :to="item.to">
       </v-list-item>
+      <v-list-group value="Categories">
+        <template v-slot:activator="{ props }">
+          <v-list-item
+            v-bind="props"
+            prepend-icon="mdi-view-grid-outline"
+            title="Categories"></v-list-item>
+        </template>
+        <v-list-item
+          v-for="(categoryItem, i) in categories"
+          :key="i"
+          :value="categoryItem.category"
+          :to="categoryItem.path"
+          :title="categoryItem.name"></v-list-item>
+      </v-list-group>
     </v-list>
 
     <v-divider />
@@ -26,6 +43,7 @@
 </template>
 
 <script setup>
+  import headerCategories from '../constants/headerCategories'
   defineProps({
     showMenu: {
       type: Boolean,
@@ -37,6 +55,8 @@
     },
   })
 
+  const categories = headerCategories()
+
   const emit = defineEmits(['update:showMenu'])
 
   const updateShowMenu = (value) => {
@@ -44,4 +64,10 @@
   }
 </script>
 
-<style scoped></style>
+<style scoped>
+  .img:hover {
+    cursor: pointer;
+    transition: 0.2s;
+    scale: 1.02;
+  }
+</style>

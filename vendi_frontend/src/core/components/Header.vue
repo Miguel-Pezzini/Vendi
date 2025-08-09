@@ -14,7 +14,7 @@
     <v-row class="ma-0 header-container" no-gutters>
       <v-col cols="9" class="d-flex justify-center align-center">
         <RouterLink to="/home">
-          <img class="img" src="@/assets/logo.png" alt="Logo" />
+          <img height="100" src="@/assets/logo.png" alt="Logo" />
         </RouterLink>
         <form class="w-100" @submit.prevent="pesquisar">
           <Input
@@ -81,6 +81,10 @@
       type: Boolean,
       default: false,
     },
+    cartActive: {
+      type: Boolean,
+      default: false,
+    },
   })
 
   const { mdAndUp, smAndDown } = useDisplay()
@@ -102,6 +106,7 @@
       wishListActive: props.wishListActive,
       shoppingActive: props.shoppingActive,
       accountActive: props.accountActive,
+      cartActive: props.cartActive,
       accountIcon,
       adminIcon,
       isAdmin: isAdmin(),
@@ -121,6 +126,7 @@
       wishListActive: props.wishListActive,
       shoppingActive: props.shoppingActive,
       accountActive: props.accountActive,
+      cartActive: props.cartActive,
       accountIcon,
       adminIcon,
       isAdmin: isAdmin(),
@@ -153,9 +159,6 @@
   }
   .header-container {
     background-color: #fff;
-  }
-  .img {
-    height: 100px;
   }
   .header-wrapper {
     max-width: 1200px;

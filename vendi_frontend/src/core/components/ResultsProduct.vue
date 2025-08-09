@@ -43,7 +43,7 @@
       </div>
       <div v-if="!product.isInWishList" class="d-flex align-center mt-2">
         <v-rating
-          readonly="true"
+          readonly
           half-increments
           :size="24"
           active-color="yellow"
