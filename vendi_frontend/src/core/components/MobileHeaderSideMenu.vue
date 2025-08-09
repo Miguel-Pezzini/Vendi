@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer :model-value="showMenu" width="400" @update:model-value="updateShowMenu">
+  <v-navigation-drawer :model-value="showMenu" width="300" @update:model-value="updateShowMenu">
     <div class="d-flex align-center justify-space-between">
       <img src="@/assets/logo.png" alt="Logo" height="100" />
       <v-btn elevation="0" icon @click="updateShowMenu(false)">
@@ -11,9 +11,10 @@
       <v-list-item
         v-for="(item, i) in mobileMenuOptions"
         :key="i"
-        :value="item.value"
-        :title="item.tooltip"
-        :prepend-icon="typeof item.icon === 'function' ? item.icon() : item.icon">
+        :title="item.title"
+        :color="item.color"
+        :prepend-icon="typeof item.icon === 'function' ? item.icon() : item.icon"
+        :to="item.to">
       </v-list-item>
     </v-list>
 

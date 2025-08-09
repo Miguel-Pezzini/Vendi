@@ -1,6 +1,6 @@
 export default (context) => [
   {
-    showOn: context.mdAndUp,
+    showOn: ({ mdAndUp }) => mdAndUp,
     isRouterLink: true,
     to: '/wishlist',
     tooltip: 'Wish List',
@@ -8,7 +8,7 @@ export default (context) => [
     color: () => (context.wishListActive ? 'golden' : null),
   },
   {
-    showOn: context.mdAndUp,
+    showOn: ({ mdAndUp }) => mdAndUp,
     isRouterLink: true,
     to: '/orders',
     tooltip: 'My Orders',
@@ -16,7 +16,7 @@ export default (context) => [
     color: () => (context.shoppingActive ? 'golden' : null),
   },
   {
-    showOn: true,
+    showOn: () => true, // sempre visível
     isRouterLink: false,
     tooltip: 'Cart',
     icon: 'mdi-cart-outline',
@@ -24,14 +24,14 @@ export default (context) => [
     onClick: () => (context.showCart.value = !context.showCart.value),
   },
   {
-    showOn: context.smAndDown,
+    showOn: ({ smAndDown }) => smAndDown,
     isRouterLink: false,
     icon: () => (context.showMenu.value ? 'mdi-close' : 'mdi-menu'),
     color: () => (context.showMenu.value ? 'golden' : null),
     onClick: () => (context.showMenu.value = !context.showMenu.value),
   },
   {
-    showOn: context.mdAndUp,
+    showOn: ({ mdAndUp }) => mdAndUp,
     isRouterLink: true,
     to: () => (context.isAdmin ? '/admin' : '/profile'),
     icon: () => (context.isAdmin ? context.adminIcon : context.accountIcon),
@@ -39,7 +39,7 @@ export default (context) => [
     color: () => (context.accountActive ? 'golden' : 'black'),
   },
   {
-    showOn: context.mdAndUp,
+    showOn: ({ mdAndUp }) => mdAndUp,
     isRouterLink: true,
     to: '/',
     tooltip: 'Logout',

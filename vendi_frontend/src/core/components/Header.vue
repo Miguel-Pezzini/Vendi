@@ -28,10 +28,9 @@
       </v-col>
       <v-col class="d-flex justify-center align-center">
         <v-row class="justify-center ga-2">
-          <template v-for="(item, i) in menuOptions" :key="i">
+          <template v-for="(item, i) in computedMenuOptions" :key="i">
             <component
               :is="item.isRouterLink ? 'RouterLink' : 'div'"
-              v-if="item.showOn"
               :to="typeof item.to === 'function' ? item.to() : item.to">
               <v-btn variant="text" icon elevation="0" @click="item.onClick()">
                 <Icon
@@ -58,7 +57,7 @@
   </div>
 </template>
 <script setup>
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
   import isAdmin from '../utils/isAdmin'
   import Input from '@/core/components/Input.vue'
   import Icon from '@/core/components/Icon.vue'
@@ -67,6 +66,7 @@
   import { useDisplay } from 'vuetify'
   import headerMenuOptionsDesktop from '../constants/headerMenuOptionsDesktop'
   import headerMenuOptionsMobile from '../constants/headerMenuOptionsMobile'
+  import headerCategories from '../constants/headerCategories'
 
   const props = defineProps({
     accountActive: {
@@ -87,16 +87,7 @@
   const accountIcon = props.accountActive ? 'mdi-account-circle-outline' : 'mdi-account-outline'
   const adminIcon = props.accountActive ? 'mdi-shield-account' : 'mdi-shield-account-outline'
 
-  const categories = [
-    { name: 'Most Sellers', path: '/store', category: 'most-seller' },
-    { name: 'Eletronics', path: '/store', category: 'eletronics' },
-    { name: 'Domestics', path: '/store', category: 'household' },
-    { name: 'Books', path: '/store', category: 'books' },
-    { name: 'Clothing', path: '/store', category: 'clothing' },
-    { name: 'Shoes', path: '/store', category: 'shoes' },
-    { name: 'Beauty & Health', path: '/store', category: 'beauty-health' },
-    { name: 'Sports & Fitness', path: '/store', category: 'sports-fitness' },
-  ]
+  const categories = headerCategories()
 
   const showCart = ref(false)
   const showMenu = ref(false)
@@ -116,6 +107,12 @@
       isAdmin: isAdmin(),
     })
   )
+
+  const computedMenuOptions = computed(() => {
+    return menuOptions.value.filter((item) =>
+      item.showOn({ mdAndUp: mdAndUp.value, smAndDown: smAndDown.value })
+    )
+  })
 
   const mobileMenuOptions = ref(
     headerMenuOptionsMobile({
