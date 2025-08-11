@@ -1,11 +1,10 @@
 <template>
   <v-col cols="auto" class="container d-flex justify-end align-center">
-    <!-- Div com fundo cinza e opacidade -->
     <div class="image-wrapper">
       <img class="img" :src="image" />
     </div>
     <div class="content">
-      <h1>{{ title }}</h1>
+      <h1 class="ma-0">{{ title }}</h1>
     </div>
   </v-col>
 </template>
@@ -62,10 +61,6 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    text-align: center;
-    color: white; /* A cor do texto pode ser alterada conforme necessário */
-  }
-  h1 {
-    margin: 0;
+    color: white;
   }
 </style>

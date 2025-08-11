@@ -1,30 +1,22 @@
 <template>
   <Header />
-  <Slide :images="images" />
-  <v-row class="mt-13" justify="center">
+  <Slide :images="bannerImages" />
+  <v-row class="mt-12" justify="center" v-if="transparentCards.length">
     <CardTransparent
-      :image="cardOne.image"
-      :title="cardOne.title"
+      v-for="transparentCard in transparentCards"
+      :image="transparentCard.image"
+      :title="transparentCard.title"
+      :key="transparentCard.title"
       @click="
-        router.push({ path: '/store', query: { category: 'decoration', origin: ['Home'] } })
+        router.push({
+          path: '/store',
+          query: { category: transparentCard.category, origin: ['Home'] },
+        })
       " />
-    <CardTransparent
-      :image="cardTwo.image"
-      :title="cardTwo.title"
-      @click="
-        router.push({ path: '/store', query: { category: 'computers', origin: ['Home'] } })
-      " />
-    <CardTransparent
-      :image="cardThree.image"
-      :title="cardThree.title"
-      @click="router.push({ path: '/store', query: { category: 'kitchen', origin: ['Home'] } })" />
-    <CardTransparent
-      :image="cardFour.image"
-      :title="cardFour.title"
-      @click="router.push({ path: '/store', query: { category: 'bathroom', origin: ['Home'] } })" />
   </v-row>
-
-  <h1 class="text-center my-7 font-weight-regular">Lançamentos</h1>
+  <v-skeleton-loader class="w-100" v-else type="image" />
+  <div v-if="recentProducts.length">
+      <h1 class="text-center my-8 font-weight-regular">Lançamentos</h1>
   <v-sheet>
     <v-slide-group show-arrows>
       <v-slide-group-item v-for="product in recentProducts" :key="product.id">
@@ -32,6 +24,8 @@
       </v-slide-group-item>
     </v-slide-group>
   </v-sheet>
+  </div>
+
   <v-divider class="mt-15 mb-3" color="#DBB671" opacity="1" />
   <v-row class="newsletter justify-center align-center py-8">
     <v-col>
@@ -55,15 +49,6 @@
 
 <script setup>
   import router from '@/core/router'
-  import banner1 from '@/assets/banners/banner1.jpg'
-  import banner2 from '@/assets/banners/banner2.jpg'
-  import banner3 from '@/assets/banners/banner3.jpg'
-
-  import card1 from '@/assets/card1.webp'
-  import card2 from '@/assets/card2.webp'
-  import card3 from '@/assets/card3.webp'
-  import card4 from '@/assets/card4.webp'
-
   import Header from '@/core/components/Header.vue'
   import Slide from '@/core/components/Slide.vue'
   import CardTransparent from '@/home/components/CardTransparent.vue'
@@ -71,8 +56,12 @@
   import Footer from '@/core/components/Footer.vue'
   import { onMounted, ref } from 'vue'
   import productService from '@/core/utils/productService'
+  import constantBannerImages from '@/core/constants/BannerSlideHome.js'
+  import constantTransparentImages from '@/core/constants/transparentCardsHome'
 
   let recentProducts = ref([])
+  const bannerImages = constantBannerImages
+  const transparentCards = constantTransparentImages
 
   async function loadRecentProducts() {
     recentProducts.value = await productService.loadProducts(`/product?limit=7`)
@@ -81,12 +70,6 @@
   onMounted(() => {
     loadRecentProducts()
   })
-
-  const images = [banner1, banner2, banner3]
-  const cardOne = { image: card1, title: 'DECORAÇÃO' }
-  const cardTwo = { image: card2, title: 'COMPUTADORES' }
-  const cardThree = { image: card3, title: 'COZINHA' }
-  const cardFour = { image: card4, title: 'BANHEIRO' }
 </script>
 
 <style scoped>
