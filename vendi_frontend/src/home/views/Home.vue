@@ -1,7 +1,10 @@
 <template>
   <Header />
   <Slide :images="bannerImages" />
-  <v-row class="mt-12" justify="center" v-if="transparentCards.length">
+  <v-row
+    :class="[$vuetify.display.mdAndUp ? 'mt-12 mx-12' : 'mt-6 mx-3']"
+    justify="center"
+    v-if="transparentCards.length">
     <CardTransparent
       v-for="transparentCard in transparentCards"
       :image="transparentCard.image"
@@ -16,23 +19,26 @@
   </v-row>
   <v-skeleton-loader class="w-100" v-else type="image" />
   <div v-if="recentProducts.length">
-      <h1 class="text-center my-8 font-weight-regular">Lançamentos</h1>
-  <v-sheet>
-    <v-slide-group show-arrows>
-      <v-slide-group-item v-for="product in recentProducts" :key="product.id">
-        <CardProducts :origin="['Home']" :product="product" class="mx-2" />
-      </v-slide-group-item>
-    </v-slide-group>
-  </v-sheet>
+    <h1 class="text-center my-8 font-weight-regular">Lançamentos</h1>
+    <v-sheet>
+      <v-slide-group show-arrows>
+        <v-slide-group-item v-for="product in recentProducts" :key="product.id">
+          <CardProducts :origin="['Home']" :product="product" class="mx-2" />
+        </v-slide-group-item>
+      </v-slide-group>
+    </v-sheet>
   </div>
 
   <v-divider class="mt-15 mb-3" color="#DBB671" opacity="1" />
-  <v-row class="newsletter justify-center align-center py-8">
+  <v-row
+    align="center"
+    justify="center"
+    :class="['py-8', $vuetify.display.smAndDown ? 'mx-3' : 'mx-16']">
     <v-col>
       <h1 class="font-weight-medium" style="font-size: 22px">Newsletter</h1>
     </v-col>
 
-    <v-spacer />
+    <v-spacer v-if="$vuetify.display.mdAndUp" />
     <v-col>
       <h2 class="font-weight-light" style="font-size: 18px">Receba nossas ofertas por e-mail</h2>
     </v-col>
@@ -76,10 +82,6 @@
   button:hover {
     transition: 0.2s;
     scale: 1.05;
-  }
-  .newsletter {
-    padding-left: 80px;
-    padding-right: 80px;
   }
   .input {
     height: 50px;
