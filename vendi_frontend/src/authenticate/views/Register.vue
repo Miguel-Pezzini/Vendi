@@ -1,13 +1,23 @@
 <template>
-  <div class="page">
-    <div class="container">
-      <img src="../../assets/side-image-login.png" />
-      <v-form ref="form" class="form" @submit.prevent="register()">
-        <div class="form-container">
-          <div class="d-flex flex-column ga-6">
-            <h1 class="font-weight-medium" style="font-size: 36px">Crie sua Conta</h1>
+  <div class="d-flex flex-column min-h-screen">
+    <div class="d-flex w-100 align-center justify-space-between">
+      <img v-if="$vuetify.display.mdAndUp" src="../../assets/side-image-login.png" />
+
+      <v-form
+        ref="form"
+        :class="[
+          'd-flex flex-column justify-center align-center w-100',
+          $vuetify.display.mdAndUp ? 'mx-16' : 'my-12 mx-6',
+        ]"
+        @submit.prevent="register">
+        <div class="w-100" style="max-width: 380px">
+          <div
+            class="d-flex flex-column gap-6"
+            :class="{ 'text-center': !$vuetify.display.mdAndUp }">
+            <h1 class="font-weight-medium text-h4">Crie sua Conta</h1>
             <p>Insira seus dados abaixo</p>
           </div>
+
           <div class="d-flex flex-column mt-6 w-100">
             <Input v-model="name" label="Nome de usuário" required />
             <Input v-model="email" label="E-mail" required validate-on="blur" :rules="emailRules" />
@@ -28,25 +38,28 @@
               required
               type="password" />
           </div>
-          <div class="mt-6 d-flex justify-space-between align-center">
+
+          <div class="mt-6 d-flex align-center">
             <v-btn
               height="52"
-              :size="$vuetify.display.mdAndUp ? 'large' : 'regular'"
+              :size="$vuetify.display.mdAndUp ? 'large' : 'default'"
+              :class="$vuetify.display.mdAndUp ? 'px-12 py-4' : 'px-6 py-3'"
               type="submit"
-              :style="$vuetify.display.mdAndUp ? 'padding: 16px 48px;' : 'padding: 12px 24px'"
               class="w-100"
               color="golden"
               :loading="!!$loadingState['auth/post']"
               text="Criar Conta" />
           </div>
+
           <div class="d-flex justify-center align-center mt-4">
-            <RouterLink to="/">
-              Ja possui conta? <span style="color: #dbb671">Logar!</span>
+            <RouterLink class="text-decoration-none text-black opacity-80" to="/">
+              Já possui conta? <span class="text-golden">Logar!</span>
             </RouterLink>
           </div>
         </div>
       </v-form>
     </div>
+
     <Footer />
   </div>
 </template>
@@ -59,7 +72,7 @@
   import api from '@/core/plugins/api'
 
   const { proxy } = getCurrentInstance()
-  // TODO REFACTOR
+
   const name = ref('')
   const email = ref('')
   const password = ref('')
@@ -77,8 +90,7 @@
 
   const passwordRules = [
     (value) => {
-      if (password.value == value) return true
-
+      if (password.value === value) return true
       return 'The passwords must match!'
     },
   ]
@@ -86,7 +98,6 @@
   const emailRules = [
     (value) => {
       if (validarEmail(value)) return true
-
       return 'Please enter a valid email address.'
     },
   ]
@@ -106,33 +117,3 @@
       })
   }
 </script>
-
-<style scoped>
-  a {
-    text-decoration: none;
-    color: #000;
-    opacity: 0.8;
-  }
-  .page {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  .container {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-    margin: 0 135px;
-  }
-  .form-container {
-    width: 380px;
-  }
-</style>

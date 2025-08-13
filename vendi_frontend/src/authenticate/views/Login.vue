@@ -1,17 +1,23 @@
 <template>
-  <div class="d-flex flex-column" style="min-height: 100vh">
+  <div class="d-flex flex-column min-h-screen">
     <div class="d-flex align-center w-100 justify-space-between">
       <img v-if="$vuetify.display.mdAndUp" src="../../assets/side-image-login.png" />
+
       <v-form
         ref="form"
-        :style="$vuetify.display.mdAndUp ? 'margin: 0 135px' : ' margin: 50px 30px'"
-        class="d-flex flex-column justify-center align-center w-100"
-        @submit.prevent="logar()">
-        <div style="width: 380px">
-          <div class="d-flex flex-column ga-6">
-            <h1 style="font-size: 36px" class="font-weight-medium">Faça seu Login</h1>
+        :class="[
+          'd-flex flex-column justify-center align-center w-100',
+          $vuetify.display.mdAndUp ? 'mx-16' : 'my-12 mx-6',
+        ]"
+        @submit.prevent="logar">
+        <div class="w-100" style="max-width: 380px">
+          <div
+            class="d-flex flex-column gap-6"
+            :class="{ 'text-center': !$vuetify.display.mdAndUp }">
+            <h1 class="font-weight-medium text-h4">Faça seu Login</h1>
             <p>Insira seus dados abaixo</p>
           </div>
+
           <div class="d-flex flex-column mt-6 w-100">
             <Input v-model="email" label="E-mail ou nome de usuário" required />
             <Input
@@ -21,17 +27,14 @@
               required
               type="password" />
           </div>
+
           <div
-            :style="
-              $vuetify.display.mdAndUp
-                ? 'justify-content: space-between'
-                : 'justify-content: start; gap: 12px'
-            "
-            class="mt-6 d-flex align-center">
+            class="mt-6 d-flex align-center"
+            :class="$vuetify.display.mdAndUp ? 'justify-space-between' : 'justify-start gap-3'">
             <v-btn
               height="52"
-              :size="$vuetify.display.mdAndUp ? 'large' : 'regular'"
-              :style="$vuetify.display.mdAndUp ? 'padding: 16px 48px;' : 'padding: 12px 24px'"
+              :size="$vuetify.display.mdAndUp ? 'large' : 'default'"
+              :class="$vuetify.display.mdAndUp ? 'px-12 py-4' : 'px-6 py-3'"
               type="submit"
               color="golden"
               text="Login"
@@ -39,21 +42,20 @@
             <v-btn
               color="black"
               variant="text"
-              size="regular"
-              text=" Esqueceu a senha?"
-              style="text-transform: none" />
+              size="default"
+              text="Esqueceu a senha?"
+              class="text-none" />
           </div>
+
           <div class="d-flex justify-center align-center mt-4">
-            <RouterLink
-              class="text-decoration-none"
-              style="color: black; opacity: 0.8"
-              to="/register">
-              Não possui conta? <span style="color: #dbb671">Criar uma!</span>
+            <RouterLink class="text-decoration-none text-black opacity-80" to="/register">
+              Não possui conta? <span class="text-golden">Criar uma!</span>
             </RouterLink>
           </div>
         </div>
       </v-form>
     </div>
+
     <Footer />
   </div>
 </template>
