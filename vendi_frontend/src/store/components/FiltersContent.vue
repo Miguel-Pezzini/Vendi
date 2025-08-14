@@ -13,6 +13,7 @@
           :model-value="priceFilter"
           @update:modelValue="updatePrice"
           min="0"
+          hide-details
           max="500"
           class="mx-3"
           strict />

@@ -3,7 +3,6 @@
     <Header />
     <v-divider />
 
-    <!-- Aba Filters no mobile -->
     <div v-if="!$vuetify.display.mdAndUp" class="pa-3">
       <v-btn
         color="golden"
@@ -17,7 +16,6 @@
 
     <v-container class="pa-0" fluid>
       <div class="d-flex">
-        <!-- Filtros no desktop -->
         <v-sheet class="pa-4" elevation="4" width="300" v-if="$vuetify.display.mdAndUp">
           <FiltersContent
             v-model:priceFilter="priceFilter"
@@ -28,26 +26,30 @@
             @get-products-by-category="getProductsByCategory" />
         </v-sheet>
 
-        <!-- Conteúdo Principal -->
-        <v-col class="pa-4">
-          <h2>Resultados</h2>
-          <v-row class="ml-6 mb-12" justify="center">
-            <v-col v-for="n in 8" :key="n">
+        <v-col>
+          <v-row class="pa-8">
+            <h2>Recommended for You</h2>
+            <v-spacer></v-spacer>
+            <h4>Showing 50 of 5000 results – Page 1 of 5</h4>
+          </v-row>
+          
+          <v-row :justify="$vuetify.display.mdAndDown ? 'center' : 'start'" :class=" $vuetify.display.mdAndUp ? 'ml-6' : 'ma-0'">
+            <v-col cols="auto" v-for="n in 8" :key="n">
               <ResultsProduct
                 :product="prod1"
                 class="pa-3"
                 active-page="Store"
                 @add-to-cart="addToCart"
-                @toggle-wish-list="toggleWishList" />
+                @addToWishlist="addToWishlist" />
             </v-col>
           </v-row>
+          <v-pagination active-color="golden" class="my-8" :length="4"></v-pagination>
         </v-col>
       </div>
     </v-container>
 
     <Footer />
 
-    <!-- Modal de filtros no mobile -->
     <v-dialog v-model="filterDialog" fullscreen>
       <v-card>
         <v-toolbar flat>
@@ -89,7 +91,7 @@
     image: card1,
   })
 
-  function toggleWishList(props) {
+  function addToWishlist(props) {
     prod1.value.isInWishList = props
   }
 

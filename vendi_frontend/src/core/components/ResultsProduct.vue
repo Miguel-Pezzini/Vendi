@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <v-card :hover="false" width="270" height="294" @click="verProduct()">
+    <v-card>
       <div>
         <v-row align="center">
           <v-col cols="auto  mt-3 ml-3">
@@ -19,13 +18,15 @@
               density="comfortable"
               :flat="true"
               :icon="product.isInWishList ? 'mdi-heart' : 'mdi-heart-outline'"
-              @click="toggleWishList()" />
+              @click="addToWishlist()" />
           </v-col>
         </v-row>
 
-        <div class="image-container">
+        <div @click="verProduct()" class="image-container">
           <img :src="product.image" />
         </div>
+      </div>
+      <div class="button-container">
         <v-btn
           color="black"
           prepend-icon="mdi-cart"
@@ -52,7 +53,6 @@
         <p style="font-size: 14px; font-weight: 700; opacity: 0.5">(65)</p>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -63,7 +63,7 @@
 
   const route = useRoute()
 
-  const emit = defineEmits(['toggleWishList', 'addToCart'])
+  const emit = defineEmits(['addToWishlist', 'addToCart'])
 
   const props = defineProps({
     product: {
@@ -76,9 +76,9 @@
     },
   })
 
-  function toggleWishList() {
+  function addToWishlist() {
     //props.product.isInWishList = !props.product.isInWishList;
-    emit('toggleWishList', props.product.isInWishList)
+    emit('addToWishlist', props.product.isInWishList)
   }
 
   function addToCart() {
@@ -100,15 +100,18 @@
     justify-content: center;
     align-items: center;
     width: 270px;
-    height: 180px;
-    padding: 15px 0px 15px 0px;
+    height: 195px;
+    padding-top: 15px;
     overflow: hidden;
   }
   .image-container img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
   }
+  .button-container {
+  margin-top: auto;
+}
   .name {
     font-weight: 500;
     font-size: 16px;
