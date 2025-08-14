@@ -22,6 +22,8 @@ The main goal of this project is to learn by building—applying theory in a rea
 - [Spring Data JPA](https://spring.io/projects/spring-data-jpa) (Database management)
 - [PostgreSQL](https://www.postgresql.org/) (Relational database)
 - [JWT](https://jwt.io/) (Authentication token)
+- [Testcontainers](https://testcontainers.com/) (For database tests setup)
+- [JUnit](https://junit.org/) (Testing)
 
 ---
 
@@ -100,7 +102,7 @@ The main goal of this project is to learn by building—applying theory in a rea
 
 ### 🔹 3. Configure the backend (Spring Boot)
 ```sh
-  cd backend
+  cd vendi_backend
   mvn clean install
   mvn spring-boot:run
 ```
@@ -109,7 +111,7 @@ The main goal of this project is to learn by building—applying theory in a rea
 
 ### 🔹 4. Configure the frontend (Vue 3 + Vuetify)
 ```sh
-  cd frontend
+  cd vendi_frontend
   npm ci
   npm run dev
 ```
@@ -125,7 +127,7 @@ URL local access: `http://localhost:3000`
 - `POST /auth/login` → Login and JWT token generation
 
 ### 📌 **Products**
-- `GET /api/products` → List all user products
+- `GET /api/products` → List all products
 - `GET /api/products/{id}` → Details of a product
 - `POST /api/products` → Create a product
 - `PUT /api/products/{id}` → Update a product
@@ -135,7 +137,12 @@ URL local access: `http://localhost:3000`
 - `POST /api/cart/add` → Add item to cart
 - `GET /api/cart` → List all cart items
 - `DELETE /api/cart/remove/{id}` → Remove item from cart
+
+- ### 📌 **Category**
+- `POST /api/category` → Create a category 
+- `GET /api/category` → List all categories
 ---
+
 
 ## 🛡️ Security and Authentication
 **Vendi** uses **JWT (JSON Web Token)** for authentication. To access protected routes, include the JWT token in the request header:
