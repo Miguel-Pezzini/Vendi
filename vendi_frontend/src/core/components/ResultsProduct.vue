@@ -1,58 +1,67 @@
 <template>
-    <v-card>
-      <div>
-        <v-row align="center">
-          <v-col cols="auto  mt-3 ml-3">
-            <span class="icon-discount"> -{{ product.discount }}% </span>
-          </v-col>
-          <v-spacer />
-          <v-col cols="auto" class="icons-container mt-3 mr-3">
-            <Button
-              v-if="product.isInWishList"
-              density="comfortable"
-              :flat="true"
-              icon="mdi-delete-outline" />
-            <Button
-              v-else
-              :color="product.isInWishList ? 'red' : 'black'"
-              density="comfortable"
-              :flat="true"
-              :icon="product.isInWishList ? 'mdi-heart' : 'mdi-heart-outline'"
-              @click="addToWishlist()" />
-          </v-col>
-        </v-row>
+  <v-card>
+    <div>
+      <v-row align="center" class="ma-2">
+        <v-col cols="auto" class="pa-0 ma-0">
+          <span
+            class="text-white rounded px-3 py-1"
+            style="background-color: #dbb671; font-size: 12px">
+            -{{ product.discount }}%
+          </span>
+        </v-col>
+        <v-spacer />
+        <v-col cols="auto" class="d-flex flex-column gap-2 pa-0 ma-0">
+          <Button
+            v-if="product.isInWishList"
+            density="comfortable"
+            :flat="true"
+            icon="mdi-delete-outline" />
+          <Button
+            v-else
+            :color="product.isInWishList ? 'red' : 'black'"
+            density="comfortable"
+            :flat="true"
+            :icon="product.isInWishList ? 'mdi-heart' : 'mdi-heart-outline'"
+            @click="addToWishlist()" />
+        </v-col>
+      </v-row>
 
-        <div @click="verProduct()" class="image-container">
-          <img :src="product.image" />
-        </div>
-      </div>
-      <div class="button-container">
-        <v-btn
-          color="black"
-          prepend-icon="mdi-cart"
-          :rounded="false"
-          class="w-100 rounded-b"
-          text="Add To Cart"
-          @click="addToCart" />
-      </div>
-    </v-card>
-    <div class="mt-4">
-      <span class="name">{{ product.name }}</span>
-      <div class="d-flex ga-3 mt-3">
-        <span class="actualPrice">R${{ product.price }} </span>
-        <span v-if="product.discount" class="price">R${{ product.fullPrice }}</span>
-      </div>
-      <div v-if="!product.isInWishList" class="d-flex align-center mt-2">
-        <v-rating
-          readonly
-          half-increments
-          :size="24"
-          active-color="yellow"
-          color="rgba(0, 0, 0, 0.25)"
-          :model-value="3.5" />
-        <p style="font-size: 14px; font-weight: 700; opacity: 0.5">(65)</p>
+      <div @click="verProduct()" class="product-image">
+        <img :src="product.image" class="w-100 h-100" />
       </div>
     </div>
+
+    <v-btn
+      color="black"
+      prepend-icon="mdi-cart"
+      :rounded="false"
+      class="w-100 rounded-b"
+      text="Add To Cart"
+      @click="addToCart" />
+  </v-card>
+
+  <div class="mt-4">
+    <span class="font-weight-medium" style="font-size: 16px">{{ product.name }}</span>
+    <div class="d-flex gap-3 mt-3 align-center">
+      <span class="font-weight-medium pr-2" style="color: golden; font-size: 16px"
+        >R${{ product.price }}</span
+      >
+      <span v-if="product.discount" class="text-subtitle-2 text-decoration-line-through opacity-50">
+        R${{ product.fullPrice }}
+      </span>
+    </div>
+
+    <div v-if="!product.isInWishList" class="d-flex align-center mt-2 gap-2">
+      <v-rating
+        readonly
+        half-increments
+        :size="24"
+        active-color="yellow"
+        color="rgba(0,0,0,0.25)"
+        :model-value="3.5" />
+      <p class="text-caption font-weight-bold opacity-50 mb-0">(65)</p>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -94,49 +103,25 @@
 </script>
 
 <style scoped>
-  .image-container {
-    box-sizing: content-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 270px;
-    height: 195px;
-    padding-top: 15px;
+  .product-image {
+    width: 250px;
+    height: 200px;
+    cursor: pointer;
     overflow: hidden;
+    transition: filter 0.3s ease;
   }
-  .image-container img {
+
+  .product-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition:
+      transform 0.3s ease,
+      filter 0.3s ease;
   }
-  .button-container {
-  margin-top: auto;
-}
-  .name {
-    font-weight: 500;
-    font-size: 16px;
-  }
-  .icons-container {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .icon-discount {
-    font-size: 12px;
-    padding: 4px 12px 4px 12px;
-    background-color: #dbb671;
-    color: white;
-    border-radius: 4px;
-  }
-  .price {
-    text-decoration: line-through;
-    opacity: 0.5;
-    font-weight: 500;
-    font-size: 16px;
-  }
-  .actualPrice {
-    color: golden;
-    font-weight: 500;
-    font-size: 16px;
+
+  .product-image:hover img {
+    filter: brightness(0.9);
+    transform: scale(1.03);
   }
 </style>

@@ -32,8 +32,10 @@
             <v-spacer></v-spacer>
             <h4>Showing 50 of 5000 results – Page 1 of 5</h4>
           </v-row>
-          
-          <v-row :justify="$vuetify.display.mdAndDown ? 'center' : 'start'" :class=" $vuetify.display.mdAndUp ? 'ml-6' : 'ma-0'">
+
+          <v-row
+            :justify="$vuetify.display.mdAndDown ? 'center' : 'start'"
+            :class="$vuetify.display.mdAndUp ? 'ml-6' : 'ma-0'">
             <v-col cols="auto" v-for="n in 8" :key="n">
               <ResultsProduct
                 :product="prod1"
