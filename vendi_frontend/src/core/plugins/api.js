@@ -31,8 +31,6 @@ server.interceptors.response.use(
   (err) => {
     store.commit('stopLoading', err)
 
-    console.log(err)
-    
     if (err.response && err.response.status === 401) {
       router.push('/login')
     }
@@ -67,17 +65,11 @@ async function save(resource, data) {
 
 async function login(email, password) {
   const response = await server.post('auth/login', { email, password })
-  localStorage.setItem('token', response.data.token)
-  localStorage.setItem('roles', response.data.roles)
   return response.data
 }
 
 async function register(email, name, password, role) {
   const response = await server.post('auth/register', { email, name, role, password })
-  localStorage.setItem('roles', response.data.roles)
-  localStorage.setItem('token', response.data.token)
-
-    server.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
   return response.data
 }
 

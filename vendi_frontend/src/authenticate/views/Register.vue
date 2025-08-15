@@ -108,8 +108,10 @@
 
     api
       .register(email.value, name.value, password.value, 'USER')
-      .then(() => {
+      .then((data) => {
         proxy.$showMessage('success', 'Your account was registered with success!')
+        localStorage.setItem('roles', data.roles)
+        localStorage.setItem('token', data.token)
         router.push({ name: 'Home' })
       })
       .catch((err) => {

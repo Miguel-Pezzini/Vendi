@@ -79,8 +79,10 @@
 
     api
       .login(email.value, password.value)
-      .then(() => {
+      .then((data) => {
         proxy.$showMessage('success', 'Login successful. Welcome back!')
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('roles', data.roles)
         router.push({ name: 'Home' })
       })
       .catch(() => {
