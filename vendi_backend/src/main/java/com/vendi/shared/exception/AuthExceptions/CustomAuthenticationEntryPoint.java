@@ -13,7 +13,9 @@ import java.io.IOException;
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+            response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
             response.getWriter().write("Authentication failed.");
     }
 }

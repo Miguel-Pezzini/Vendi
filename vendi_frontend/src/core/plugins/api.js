@@ -1,11 +1,12 @@
 import axios from 'axios'
+import router from '../router'
 import { store } from './store'
 
 const BASE_URL = 'http://localhost:8080/'
 
 const server = axios.create({
   baseURL: BASE_URL,
-  timeout: 1000,
+  timeout: 5000,
 })
 
 const getHeaders = {
@@ -29,7 +30,14 @@ server.interceptors.response.use(
   },
   (err) => {
     store.commit('stopLoading', err)
-    return Promise.reject(err.response.data)
+
+    console.log(err)
+    
+    if (err.response && err.response.status === 401) {
+      router.push('/login')
+    }
+
+    return Promise.reject(err.response?.data || err)
   }
 )
 
@@ -68,6 +76,8 @@ async function register(email, name, password, role) {
   const response = await server.post('auth/register', { email, name, role, password })
   localStorage.setItem('roles', response.data.roles)
   localStorage.setItem('token', response.data.token)
+
+    server.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`
   return response.data
 }
 

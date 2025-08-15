@@ -52,7 +52,7 @@
           </div>
 
           <div class="d-flex justify-center align-center mt-4">
-            <RouterLink class="text-decoration-none text-black opacity-80" to="/">
+            <RouterLink class="text-decoration-none text-black opacity-80" to="/login">
               Já possui conta? <span class="text-golden">Logar!</span>
             </RouterLink>
           </div>
