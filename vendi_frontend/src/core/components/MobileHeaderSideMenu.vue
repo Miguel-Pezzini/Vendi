@@ -2,7 +2,7 @@
   <v-navigation-drawer :model-value="showMenu" width="300" @update:model-value="updateShowMenu">
     <div class="d-flex align-center justify-space-between">
       <RouterLink to="/home">
-        <img class="img" height="100" src="@/assets/logo.png" alt="Logo" />
+        <img class="img pl-4 py-2" height="70" src="@/assets/logo.png" alt="Logo" />
       </RouterLink>
       <v-btn elevation="0" icon @click="updateShowMenu(false)">
         <v-icon>mdi-close</v-icon>
@@ -60,6 +60,7 @@
   const emit = defineEmits(['update:showMenu'])
 
   const updateShowMenu = (value) => {
+    console.log("a", value)
     emit('update:showMenu', value)
   }
 </script>

@@ -5,7 +5,7 @@
     <v-row>
       <Path :old-paths="['Home']" active-path="Minha Conta" />
       <v-spacer />
-      <p>Bem-Vindo! <span style="color: #dbb671">Your name</span></p>
+      <p>Welcome! <span style="color: #dbb671">Your name</span></p>
     </v-row>
 
     <v-row class="container margin">
@@ -17,26 +17,25 @@
         <v-card>
           <v-form class="rounded">
             <v-row>
-              <h1 class="title">Edite Seu Perfil</h1>
+              <h1 class="title">Change your account</h1>
             </v-row>
             <v-row>
-              <Input variant="outlined" label="Nome" />
+              <Input variant="outlined" label="Name" v-model="account.name" />
             </v-row>
             <v-row class="ga-4">
-              <Input variant="outlined" label="E-mail" />
-              <Input variant="outlined" label="Endereco" />
+              <Input variant="outlined" v-model="account.email" label="E-mail" />
             </v-row>
             <v-row>
-              <h1 class="title">Mudança de Senha</h1>
+              <h1 class="title">Changing password</h1>
             </v-row>
             <v-row>
-              <Input variant="outlined" label="Senha Atual" />
+              <Input variant="outlined" label="Current password" />
             </v-row>
             <v-row>
-              <Input variant="outlined" label="Nova Senha" />
+              <Input variant="outlined" label="New password" />
             </v-row>
             <v-row>
-              <Input variant="outlined" label="Confirmar Nova Senha" />
+              <Input variant="outlined" label="Confirm new password" />
             </v-row>
             <v-row>
               <v-spacer />
@@ -58,6 +57,24 @@
   import Input from '@/core/components/Input.vue'
   import Button from '@/core/components/Button.vue'
   import Footer from '@/core/components/Footer.vue'
+  import api from '@/core/plugins/api'
+  import { onMounted, ref, getCurrentInstance } from 'vue'
+  const { proxy } = getCurrentInstance()
+
+  const account = ref({
+    name: '',
+    email: '',
+  })
+
+  onMounted(() => {
+    loadAccount()
+  })
+
+  async function loadAccount() {
+    account.value = await api.get('user').catch((err) => {
+      proxy.$showMessage('success', err)
+    })
+  }
 </script>
 
 <style scoped>

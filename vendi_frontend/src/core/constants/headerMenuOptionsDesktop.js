@@ -41,7 +41,7 @@ export default (context) => [
   {
     showOn: ({ mdAndUp }) => mdAndUp,
     isRouterLink: true,
-    to: '/',
+    to: '/login',
     tooltip: 'Logout',
     icon: 'mdi-logout',
     color: 'red',

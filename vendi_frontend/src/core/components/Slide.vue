@@ -1,9 +1,14 @@
 <template>
-  <v-window show-arrows>
+  <v-window show-arrows v-if="images.length">
     <v-window-item v-for="image in images" :key="image">
-      <img class="banner" :src="image" />
+      <img
+        style="object-fit: cover"
+        class="w-100"
+        :height="$vuetify.display.mdAndUp ? 660 : 300"
+        :src="image" />
     </v-window-item>
   </v-window>
+  <v-skeleton-loader type="image" class="w-100" v-else />
 </template>
 
 <script setup>
@@ -14,11 +19,3 @@
     },
   })
 </script>
-
-<style scoped>
-  .banner {
-    width: 100%;
-    height: 660px;
-    object-fit: cover;
-  }
-</style>

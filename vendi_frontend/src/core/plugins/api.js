@@ -1,11 +1,12 @@
 import axios from 'axios'
+import router from '../router'
 import { store } from './store'
 
 const BASE_URL = 'http://localhost:8080/'
 
 const server = axios.create({
   baseURL: BASE_URL,
-  timeout: 1000,
+  timeout: 5000,
 })
 
 const getHeaders = {
@@ -29,7 +30,12 @@ server.interceptors.response.use(
   },
   (err) => {
     store.commit('stopLoading', err)
-    return Promise.reject(err.response.data)
+
+    if (err.response && err.response.status === 401) {
+      router.push('/login')
+    }
+
+    return Promise.reject(err.response?.data || err)
   }
 )
 
@@ -59,15 +65,11 @@ async function save(resource, data) {
 
 async function login(email, password) {
   const response = await server.post('auth/login', { email, password })
-  localStorage.setItem('token', response.data.token)
-  localStorage.setItem('roles', response.data.roles)
   return response.data
 }
 
 async function register(email, name, password, role) {
   const response = await server.post('auth/register', { email, name, role, password })
-  localStorage.setItem('roles', response.data.roles)
-  localStorage.setItem('token', response.data.token)
   return response.data
 }
 

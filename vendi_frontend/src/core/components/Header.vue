@@ -2,19 +2,19 @@
   <CartMenu v-model:show-cart="showCart" />
   <MobileHeaderSideMenu :mobileMenuOptions="mobileMenuOptions" v-model:show-menu="showMenu" />
 
-  <v-row class="header ma-0" align="center" justify="center">
+  <v-row v-if="mdAndUp" class="header ma-0" align="center" justify="center">
     <span class="text-subtitle-2 mr-2">
       Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!
     </span>
-    <RouterLink class="text-subtitle-2 text-decoration-underline" to="/products">
-      ShopNow
+    <RouterLink class="text-decoration-underline" to="/products">
+      <span class="text-subtitle-2 text-white"> ShopNow </span>
     </RouterLink>
   </v-row>
   <div class="header-wrapper">
     <v-row class="ma-0 header-container" no-gutters>
       <v-col cols="9" class="d-flex justify-center align-center">
         <RouterLink to="/home">
-          <img height="100" src="@/assets/logo.png" alt="Logo" />
+          <img class="my-2 mx-4" height="70" src="@/assets/logo.png" alt="Logo" />
         </RouterLink>
         <form class="w-100" @submit.prevent="pesquisar">
           <Input
