@@ -13,6 +13,7 @@ import java.util.UUID;
 public class UserService {
     @Autowired
     UserRepository repository;
+
     public Optional<User> findUser(UUID userId) {
         return repository.findById(userId);
     }

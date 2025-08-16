@@ -14,12 +14,12 @@
           <div
             class="d-flex flex-column gap-6"
             :class="{ 'text-center': !$vuetify.display.mdAndUp }">
-            <h1 class="font-weight-medium text-h4">Faça seu Login</h1>
-            <p>Insira seus dados abaixo</p>
+            <h1 class="font-weight-medium text-h4">Log In</h1>
+            <p>Enter your details below</p>
           </div>
 
           <div class="d-flex flex-column mt-6 w-100">
-            <Input v-model="email" label="E-mail ou nome de usuário" required />
+            <Input v-model="email" label="Enter your E-mail" required />
             <Input
               v-model="password"
               append-icon="mdi-eye"
@@ -43,13 +43,13 @@
               color="black"
               variant="text"
               size="default"
-              text="Esqueceu a senha?"
+              text="Forgot your password?"
               class="text-none" />
           </div>
 
           <div class="d-flex justify-center align-center mt-4">
             <RouterLink class="text-decoration-none text-black opacity-80" to="/register">
-              Não possui conta? <span class="text-golden">Criar uma!</span>
+              Don't have an account? <span class="text-golden">Create one!</span>
             </RouterLink>
           </div>
         </div>

@@ -14,17 +14,17 @@
           <div
             class="d-flex flex-column gap-6"
             :class="{ 'text-center': !$vuetify.display.mdAndUp }">
-            <h1 class="font-weight-medium text-h4">Crie sua Conta</h1>
-            <p>Insira seus dados abaixo</p>
+            <h1 class="font-weight-medium text-h4">Register your account</h1>
+            <p>Enter your details below</p>
           </div>
 
           <div class="d-flex flex-column mt-6 w-100">
-            <Input v-model="name" label="Nome de usuário" required />
+            <Input v-model="name" label="Name" required />
             <Input v-model="email" label="E-mail" required validate-on="blur" :rules="emailRules" />
             <Input
               v-model="password"
               append-icon="mdi-eye"
-              label="Senha"
+              label="Password"
               required
               validate-on="blur"
               :min-length="6"
@@ -33,7 +33,7 @@
               v-model="repeatPassword"
               append-icon="mdi-eye"
               :rules="passwordRules"
-              label="Repita sua Senha"
+              label="Repeat your password"
               :min-length="6"
               required
               type="password" />
@@ -48,12 +48,12 @@
               class="w-100"
               color="golden"
               :loading="!!$loadingState['auth/post']"
-              text="Criar Conta" />
+              text="Register account" />
           </div>
 
           <div class="d-flex justify-center align-center mt-4">
             <RouterLink class="text-decoration-none text-black opacity-80" to="/login">
-              Já possui conta? <span class="text-golden">Logar!</span>
+              Alredy have an account? <span class="text-golden">Login!</span>
             </RouterLink>
           </div>
         </div>

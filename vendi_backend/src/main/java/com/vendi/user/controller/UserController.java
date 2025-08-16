@@ -1,5 +1,8 @@
 package com.vendi.user.controller;
 
+import com.vendi.user.dto.UserDTO;
+import com.vendi.user.model.User;
+import com.vendi.user.service.UserAuthenticatedService;
 import com.vendi.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +15,12 @@ public class UserController {
     @Autowired
     UserService service;
 
+    @Autowired
+    UserAuthenticatedService authenticatedService;
+
     @GetMapping()
-    public ResponseEntity<String> getUser() {
-        return ResponseEntity.ok("sucesso!");
+    public ResponseEntity<UserDTO> getUser() {
+        User user = authenticatedService.getAuthenticatedUser();
+        return ResponseEntity.ok(new UserDTO(user));
     }
 }
