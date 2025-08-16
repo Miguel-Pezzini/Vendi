@@ -3,9 +3,11 @@
   <v-divider />
   <v-container class="container">
     <v-row>
-      <Path :old-paths="['Home']" active-path="Minha Conta" />
+      <Path :old-paths="['Home']" active-path="My Account" />
       <v-spacer />
-      <p>Welcome! <span style="color: #dbb671">Your name</span></p>
+      <p>
+        Welcome! <span style="color: #dbb671">{{ account.name }}</span>
+      </p>
     </v-row>
 
     <v-row class="container margin">
