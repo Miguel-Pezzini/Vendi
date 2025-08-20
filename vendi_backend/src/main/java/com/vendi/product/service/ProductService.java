@@ -13,7 +13,6 @@ import com.vendi.photo.model.Photo;
 import com.vendi.category.model.Category;
 import com.vendi.product.model.Product;
 import com.vendi.shared.exception.ValidationExceptions.IllegalArgumentException;
-import com.vendi.user.model.User;
 import com.vendi.product.repository.ProductRepository;
 import com.vendi.category.service.CategoryService;
 import com.vendi.user.service.UserAuthenticatedService;
@@ -86,13 +85,6 @@ public class ProductService {
         List<Product> products = this.repository.findAllByCustomFilter(productQueryParams);
 
         return products.stream().map(ProductResponseDTO::new).toList();
-    }
-
-    @Transactional(readOnly = true)
-    public List<ProductResponseDTO> getUserProducts() {
-        User user = userAuthenticatedService.getAuthenticatedUser();
-
-        return user.getProducts().stream().map(ProductResponseDTO::new).toList();
     }
 
     @Transactional(readOnly = true)

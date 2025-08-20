@@ -24,12 +24,5 @@ Accept: application/json
     client.global.set("auth_token", response.body.token);
 %}
 
-###
-
-GET {{base_url}}/user
-Authorization: Bearer {{auth_token}}
-Content-Type: application/json
-Accept: application/json
-
 
 

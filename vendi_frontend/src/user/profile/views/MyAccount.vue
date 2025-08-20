@@ -73,8 +73,8 @@
   })
 
   async function loadAccount() {
-    account.value = await api.get('user').catch((err) => {
-      proxy.$showMessage('success', err)
+    account.value = await api.get('me').catch((err) => {
+      proxy.$showMessage('error', err)
     })
   }
 </script>

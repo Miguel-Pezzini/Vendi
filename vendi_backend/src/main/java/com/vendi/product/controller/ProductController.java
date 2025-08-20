@@ -25,13 +25,6 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<List<ProductResponseDTO>> getUserProducts() {
-        List<ProductResponseDTO> products = productService.getUserProducts();
-
-        return ResponseEntity.status(HttpStatus.OK).body(products);
-    }
-
     @GetMapping()
     public ResponseEntity<List<ProductResponseDTO>> getProducts(@ModelAttribute ProductQueryParams params) {
         List<ProductResponseDTO> products = productService.getProducts(params);
