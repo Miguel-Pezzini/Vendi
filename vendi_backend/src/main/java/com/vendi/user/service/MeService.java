@@ -20,6 +20,7 @@ public class MeService {
         return new UserDTO(userAuthenticatedService.getAuthenticatedUser());
     }
 
+    @Transactional(readOnly = true)
     public List<ProductResponseDTO> getMyProducts() {
         return userAuthenticatedService.getAuthenticatedUser().getProducts().stream().map(ProductResponseDTO::new).toList();
     }
