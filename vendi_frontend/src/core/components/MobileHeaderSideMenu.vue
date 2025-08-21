@@ -60,7 +60,7 @@
   const emit = defineEmits(['update:showMenu'])
 
   const updateShowMenu = (value) => {
-    console.log("a", value)
+    console.log('a', value)
     emit('update:showMenu', value)
   }
 </script>

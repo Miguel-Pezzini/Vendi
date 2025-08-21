@@ -1,4 +1,4 @@
-GET {{base_url}}/photo/3098cd41-fcb5-4c68-a5e3-240d256c8a3d
+GET {{base_url}}/photo/31508fce-4051-47b3-938d-47cbebc69142
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json
