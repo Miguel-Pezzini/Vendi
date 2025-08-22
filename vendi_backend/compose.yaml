@@ -20,18 +20,18 @@ services:
     build:
       context: .
     ports:
-      - "8080:8080"                # Porta do Spring Boot
+      - "8080:8080"
     depends_on:
-      - postgres                   # Garante que o PostgreSQL estará pronto antes de iniciar o Spring Boot
+      - postgres
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/vendi  # URL de conexão com o PostgreSQL
-      SPRING_DATASOURCE_USERNAME: user                              # Usuário do PostgreSQL
-      SPRING_DATASOURCE_PASSWORD: 1234                                # Senha do PostgreSQL
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/vendi
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: 1234
     networks:
       - app-network
 
 volumes:
-  postgres-data:   # Volume para dados persistentes do PostgreSQL
+  postgres-data:
 
 networks:
   app-network:
