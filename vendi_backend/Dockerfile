@@ -1,14 +1,21 @@
-# Use a imagem oficial do OpenJDK
-FROM openjdk:17-jdk-slim
+# Etapa 1: Build da aplicação usando Maven
+FROM maven:3.9.4-eclipse-temurin-17 AS build
 
-# Defina o diretório de trabalho no contêiner
 WORKDIR /app
 
-# Copie o arquivo JAR para dentro do contêiner
-COPY out/artifacts/vendi_jar/vendi.jar app.jar
+# Copia o pom.xml e baixa dependências
+COPY pom.xml .
+RUN mvn dependency:go-offline
 
-# Exponha a porta que o Spring Boot vai rodar
+# Copia o código fonte e compila
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# Etapa 2: Imagem final, apenas com o JAR gerado
+FROM eclipse-temurin:17-jdk
+
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+
 EXPOSE 8080
-
-# Execute a aplicação Spring Boot
 ENTRYPOINT ["java", "-jar", "app.jar"]
