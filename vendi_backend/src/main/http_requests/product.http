@@ -4,7 +4,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "name": "",
+  "name": "Product",
   "price": 5,
   "quantity": 4,
   "installment": 0,
@@ -38,16 +38,10 @@ Accept: application/json
       "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/5YfZUEAAAAASUVORK5CYII=",
       "contentType": "image/png",
       "filename": "example.png",
-      "isMainPhoto": false
-    },
-    {
-      "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/5YfZUEAAAAASUVORK5CYII=",
-      "contentType": "image/png",
-      "filename": "example.png",
       "isMainPhoto": true
     }
   ],
-  "categoriesIds": ["916c2e6a-4f0f-4520-8329-bd2b41b617fd"]
+  "categoriesIds": ["b6601d34-1804-4dc9-90df-1bfa50baad67"]
 }
 
 ###
@@ -96,7 +90,7 @@ Accept: application/json
     }
   ],
   "photosToKeep": [],
-  "categoriesIds": ["fe2739e9-759d-46d5-b408-0999e75f5e77"]
+  "categoriesIds": ["34129560-9ccc-445d-ae0d-44b8866fe83e"]
 }
 
 ###
