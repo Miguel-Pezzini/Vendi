@@ -1,4 +1,4 @@
-POST {{base_url}}/product
+POST {{base_url}}/products
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json
@@ -46,7 +46,7 @@ Accept: application/json
 
 ###
 
-PUT {{base_url}}/product/39d47bf0-8c24-4787-b9e1-380997625394
+PUT {{base_url}}/products/39d47bf0-8c24-4787-b9e1-380997625394
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json
@@ -95,28 +95,21 @@ Accept: application/json
 
 ###
 
-GET {{base_url}}/product/user
+GET {{base_url}}/products?limit=5
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json
 
 ###
 
-GET {{base_url}}/product?limit=5
+DELETE {{base_url}}/products/5b68615b-0bd2-4379-93b8-44295e618754
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json
 
 ###
 
-DELETE {{base_url}}/product/5b68615b-0bd2-4379-93b8-44295e618754
-Authorization: Bearer {{auth_token}}
-Content-Type: application/json
-Accept: application/json
-
-###
-
-GET {{base_url}}/product/7168f589-7d4a-4a72-a1ce-44214409b8be
+GET {{base_url}}/products/7168f589-7d4a-4a72-a1ce-44214409b8be
 Authorization: Bearer {{auth_token}}
 Content-Type: application/json
 Accept: application/json
