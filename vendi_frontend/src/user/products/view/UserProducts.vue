@@ -47,7 +47,7 @@
   let products = ref([])
 
   onMounted(async () => {
-    products.value = await productService.loadProducts('product/user')
+    products.value = await productService.loadProducts('me/products')
   })
 </script>
 

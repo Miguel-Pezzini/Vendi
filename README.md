@@ -116,7 +116,7 @@ The main goal of this project is to learn by building—applying theory in a rea
   npm run dev
 ```
 
-URL local access: `http://localhost:3000`
+URL local access: `http://localhost:3333`
 
 ---
 
