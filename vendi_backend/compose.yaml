@@ -14,25 +14,6 @@ services:
     networks:
       - app-network
 
-  springboot:
-    image: vendi
-    container_name: vendi
-    build:
-      context: .
-    volumes:
-      - ./src:/app/src
-      - ./pom.xml:/app/pom.xml
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/vendi
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: 1234
-    networks:
-      - app-network
-
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
