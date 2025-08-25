@@ -33,7 +33,7 @@ export default (context) => [
   {
     showOn: ({ mdAndUp }) => mdAndUp,
     isRouterLink: true,
-    to: () => (context.isAdmin ? '/admin' : '/profile'),
+    to: () => (context.isAdmin ? '/admin' : '/account'),
     icon: () => (context.isAdmin ? context.adminIcon : context.accountIcon),
     tooltip: 'My Account',
     color: context.accountActive ? 'golden' : 'black',

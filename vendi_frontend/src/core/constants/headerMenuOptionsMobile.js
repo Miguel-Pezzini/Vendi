@@ -18,7 +18,7 @@ export default (context) => [
     prependIcon: 'mdi-cart-outline',
   },
   {
-    to: context.isAdmin ? '/admin' : '/profile',
+    to: context.isAdmin ? '/admin' : '/account',
     prependIcon: context.isAdmin ? context.adminIcon : context.accountIcon,
     title: 'My Account',
     color: context.accountActive ? 'golden' : 'black',

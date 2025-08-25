@@ -4,8 +4,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "name": "Category example",
-  "description": "category description"
+  "name": "Eletronics",
+  "description": "Eletronics items"
 }
 
 ###

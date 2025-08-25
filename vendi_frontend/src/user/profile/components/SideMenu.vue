@@ -27,6 +27,10 @@
       type: Boolean,
       default: false,
     },
+    activeAddresses: {
+      type: Boolean,
+      default: false,
+    },
     activeMyProducts: {
       type: Boolean,
       default: false,
@@ -44,8 +48,13 @@
       subMenus: [
         {
           title: 'My Account',
-          to: '/profile',
+          to: '/account',
           marked: props.activeMyAccount,
+        },
+        {
+          title: 'Manage addresses',
+          to: '/account/addresses',
+          marked: props.activeAddresses,
         },
         {
           title: 'My Payment Forms',

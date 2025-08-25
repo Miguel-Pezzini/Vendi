@@ -14,7 +14,7 @@ public class Address extends AbstractEditableEntity {
     private String street;
     private String city;
     private String state;
-    private String cep;
+    private String zipCode;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

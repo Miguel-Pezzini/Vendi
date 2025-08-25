@@ -1,0 +1,23 @@
+### Get authenticated user
+
+GET {{base_url}}/me
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+Accept: application/json
+
+### Get authenticated user products
+
+GET {{base_url}}/me/products
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+Accept: application/json
+
+### Get authenticated user addresses
+
+GET {{base_url}}/me/addresses
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+Accept: application/json
+
+
+
