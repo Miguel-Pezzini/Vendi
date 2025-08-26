@@ -12,19 +12,19 @@ import java.util.UUID;
 
 public class ProductMocker {
 
-    private static ProductRequestDTO getBaseProductRequestDTO(String name, float price, int quantity, int installment, int discount, List<PhotoToCreateDTO> photosToCreate, List<PhotoToKeepDTO> photosToKeep, List<UUID> categoriesIds) {
+    private static ProductRequestDTO createBaseProduct(String name, float price, int quantity, int installment, int discount, List<PhotoToCreateDTO> photosToCreate, List<PhotoToKeepDTO> photosToKeep, List<UUID> categoriesIds) {
         return new ProductRequestDTO(name, price, quantity, installment, discount, photosToCreate, photosToKeep, categoriesIds);
     }
 
-    static public ProductRequestDTO getCompleteProductRequestDTO(List<PhotoToCreateDTO> photosToCreate, List<PhotoToKeepDTO> photosToKeep, List<UUID> categoriesIds) {
-        return getBaseProductRequestDTO("Product test", 50.5F, 5, 0, 0, photosToCreate, photosToKeep, categoriesIds);
+    static public ProductRequestDTO createCompleteProduct(List<PhotoToCreateDTO> photosToCreate, List<PhotoToKeepDTO> photosToKeep, List<UUID> categoriesIds) {
+        return createBaseProduct("Product test", 50.5F, 5, 0, 0, photosToCreate, photosToKeep, categoriesIds);
     }
 
-    static public ProductRequestDTO getProductRequestDTOWithoutPhotos(List<UUID> categoriesIds) {
-        return getBaseProductRequestDTO("Product test", 50.5F, 5, 0, 0, new ArrayList<>(),new ArrayList<>(), categoriesIds);
+    static public ProductRequestDTO createProductWithoutPhotos(List<UUID> categoriesIds) {
+        return createBaseProduct("Product test", 50.5F, 5, 0, 0, new ArrayList<>(),new ArrayList<>(), categoriesIds);
     }
 
-    static public ProductRequestDTO getProductRequestDTOWithPhotosToCreate(List<PhotoToCreateDTO> photosToCreate, List<UUID> categoriesIds) {
-        return getBaseProductRequestDTO("Product test", 50.5F, 5, 0, 0, photosToCreate,new ArrayList<>(), categoriesIds);
+    static public ProductRequestDTO createProductWithPhotosToCreate(List<PhotoToCreateDTO> photosToCreate, List<UUID> categoriesIds) {
+        return createBaseProduct("Product test", 50.5F, 5, 0, 0, photosToCreate,new ArrayList<>(), categoriesIds);
     }
 }

@@ -10,18 +10,18 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class PhotoMocker {
-    static public PhotoToCreateDTO getBasePhotoToCreateDTO(Boolean isMainPhoto, String data, String contentType, String filename) {
+    static public PhotoToCreateDTO createBasePhoto(Boolean isMainPhoto, String data, String contentType, String filename) {
         return new PhotoToCreateDTO(isMainPhoto, data, contentType, filename);
     }
-    static public PhotoToKeepDTO getBasePhotoToKeepDTO(UUID id, Boolean isMainPhoto) {
+    static public PhotoToKeepDTO createPhotoToKeep(UUID id, Boolean isMainPhoto) {
         return new PhotoToKeepDTO(id, isMainPhoto);
     }
 
     static public List<PhotoToCreateDTO> getPhotosToCreateDTO() {
         List<PhotoToCreateDTO> photos = IntStream.range(0, 3)
-                .mapToObj(i -> getBasePhotoToCreateDTO(false, "randomData", "image/png", "not_main_photo"))
+                .mapToObj(i -> createBasePhoto(false, "randomData", "image/png", "not_main_photo"))
                 .collect(Collectors.toList());
-        photos.add(getBasePhotoToCreateDTO(true, "randomData", "image/png", "main_photo"));
+        photos.add(createBasePhoto(true, "randomData", "image/png", "main_photo"));
         return photos;
     }
 

@@ -19,7 +19,7 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void testSaveCategoryWithoutCategoryFatherId() {
-        CategoryRequestDTO categoryRequestDTO = CategoryMocker.getCategoryRequestDTOWithoutCategoryFatherId();
+        CategoryRequestDTO categoryRequestDTO = CategoryMocker.createCategoryWithoutFather();
         CategoryResponseDTO categoryResponseDTO = categoryService.create(categoryRequestDTO);
 
         assertNotNull(categoryResponseDTO.id());
@@ -28,7 +28,7 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void testSaveCategoryWithInvalidCategoryFatherId() {
-        CategoryRequestDTO categoryRequestDTO = CategoryMocker.getCategoryRequestDTO(new UUID(0, 10));
+        CategoryRequestDTO categoryRequestDTO = CategoryMocker.createCategoryWithFather(new UUID(0, 10));
 
         Exception exception = assertThrows(EntityNotFoundException.class, () -> {
             categoryService.create(categoryRequestDTO);
@@ -41,10 +41,10 @@ public class CategoryIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void testSaveCategoryWithCategoryFatherId() {
-        CategoryRequestDTO fatherCategoryRequestDTO = CategoryMocker.getCategoryRequestDTOWithoutCategoryFatherId();
+        CategoryRequestDTO fatherCategoryRequestDTO = CategoryMocker.createCategoryWithoutFather();
         CategoryResponseDTO fatherCategoryResponseDTO = categoryService.create(fatherCategoryRequestDTO);
 
-        CategoryRequestDTO childCategoryRequestDTO = CategoryMocker.getCategoryRequestDTO(fatherCategoryResponseDTO.id());
+        CategoryRequestDTO childCategoryRequestDTO = CategoryMocker.createCategoryWithFather(fatherCategoryResponseDTO.id());
         CategoryResponseDTO childCategoryResponseDTO = categoryService.create(childCategoryRequestDTO);
 
         assertNotNull(childCategoryResponseDTO.id());
