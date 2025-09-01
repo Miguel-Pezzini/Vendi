@@ -1,7 +1,7 @@
 package com.vendi.photo.service;
 
-import com.vendi.photo.dto.PhotoData;
-import com.vendi.photo.dto.PhotoToCreateDTO;
+import com.vendi.photo.dto.PhotoDataDTO;
+import com.vendi.photo.dto.CreatePhotoDTO;
 import com.vendi.photo.mapper.PhotoMapper;
 import com.vendi.photo.model.Photo;
 import com.vendi.photo.repository.PhotoRepository;
@@ -18,15 +18,15 @@ public class PhotoService {
     @Autowired
     PhotoRepository photoRepository;
 
-    public List<Photo> createPhotos(List<PhotoToCreateDTO> createPhotoRequestDTOs) {
+    public List<Photo> createPhotos(List<CreatePhotoDTO> createPhotoRequestDTOs) {
         return PhotoMapper.mapToPhotos(createPhotoRequestDTOs);
     }
 
     @Transactional(readOnly = true)
-    public PhotoData getById(UUID photoId) {
+    public PhotoDataDTO getById(UUID photoId) {
         Photo photo = this.photoRepository.findById(photoId).orElseThrow();
 
-        return new PhotoData(photo);
+        return new PhotoDataDTO(photo);
     }
 
     public void deleteById(UUID photoId) {

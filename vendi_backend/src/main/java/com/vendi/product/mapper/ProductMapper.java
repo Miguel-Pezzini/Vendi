@@ -1,17 +1,52 @@
 package com.vendi.product.mapper;
 
-import com.vendi.product.dto.ProductRequestDTO;
+import com.vendi.category.model.Category;
+import com.vendi.photo.dto.CreatePhotoDTO;
+import com.vendi.product.dto.CreateProductDTO;
+import com.vendi.product.dto.UpdateProductDTO;
+import com.vendi.product.exception.InvalidMainPhotoException;
 import com.vendi.product.model.Product;
+import com.vendi.shared.exception.ResourceNotFoundException;
+
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public class ProductMapper {
 
-    public static Product dtoToProduct(ProductRequestDTO productRequestDTO) {
+    public static Product dtoToProduct(CreateProductDTO createProductDTO) {
         Product product = new Product();
-        product.setQuantity(productRequestDTO.quantity());
-        product.setPrice(productRequestDTO.price());
-        product.setInstallment(productRequestDTO.installment());
-        product.setDiscount(productRequestDTO.discount());
-        product.setName(productRequestDTO.name());
+        product.setQuantity(createProductDTO.quantity());
+        product.setPrice(createProductDTO.price());
+        product.setInstallment(createProductDTO.installment());
+        product.setDiscount(createProductDTO.discount());
+        product.setName(createProductDTO.name());
         return product;
+    }
+
+    public static Product updateProductDTOToProduct(UpdateProductDTO updateProductDTO, Product product) {
+        product.setQuantity(updateProductDTO.quantity());
+        product.setPrice(updateProductDTO.price());
+        product.setInstallment(updateProductDTO.installment());
+        product.setDiscount(updateProductDTO.discount());
+        product.setName(updateProductDTO.name());
+        return product;
+    }
+
+    public static void validateCategories(Set<Category> categories, List<UUID> categoriesIds) throws ResourceNotFoundException {
+        if (categories.size() != categoriesIds.size()) {
+            throw new ResourceNotFoundException("Categories not found");
+        }
+    }
+
+    public static void validateMainPhoto(List<CreatePhotoDTO> photosToCreateDTO) {
+        long mainPhotoCount = photosToCreateDTO.stream()
+                .filter(CreatePhotoDTO::isMainPhoto)
+                .count();
+
+        if (mainPhotoCount != 1) {
+            throw new InvalidMainPhotoException(
+                    "There must be exactly one main photo, but found " + mainPhotoCount + ".");
+        }
     }
 }

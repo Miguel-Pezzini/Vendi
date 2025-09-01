@@ -2,7 +2,7 @@ package com.vendi.photo.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-public record PhotoToCreateDTO (
+public record CreatePhotoDTO(
         Boolean isMainPhoto,
         @NotNull String data,
         @NotNull String contentType,

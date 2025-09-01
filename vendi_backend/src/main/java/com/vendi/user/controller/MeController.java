@@ -1,9 +1,8 @@
 package com.vendi.user.controller;
 
 import com.vendi.address.dto.AddressDTO;
-import com.vendi.product.dto.ProductResponseDTO;
+import com.vendi.product.dto.ProductDTO;
 import com.vendi.user.dto.UserDTO;
-import com.vendi.user.model.User;
 import com.vendi.user.service.MeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +26,7 @@ public class MeController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<ProductResponseDTO>> getUserProducts() {
+    public ResponseEntity<List<ProductDTO>> getUserProducts() {
         return ResponseEntity.status(HttpStatus.OK).body(meService.getMyProducts());
     }
 

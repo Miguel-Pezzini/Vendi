@@ -1,6 +1,6 @@
 package com.vendi.photo.mapper;
 
-import com.vendi.photo.dto.PhotoToCreateDTO;
+import com.vendi.photo.dto.CreatePhotoDTO;
 import com.vendi.photo.model.Photo;
 
 import java.util.Base64;
@@ -13,7 +13,7 @@ public class PhotoMapper {
         return Base64.getDecoder().decode(base64String);
     }
 
-    public static Photo mapToPhoto(PhotoToCreateDTO createPhotoRequestDTO) {
+    public static Photo mapToPhoto(CreatePhotoDTO createPhotoRequestDTO) {
         Photo photo = new Photo();
         photo.setFilename(createPhotoRequestDTO.filename());
         photo.setData(decodeBase64ToBytes(createPhotoRequestDTO.data()));
@@ -22,7 +22,7 @@ public class PhotoMapper {
         return photo;
     }
 
-    public static List<Photo> mapToPhotos(List<PhotoToCreateDTO> createPhotoRequestDTOs) {
+    public static List<Photo> mapToPhotos(List<CreatePhotoDTO> createPhotoRequestDTOs) {
         return createPhotoRequestDTOs.stream()
                 .map(PhotoMapper::mapToPhoto)
                 .collect(Collectors.toList());

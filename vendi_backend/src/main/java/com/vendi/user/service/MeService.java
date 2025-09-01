@@ -1,9 +1,8 @@
 package com.vendi.user.service;
 
 import com.vendi.address.dto.AddressDTO;
-import com.vendi.product.dto.ProductResponseDTO;
+import com.vendi.product.dto.ProductDTO;
 import com.vendi.user.dto.UserDTO;
-import com.vendi.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +20,8 @@ public class MeService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductResponseDTO> getMyProducts() {
-        return userAuthenticatedService.getAuthenticatedUser().getProducts().stream().map(ProductResponseDTO::new).toList();
+    public List<ProductDTO> getMyProducts() {
+        return userAuthenticatedService.getAuthenticatedUser().getProducts().stream().map(ProductDTO::new).toList();
     }
 
     @Transactional(readOnly = true)

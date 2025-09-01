@@ -19,36 +19,36 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping()
-    public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductRequestDTO body) throws ResourceNotFoundException {
-        ProductResponseDTO savedProduct = productService.create(body);
+    public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody CreateProductDTO body) throws ResourceNotFoundException {
+        ProductDTO savedProduct = productService.create(body);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
     }
 
     @GetMapping()
-    public ResponseEntity<List<ProductResponseDTO>> getProducts(@ModelAttribute ProductQueryParams params) {
-        List<ProductResponseDTO> products = productService.getProducts(params);
+    public ResponseEntity<List<ProductDTO>> getProducts(@ModelAttribute ProductQueryParams params) {
+        List<ProductDTO> products = productService.getProducts(params);
 
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable UUID productId) throws ResourceNotFoundException {
-        ProductResponseDTO product = productService.getById(productId);
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable UUID productId) throws ResourceNotFoundException {
+        ProductDTO product = productService.getById(productId);
 
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
     @GetMapping("/{productId}/details")
-    public ResponseEntity<ProductDetailsResponseDTO> getProductDetailsById(@PathVariable UUID productId) throws ResourceNotFoundException {
-        ProductDetailsResponseDTO product = productService.getDetailsById(productId);
+    public ResponseEntity<ProductDetailsDTO> getProductDetailsById(@PathVariable UUID productId) throws ResourceNotFoundException {
+        ProductDetailsDTO product = productService.getDetailsById(productId);
 
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable UUID productId, @RequestBody @Valid ProductRequestDTO body) throws ResourceNotFoundException, IllegalArgumentException {
-        ProductResponseDTO updatedProduct = productService.update(productId, body);
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID productId, @RequestBody @Valid UpdateProductDTO body) throws ResourceNotFoundException, IllegalArgumentException {
+        ProductDTO updatedProduct = productService.update(productId, body);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedProduct);
     }

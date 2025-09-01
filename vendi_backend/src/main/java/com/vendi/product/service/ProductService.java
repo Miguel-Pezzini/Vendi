@@ -1,18 +1,12 @@
 package com.vendi.product.service;
 
-import com.vendi.photo.dto.IsMainPhoto;
-import com.vendi.photo.dto.PhotoToCreateDTO;
-import com.vendi.photo.dto.PhotoToKeepDTO;
 import com.vendi.photo.service.PhotoService;
 import com.vendi.product.dto.*;
-import com.vendi.product.exception.InvalidMainPhotoException;
-import com.vendi.product.exception.MaxPhotoLimitExceededException;
 import com.vendi.product.mapper.ProductMapper;
 import com.vendi.shared.exception.ResourceNotFoundException;
 import com.vendi.photo.model.Photo;
 import com.vendi.category.model.Category;
 import com.vendi.product.model.Product;
-import com.vendi.shared.exception.ValidationExceptions.IllegalArgumentException;
 import com.vendi.product.repository.ProductRepository;
 import com.vendi.category.service.CategoryService;
 import com.vendi.user.service.UserAuthenticatedService;
@@ -22,8 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ProductService {
@@ -45,135 +37,61 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponseDTO create(ProductRequestDTO productRequestDTO) throws ResourceNotFoundException {
-        Product product = ProductMapper.dtoToProduct(productRequestDTO);
+    public ProductDTO create(CreateProductDTO createProductDTO) throws ResourceNotFoundException {
+        Product product = ProductMapper.dtoToProduct(createProductDTO);
 
-        Set<Category> categories = new HashSet<>(this.categoryService.findAllById(productRequestDTO.categoriesIds()));
-        this.validateCategories(categories, productRequestDTO.categoriesIds());
+        Set<Category> categories = new HashSet<>(this.categoryService.findAllById(createProductDTO.categoriesIds()));
+        ProductMapper.validateCategories(categories, createProductDTO.categoriesIds());
+        ProductMapper.validateMainPhoto(createProductDTO.photosToCreate());
 
         product.setUser(this.userAuthenticatedService.getAuthenticatedUser());
         product.setCategories(categories);
 
-        this.validateMainPhoto(productRequestDTO.photosToCreate());
-        List<Photo> photos = photoService.createPhotos(productRequestDTO.photosToCreate());
+        List<Photo> photos = photoService.createPhotos(createProductDTO.photosToCreate());
         for (Photo photo : photos) {
             product.addPhoto(photo);
         }
 
-        return new ProductResponseDTO(this.repository.save(product));
+        return new ProductDTO(this.repository.save(product));
     }
 
-    void validateCategories(Set<Category> categories, List<UUID> categoriesIds) throws ResourceNotFoundException {
-        if (categories.size() != categoriesIds.size()) {
-            throw new ResourceNotFoundException("Categories not found");
-        }
-    }
-
-    void validateMainPhoto(List<PhotoToCreateDTO> photosToCreateDTO) {
-        long mainPhotoCount = photosToCreateDTO.stream()
-                .filter(PhotoToCreateDTO::isMainPhoto)
-                .count();
-
-        if (mainPhotoCount != 1) {
-            throw new InvalidMainPhotoException(
-                    "There must be exactly one main photo, but found " + mainPhotoCount + ".");
-        }
-    }
 
     @Transactional(readOnly = true)
-    public List<ProductResponseDTO>getProducts(ProductQueryParams productQueryParams) {
+    public List<ProductDTO>getProducts(ProductQueryParams productQueryParams) {
         List<Product> products = this.repository.findAllByCustomFilter(productQueryParams);
 
-        return products.stream().map(ProductResponseDTO::new).toList();
+        return products.stream().map(ProductDTO::new).toList();
     }
 
     @Transactional(readOnly = true)
-    public ProductResponseDTO getById(UUID productId) throws ResourceNotFoundException {
-        Optional<Product> product = repository.findById(productId);
+    public ProductDTO getById(UUID productId) throws ResourceNotFoundException {
+        Product product = repository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found."));
 
-        if(product.isEmpty()) {
-            throw new ResourceNotFoundException("This product does not exists");
-        }
-
-        return new ProductResponseDTO(product.get());
+        return new ProductDTO(product);
     }
 
     @Transactional(readOnly = true)
-    public ProductDetailsResponseDTO getDetailsById(UUID productId) throws ResourceNotFoundException {
-        Optional<Product> product = repository.findById(productId);
+    public ProductDetailsDTO getDetailsById(UUID productId) throws ResourceNotFoundException {
+        Product product = repository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found."));
 
-        if(product.isEmpty()) {
-            throw new ResourceNotFoundException("This product does not exists");
-        }
-
-        return new ProductDetailsResponseDTO(product.get());
+        return new ProductDetailsDTO(product);
     }
 
-
-
     @Transactional(readOnly = true)
-    public List<ProductResponseDTO> getLatestProducts(int limit) {
+    public List<ProductDTO> getLatestProducts(int limit) {
         Pageable pageable = PageRequest.of(0, limit);
-        return this.repository.findRecentProducts(pageable).stream().map(ProductResponseDTO::new).toList();
+        return this.repository.findRecentProducts(pageable).stream().map(ProductDTO::new).toList();
     }
 
     @Transactional
-    public ProductResponseDTO update(UUID productId,  ProductRequestDTO productRequestDTO) throws ResourceNotFoundException, IllegalArgumentException {
-        Product product = repository.findById(productId).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+    public ProductDTO update(UUID productId, UpdateProductDTO updateProductDTO) throws ResourceNotFoundException {
+        Product product = repository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found."));
 
-        Set<Category> categories = new HashSet<>(this.categoryService.findAllById(productRequestDTO.categoriesIds()));
-        this.validateCategories(categories, productRequestDTO.categoriesIds());
-        product.setCategories(categories);
-        product.setName(productRequestDTO.name());
-        product.setPrice(productRequestDTO.price());
-        product.setQuantity(productRequestDTO.quantity());
-        product.setInstallment(productRequestDTO.installment());
-        product.setDiscount(productRequestDTO.discount());
+        Set<Category> categories = new HashSet<>(this.categoryService.findAllById(updateProductDTO.categoriesIds()));
+        ProductMapper.validateCategories(categories, updateProductDTO.categoriesIds());
+        ProductMapper.updateProductDTOToProduct(updateProductDTO, product);
 
-        this.validatePhotos(productRequestDTO.photosToCreate(), productRequestDTO.photosToKeep());
-
-        List<Photo> createdPhotos = productRequestDTO.photosToCreate().isEmpty()
-                ? Collections.emptyList()
-                : photoService.createPhotos(productRequestDTO.photosToCreate());
-
-        List<Photo> currentPhotos = product.getPhotos();
-        Set<UUID> idsToKeep = (productRequestDTO.photosToKeep() == null)
-                ? Collections.emptySet()
-                : productRequestDTO.photosToKeep().stream()
-                .map(PhotoToKeepDTO::id)
-                .collect(Collectors.toSet());
-
-        for (Photo photo : new ArrayList<>(currentPhotos)) {
-            if (!idsToKeep.contains(photo.getId())) {
-                photoService.deleteById(photo.getId());
-                currentPhotos.remove(photo);
-            }
-        }
-
-        for (Photo photo : createdPhotos) {
-            product.addPhoto(photo);
-        }
-
-        return new ProductResponseDTO(repository.save(product));
-    }
-
-    private void validatePhotos(List<PhotoToCreateDTO> photosToCreate, List<PhotoToKeepDTO> photosToKeep) throws IllegalArgumentException {
-        List<PhotoToCreateDTO> createList = photosToCreate != null ? photosToCreate : Collections.emptyList();
-        List<PhotoToKeepDTO> keepList = photosToKeep != null ? photosToKeep : Collections.emptyList();
-
-        if (createList.size() + keepList.size() > Product.MAX_PHOTO_LIMIT) {
-            throw new MaxPhotoLimitExceededException(Product.MAX_PHOTO_LIMIT);
-        }
-
-        long mainPhotoCount = Stream.concat(
-                        createList.stream(),
-                        keepList.stream()
-                )
-                .filter(IsMainPhoto::isMainPhoto)
-                .count();
-        if (mainPhotoCount != 1) {
-            throw new IllegalArgumentException("There must be exactly one photo marked as main.");
-        }
+        return new ProductDTO(repository.save(product));
     }
 
     public void delete(UUID productId) {

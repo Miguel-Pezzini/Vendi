@@ -1,7 +1,7 @@
 package com.vendi.product.dto;
 
 import com.vendi.category.dto.CategoryResponseDTO;
-import com.vendi.photo.dto.PhotoResponseDTO;
+import com.vendi.photo.dto.PhotoDTO;
 import com.vendi.photo.model.Photo;
 import com.vendi.product.model.Product;
 
@@ -9,8 +9,8 @@ import java.util.HashSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public record ProductResponseDTO(UUID id, String name, Float price, int quantity, int installment, int discount, PhotoResponseDTO mainPhoto, HashSet<CategoryResponseDTO> categories) {
-    public ProductResponseDTO(Product product) {
+public record ProductDTO(UUID id, String name, Float price, int quantity, int installment, int discount, PhotoDTO mainPhoto, HashSet<CategoryResponseDTO> categories) {
+    public ProductDTO(Product product) {
         this(
                 product.getId(),
                 product.getName(),
@@ -18,7 +18,7 @@ public record ProductResponseDTO(UUID id, String name, Float price, int quantity
                 product.getQuantity(),
                 product.getInstallment(),
                 product.getDiscount(),
-                new PhotoResponseDTO((product.getPhotos().stream().filter(Photo::getIsMain).findFirst()).get()),
+                new PhotoDTO((product.getPhotos().stream().filter(Photo::getIsMain).findFirst()).get()),
                 product.getCategories() == null ? new HashSet<>() :
                         product.getCategories().stream()
                                 .map(CategoryResponseDTO::new)

@@ -1,16 +1,15 @@
 package com.vendi.integration;
 
 import com.vendi.auth.service.AuthService;
-import com.vendi.category.dto.CategoryRequestDTO;
 import com.vendi.category.dto.CategoryResponseDTO;
 import com.vendi.category.service.CategoryService;
 import com.vendi.dtoMocks.AuthMocker;
 import com.vendi.dtoMocks.CategoryMocker;
 import com.vendi.dtoMocks.PhotoMocker;
 import com.vendi.dtoMocks.ProductMocker;
-import com.vendi.photo.dto.PhotoToCreateDTO;
-import com.vendi.product.dto.ProductRequestDTO;
-import com.vendi.product.dto.ProductResponseDTO;
+import com.vendi.photo.dto.CreatePhotoDTO;
+import com.vendi.product.dto.CreateProductDTO;
+import com.vendi.product.dto.ProductDTO;
 import com.vendi.product.service.ProductService;
 import com.vendi.user.model.User;
 import com.vendi.user.repository.UserRepository;
@@ -56,15 +55,26 @@ public class ProductIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void testProductServiceCreate() {
-        List<PhotoToCreateDTO> photosToCreateDTO = PhotoMocker.getPhotosToCreateDTO();
-        CategoryRequestDTO categoryRequestDTO = CategoryMocker.createCategoryWithoutFather();
-        CategoryResponseDTO categoryResponseDTO = categoryService.create(categoryRequestDTO);
+    void testProductCreation() {
+        List<CreatePhotoDTO> photosToCreateDTO = PhotoMocker.getPhotosToCreateDTO();
+        CategoryResponseDTO categoryResponseDTO = categoryService.create(CategoryMocker.createCategoryWithoutFather());
         List<UUID> categoriesIds = List.of(categoryResponseDTO.id());
-        ProductRequestDTO productRequestDTO = ProductMocker.createProductWithPhotosToCreate(photosToCreateDTO, categoriesIds);
-        ProductResponseDTO productResponseDTO = assertDoesNotThrow(() -> productService.create(productRequestDTO));
+        CreateProductDTO createProductDTO = ProductMocker.createProduct(photosToCreateDTO, categoriesIds);
+        ProductDTO productDTO = assertDoesNotThrow(() -> productService.create(createProductDTO));
 
-        assertNotNull(productResponseDTO.id());
-        assertEquals(productRequestDTO.name(), productResponseDTO.name());
+        assertNotNull(productDTO.id());
+        assertEquals(createProductDTO.name(), productDTO.name());
+    }
+
+    @Test
+    void testProductUpdate() {
+        List<CreatePhotoDTO> photosToCreateDTO = PhotoMocker.getPhotosToCreateDTO();
+        CategoryResponseDTO categoryResponseDTO = categoryService.create(CategoryMocker.createCategoryWithoutFather());
+        List<UUID> categoriesIds = List.of(categoryResponseDTO.id());
+        CreateProductDTO createProductDTO = ProductMocker.createProduct(photosToCreateDTO, categoriesIds);
+        ProductDTO productDTO = assertDoesNotThrow(() -> productService.create(createProductDTO));
+
+        assertNotNull(productDTO.id());
+        assertEquals(createProductDTO.name(), productDTO.name());
     }
 }
