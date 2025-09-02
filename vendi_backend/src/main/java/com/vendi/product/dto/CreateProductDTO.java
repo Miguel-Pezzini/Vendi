@@ -17,8 +17,7 @@ public record CreateProductDTO(
         @NotNull(message = "The quantity of the product cannot be empty.")  @Min(1) int quantity,
         @Min(value = 0, message = "The installment can only be positive.") int installment,
         @Min(value = 0, message = "The discount can only be positive.") int discount,
-        @NotNull @Size(max = Product.MAX_PHOTO_LIMIT, message = "You can send up to 5 photos only.") List<CreatePhotoDTO> photosToCreate,
-        @Size(max = Product.MAX_PHOTO_LIMIT, message = "You can send up to 5 photos only.") List <PhotoToKeepDTO> photosToKeep,
+        @NotNull @Size(max = Product.MAX_PHOTO_LIMIT, message = "You can send up to 5 photos only.") List<CreatePhotoDTO> photos,
         @NotNull(message = "You have to set at least one category for you product.") List<UUID> categoriesIds
 ) {}
 

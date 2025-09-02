@@ -72,4 +72,10 @@ public class Product extends AbstractEditableEntity {
         photo.setProduct(this);
         this.photos.add(photo);
     }
+
+    public void addPhotos(List<Photo> photos) {
+        for (Photo photo : photos) {
+            this.addPhoto(photo);
+        }
+    }
 }

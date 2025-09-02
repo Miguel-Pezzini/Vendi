@@ -10,6 +10,7 @@ import com.vendi.product.model.Product;
 import com.vendi.product.repository.ProductRepository;
 import com.vendi.category.service.CategoryService;
 import com.vendi.user.service.UserAuthenticatedService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+@RequiredArgsConstructor
 @Service
 public class ProductService {
 
@@ -25,62 +27,42 @@ public class ProductService {
     private final UserAuthenticatedService userAuthenticatedService;
     private final PhotoService photoService;
 
-    public ProductService(
-            CategoryService categoryService,
-            ProductRepository repository,
-            UserAuthenticatedService userAuthenticatedService,
-            PhotoService photoService) {
-        this.categoryService = categoryService;
-        this.repository = repository;
-        this.userAuthenticatedService = userAuthenticatedService;
-        this.photoService = photoService;
-    }
-
     @Transactional
     public ProductDTO create(CreateProductDTO createProductDTO) throws ResourceNotFoundException {
-        Product product = ProductMapper.dtoToProduct(createProductDTO);
+        Product product = ProductMapper.createDTOToProduct(createProductDTO);
 
         Set<Category> categories = new HashSet<>(this.categoryService.findAllById(createProductDTO.categoriesIds()));
         ProductMapper.validateCategories(categories, createProductDTO.categoriesIds());
-        ProductMapper.validateMainPhoto(createProductDTO.photosToCreate());
+        ProductMapper.validateMainPhoto(createProductDTO.photos());
 
         product.setUser(this.userAuthenticatedService.getAuthenticatedUser());
         product.setCategories(categories);
 
-        List<Photo> photos = photoService.createPhotos(createProductDTO.photosToCreate());
-        for (Photo photo : photos) {
-            product.addPhoto(photo);
-        }
+        product.addPhotos(photoService.createPhotos(createProductDTO.photos()));
 
-        return new ProductDTO(this.repository.save(product));
+        return ProductMapper.toDTO(this.repository.save(product));
     }
 
-
-    @Transactional(readOnly = true)
     public List<ProductDTO>getProducts(ProductQueryParams productQueryParams) {
         List<Product> products = this.repository.findAllByCustomFilter(productQueryParams);
 
-        return products.stream().map(ProductDTO::new).toList();
+        return products.stream().map(ProductMapper::toDTO).toList();
     }
 
-    @Transactional(readOnly = true)
     public ProductDTO getById(UUID productId) throws ResourceNotFoundException {
         Product product = repository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found."));
 
-        return new ProductDTO(product);
+        return ProductMapper.toDTO(product);
     }
 
-    @Transactional(readOnly = true)
     public ProductDetailsDTO getDetailsById(UUID productId) throws ResourceNotFoundException {
         Product product = repository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found."));
-
-        return new ProductDetailsDTO(product);
+        return ProductMapper.toDetailsDTO(product);
     }
 
-    @Transactional(readOnly = true)
     public List<ProductDTO> getLatestProducts(int limit) {
         Pageable pageable = PageRequest.of(0, limit);
-        return this.repository.findRecentProducts(pageable).stream().map(ProductDTO::new).toList();
+        return this.repository.findRecentProducts(pageable).stream().map(ProductMapper::toDTO).toList();
     }
 
     @Transactional
@@ -89,9 +71,11 @@ public class ProductService {
 
         Set<Category> categories = new HashSet<>(this.categoryService.findAllById(updateProductDTO.categoriesIds()));
         ProductMapper.validateCategories(categories, updateProductDTO.categoriesIds());
-        ProductMapper.updateProductDTOToProduct(updateProductDTO, product);
+        ProductMapper.updateDTOToProduct(updateProductDTO, product);
 
-        return new ProductDTO(repository.save(product));
+        product.setCategories(categories);
+
+        return ProductMapper.toDTO(repository.save(product));
     }
 
     public void delete(UUID productId) {

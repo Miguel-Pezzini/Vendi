@@ -11,7 +11,7 @@ import java.util.UUID;
 public class ProductMocker {
 
     private static CreateProductDTO createBaseProduct(String name, float price, int quantity, int installment, int discount, List<CreatePhotoDTO> photosToCreate, List<PhotoToKeepDTO> photosToKeep, List<UUID> categoriesIds) {
-        return new CreateProductDTO(name, price, quantity, installment, discount, photosToCreate, photosToKeep, categoriesIds);
+        return new CreateProductDTO(name, price, quantity, installment, discount, photosToCreate, categoriesIds);
     }
 
 //    static public ProductRequestDTO createCompleteProduct(List<PhotoToCreateDTO> photosToCreate, List<PhotoToKeepDTO> photosToKeep, List<UUID> categoriesIds) {

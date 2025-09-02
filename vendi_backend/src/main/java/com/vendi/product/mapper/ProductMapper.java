@@ -3,6 +3,8 @@ package com.vendi.product.mapper;
 import com.vendi.category.model.Category;
 import com.vendi.photo.dto.CreatePhotoDTO;
 import com.vendi.product.dto.CreateProductDTO;
+import com.vendi.product.dto.ProductDTO;
+import com.vendi.product.dto.ProductDetailsDTO;
 import com.vendi.product.dto.UpdateProductDTO;
 import com.vendi.product.exception.InvalidMainPhotoException;
 import com.vendi.product.model.Product;
@@ -14,7 +16,15 @@ import java.util.UUID;
 
 public class ProductMapper {
 
-    public static Product dtoToProduct(CreateProductDTO createProductDTO) {
+    public static ProductDTO toDTO(Product product) {
+        return new ProductDTO(product);
+    }
+
+    public static ProductDetailsDTO toDetailsDTO(Product product) {
+        return new ProductDetailsDTO(product);
+    }
+
+    public static Product createDTOToProduct(CreateProductDTO createProductDTO) {
         Product product = new Product();
         product.setQuantity(createProductDTO.quantity());
         product.setPrice(createProductDTO.price());
@@ -24,7 +34,7 @@ public class ProductMapper {
         return product;
     }
 
-    public static Product updateProductDTOToProduct(UpdateProductDTO updateProductDTO, Product product) {
+    public static Product updateDTOToProduct(UpdateProductDTO updateProductDTO, Product product) {
         product.setQuantity(updateProductDTO.quantity());
         product.setPrice(updateProductDTO.price());
         product.setInstallment(updateProductDTO.installment());

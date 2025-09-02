@@ -41,7 +41,7 @@ Accept: application/json
       "isMainPhoto": true
     }
   ],
-  "categoriesIds": ["956e5101-073f-4e75-9c71-44b136d5d56e"]
+  "categoriesIds": ["933cfe7f-118c-46eb-8b81-f487a1e08856"]
 }
 
 ###
@@ -90,7 +90,7 @@ Accept: application/json
     }
   ],
   "photosToKeep": [],
-  "categoriesIds": ["34129560-9ccc-445d-ae0d-44b8866fe83e"]
+  "categoriesIds": ["933cfe7f-118c-46eb-8b81-f487a1e08856"]
 }
 
 ###
