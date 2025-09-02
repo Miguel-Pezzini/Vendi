@@ -18,7 +18,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public List<Product> findAllByCustomFilter(ProductQueryParams dto) {
+    public List<Product> findAll(ProductQueryParams dto) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Product> query = cb.createQuery(Product.class);
         Root<Product> product = query.from(Product.class);

@@ -44,7 +44,7 @@ public class ProductService {
     }
 
     public List<ProductDTO>getProducts(ProductQueryParams productQueryParams) {
-        List<Product> products = this.repository.findAllByCustomFilter(productQueryParams);
+        List<Product> products = this.repository.findAll(productQueryParams);
 
         return products.stream().map(ProductMapper::toDTO).toList();
     }

@@ -6,5 +6,5 @@ import com.vendi.product.model.Product;
 import java.util.List;
 
 public interface ProductRepositoryCustom {
-    List<Product> findAllByCustomFilter(ProductQueryParams productQueryParams);
+    List<Product> findAll(ProductQueryParams productQueryParams);
 }

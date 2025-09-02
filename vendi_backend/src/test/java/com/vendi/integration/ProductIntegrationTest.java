@@ -10,6 +10,7 @@ import com.vendi.dtoMocks.ProductMocker;
 import com.vendi.photo.dto.CreatePhotoDTO;
 import com.vendi.product.dto.CreateProductDTO;
 import com.vendi.product.dto.ProductDTO;
+import com.vendi.product.dto.UpdateProductDTO;
 import com.vendi.product.service.ProductService;
 import com.vendi.user.model.User;
 import com.vendi.user.repository.UserRepository;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,25 +58,45 @@ public class ProductIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     void testProductCreation() {
-        List<CreatePhotoDTO> photosToCreateDTO = PhotoMocker.getPhotosToCreateDTO();
+        // Arrange - Create CreateProductDTO
         CategoryResponseDTO categoryResponseDTO = categoryService.create(CategoryMocker.createCategoryWithoutFather());
         List<UUID> categoriesIds = List.of(categoryResponseDTO.id());
+        List<CreatePhotoDTO> photosToCreateDTO = PhotoMocker.getPhotosToCreateDTO();
         CreateProductDTO createProductDTO = ProductMocker.createProduct(photosToCreateDTO, categoriesIds);
+
+        // Act
         ProductDTO productDTO = assertDoesNotThrow(() -> productService.create(createProductDTO));
 
+        // Assert
         assertNotNull(productDTO.id());
         assertEquals(createProductDTO.name(), productDTO.name());
     }
 
     @Test
     void testProductUpdate() {
+        // Arrange - Create initial product
         List<CreatePhotoDTO> photosToCreateDTO = PhotoMocker.getPhotosToCreateDTO();
         CategoryResponseDTO categoryResponseDTO = categoryService.create(CategoryMocker.createCategoryWithoutFather());
         List<UUID> categoriesIds = List.of(categoryResponseDTO.id());
         CreateProductDTO createProductDTO = ProductMocker.createProduct(photosToCreateDTO, categoriesIds);
-        ProductDTO productDTO = assertDoesNotThrow(() -> productService.create(createProductDTO));
+        ProductDTO createdProduct = assertDoesNotThrow(() -> productService.create(createProductDTO));
 
-        assertNotNull(productDTO.id());
-        assertEquals(createProductDTO.name(), productDTO.name());
+        // Act
+        Float newPrice = createdProduct.price() + 10.0f;
+        UpdateProductDTO updateProductDTO = new UpdateProductDTO(
+                "Novo Nome",
+                newPrice,
+                createdProduct.quantity(),
+                createdProduct.installment(),
+                createdProduct.discount(),
+                createdProduct.categories().stream().map(CategoryResponseDTO::id).toList()
+        );
+        ProductDTO updatedProduct = assertDoesNotThrow(() -> productService.update(createdProduct.id(), updateProductDTO));
+
+        // Assert
+        assertEquals(createdProduct.id(), updatedProduct.id());
+        assertEquals("Novo Nome", updatedProduct.name());
+        assertEquals(newPrice, updatedProduct.price());
+        assertEquals(createdProduct.categories().size(), updatedProduct.categories().size());
     }
 }
