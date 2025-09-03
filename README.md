@@ -24,6 +24,7 @@ The main goal of this project is to learn by building—applying theory in a rea
 - [JWT](https://jwt.io/) (Authentication token)
 - [Testcontainers](https://testcontainers.com/) (For database tests setup)
 - [JUnit](https://junit.org/) (Testing)
+- [Prometheus](https://prometheus.io/) + [Grafana](https://grafana.com/) (Observability & Monitoring)
 
 ---
 
