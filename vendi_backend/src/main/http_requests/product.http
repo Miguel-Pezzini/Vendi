@@ -9,7 +9,7 @@ Accept: application/json
   "quantity": 4,
   "installment": 0,
   "discount": 0,
-  "photosToCreate": [
+  "photos": [
     {
       "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/5YfZUEAAAAASUVORK5CYII=",
       "contentType": "image/png",
@@ -41,7 +41,7 @@ Accept: application/json
       "isMainPhoto": true
     }
   ],
-  "categoriesIds": ["933cfe7f-118c-46eb-8b81-f487a1e08856"]
+  "categoriesIds": ["9ee7b8d5-eace-445a-a0ae-dd3e5ed7553c"]
 }
 
 ###
