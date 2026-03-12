@@ -1,22 +1,22 @@
 <template>
-  <div class="d-flex flex-column">
+  <div class="store-page">
     <Header />
     <v-divider />
 
-    <div v-if="!$vuetify.display.mdAndUp" class="pa-3">
+    <div v-if="!$vuetify.display.mdAndUp" class="store-mobile-filter">
       <v-btn
         color="golden"
         block
-        rounded="lg"
+        rounded="pill"
         prepend-icon="mdi-filter"
         @click="filterDialog = true">
         Filters
       </v-btn>
     </div>
 
-    <v-container class="pa-0" fluid>
-      <div class="d-flex">
-        <v-sheet class="pa-4" elevation="4" width="300" v-if="$vuetify.display.mdAndUp">
+    <v-container class="store-container" fluid>
+      <div class="store-layout">
+        <v-sheet class="store-sidebar" rounded="xl" elevation="0" v-if="$vuetify.display.mdAndUp">
           <FiltersContent
             v-model:priceFilter="priceFilter"
             :selectedFilters="selectedFilters"
@@ -26,27 +26,30 @@
             @get-products-by-category="getProductsByCategory" />
         </v-sheet>
 
-        <v-col>
-          <v-row class="pa-8">
-            <h2>Recommended for You</h2>
-            <v-spacer></v-spacer>
-            <h4>Showing 50 of 5000 results – Page 1 of 5</h4>
-          </v-row>
+        <section class="store-results">
+          <div class="store-results__header">
+            <div>
+              <h2 class="store-results__title">Recommended for You</h2>
+              <p class="store-results__subtitle">
+                Produtos organizados com filtros e uma grade otimizada para qualquer tela.
+              </p>
+            </div>
+            <h4 class="store-results__summary">Showing 50 of 5000 results - Page 1 of 5</h4>
+          </div>
 
-          <v-row
-            :justify="$vuetify.display.mdAndDown ? 'center' : 'start'"
-            :class="$vuetify.display.mdAndUp ? 'ml-6' : 'ma-0'">
-            <v-col cols="auto" v-for="n in 8" :key="n">
+          <v-row class="store-grid">
+            <v-col v-for="n in 8" :key="n" cols="12" sm="6" lg="4" xl="3">
               <ResultsProduct
                 :product="prod1"
-                class="pa-3"
+                class="store-product-card"
                 active-page="Store"
                 @add-to-cart="addToCart"
                 @addToWishlist="addToWishlist" />
             </v-col>
           </v-row>
-          <v-pagination active-color="golden" class="my-8" :length="4"></v-pagination>
-        </v-col>
+
+          <v-pagination active-color="golden" class="store-pagination" :length="4" />
+        </section>
       </div>
     </v-container>
 
@@ -84,6 +87,7 @@
   import Footer from '@/core/components/Footer.vue'
   import ResultsProduct from '@/core/components/ResultsProduct.vue'
   import FiltersContent from '../components/FiltersContent.vue'
+
   const prod1 = ref({
     discount: 35,
     name: 'Laptop',
@@ -111,8 +115,8 @@
       items: ['8GB', '16GB', '32GB'],
     },
     {
-      name: 'Gênero',
-      items: ['Ficção', 'Biografia', 'Terror'],
+      name: 'GÃªnero',
+      items: ['FicÃ§Ã£o', 'Biografia', 'Terror'],
     },
   ]
 
@@ -124,7 +128,7 @@
   const selectedFilters = ref({
     CPU: [],
     RAM: [],
-    Gênero: [],
+    GÃªnero: [],
   })
 
   const priceFilter = ref([0, 500])
@@ -133,21 +137,125 @@
   function searchByPrice() {
     console.log(priceFilter.value, selectedFilters.value)
   }
+
   function getProductsByCategory(category) {
     console.log(category)
   }
 </script>
 
 <style scoped>
-  .max-w-380 {
-    max-width: 380px;
+  .store-page {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
   }
-  span {
-    color: black;
-    font-weight: 300;
+
+  .store-mobile-filter {
+    padding: 0.875rem 1rem 0;
   }
-  span:hover {
+
+  .store-container {
+    padding: 1.25rem 1rem 3.5rem;
+  }
+
+  .store-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .store-sidebar {
+    position: sticky;
+    top: 1.5rem;
+    padding: 1rem;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    box-shadow:
+      0 16px 36px rgba(15, 23, 42, 0.05),
+      0 2px 8px rgba(15, 23, 42, 0.04);
+  }
+
+  .store-results {
+    min-width: 0;
+  }
+
+  .store-results__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .store-results__title {
+    margin: 0;
+    color: #111827;
+    font-size: clamp(1.4rem, 2vw, 1.85rem);
+    font-weight: 600;
+  }
+
+  .store-results__subtitle {
+    margin: 0.45rem 0 0;
+    color: rgba(17, 24, 39, 0.62);
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .store-results__summary {
+    margin: 0;
+    color: rgba(17, 24, 39, 0.58);
+    font-size: 0.95rem;
     font-weight: 500;
-    cursor: pointer;
+    text-align: right;
+  }
+
+  .store-grid {
+    margin: 0 -0.5rem;
+  }
+
+  .store-product-card {
+    height: 100%;
+  }
+
+  .store-pagination {
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 1279px) {
+    .store-layout {
+      grid-template-columns: minmax(250px, 280px) minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 959px) {
+    .store-container {
+      padding: 1rem 0.75rem 3rem;
+    }
+
+    .store-layout {
+      display: block;
+    }
+
+    .store-results__header {
+      margin-bottom: 1.25rem;
+    }
+
+    .store-results__summary {
+      text-align: left;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .store-mobile-filter {
+      padding: 0.75rem 0.75rem 0;
+    }
+
+    .store-results__header {
+      gap: 0.5rem;
+    }
   }
 </style>
