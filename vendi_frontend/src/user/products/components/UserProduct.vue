@@ -56,7 +56,7 @@
   })
 
   function editProduct() {
-    router.push({ path: `user/products/${props.product.id}` })
+    router.push({ path: `/user/products/${props.product.id}` })
   }
 </script>
 

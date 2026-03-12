@@ -1,6 +1,10 @@
 package com.vendi.product.dto;
 
+import java.util.UUID;
+
 public record ProductQueryParams(
-        int limit
+        Integer limit,
+        String search,
+        UUID categoryId
 ) {
 }

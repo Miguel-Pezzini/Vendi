@@ -6,14 +6,37 @@ async function getPhotoData(photoId) {
   return res.dataURI
 }
 
+function enrichSummaryProduct(product, dataURI = null) {
+  const image = dataURI || product.image || null
+  const fullPrice =
+    product.discount && product.discount > 0
+      ? Number((product.price / (1 - product.discount / 100)).toFixed(2))
+      : null
+
+  return {
+    ...product,
+    image,
+    fullPrice,
+    mainPhoto: product.mainPhoto ? { ...product.mainPhoto, dataURI: image } : product.mainPhoto,
+  }
+}
+
+async function hydrateProductSummary(product) {
+  if (!product?.mainPhoto?.id) {
+    return enrichSummaryProduct(product)
+  }
+
+  const dataURI = await getPhotoData(product.mainPhoto.id)
+  return enrichSummaryProduct(product, dataURI)
+}
+
 async function loadProduct(productId) {
-  let product = await api.get('/product', productId)
-  product.mainPhoto = { dataURI: await getPhotoData(product.mainPhoto.id), ...product.mainPhoto }
-  return product
+  const product = await api.get('products', productId)
+  return hydrateProductSummary(product)
 }
 
 async function loadProductDetails(productId) {
-  const product = await api.get(`/product/${productId}/details`)
+  const product = await api.get(`products/${productId}/details`)
 
   const mainPhoto = product.photos.find((photo) => photo.isMainPhoto)
   product.mainPhoto = {
@@ -36,9 +59,9 @@ async function loadProductDetails(productId) {
 }
 
 async function loadProductDetailsPhotosToFile(productId) {
-  const product = await api.get(`/product/${productId}/details`)
+  const product = await api.get(`products/${productId}/details`)
 
-  let mainPhoto = product.photos.find((photo) => photo.isMainPhoto)
+  const mainPhoto = product.photos.find((photo) => photo.isMainPhoto)
   product.mainPhoto = imageService.base64ToFile(
     await getPhotoData(mainPhoto.id),
     mainPhoto.filename
@@ -55,17 +78,9 @@ async function loadProductDetailsPhotosToFile(productId) {
   return product
 }
 
-async function loadProducts(recurso) {
-  const products = await api.getAll(recurso)
-
-  await Promise.all(
-    products.map(async (product) => {
-      const dataURI = await getPhotoData(product.mainPhoto.id)
-      product.mainPhoto = { ...product.mainPhoto, dataURI }
-    })
-  )
-
-  return products
+async function loadProducts(resource = 'products', params = {}) {
+  const products = await api.getAll(resource, params)
+  return Promise.all(products.map(hydrateProductSummary))
 }
 
 const productService = {
@@ -73,6 +88,7 @@ const productService = {
   loadProductDetails,
   loadProducts,
   loadProductDetailsPhotosToFile,
+  hydrateProductSummary,
 }
 
 export default productService

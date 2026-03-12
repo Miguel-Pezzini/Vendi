@@ -3,12 +3,18 @@
     <Header />
     <v-divider />
 
-    <div class="container" @click="loadPaths">
+    <div class="container">
       <v-row>
-        <Path :old-paths="oldPaths" :active-path="prod.name" />
+        <Path :old-paths="oldPaths" :active-path="product?.name || 'Product'" />
       </v-row>
 
-      <v-row style="margin-top: 80px">
+      <v-row v-if="loading" style="margin-top: 80px">
+        <v-col cols="12">
+          <v-skeleton-loader type="image, article" />
+        </v-col>
+      </v-row>
+
+      <v-row v-else-if="product" style="margin-top: 80px">
         <v-col>
           <div class="d-flex product-container ga-8">
             <div class="d-flex flex-column ga-4">
@@ -19,7 +25,7 @@
                 :style="{ border: image.active ? '2px solid #DBB671' : '1px solid #000' }"
                 style="width: 80px; height: 80px; border-radius: 4px; padding: 5px; cursor: pointer"
                 @mouseover="setActiveImg(image.img)">
-                <v-img aspect-ratio="16/9" cover :src="image.img" />
+                <v-img aspect-ratio="1" cover :src="image.img" />
               </div>
             </div>
             <div style="max-width: 600px">
@@ -30,94 +36,47 @@
         <v-col class="ml-16">
           <div class="d-flex flex-column">
             <div class="d-flex flex-column ga-2">
-              <h1>{{ prod.name }}</h1>
+              <h1>{{ product.name }}</h1>
               <div class="d-flex ga-4">
-                <div class="d-flex ga-2 align-center">
-                  <v-rating
-                    v-model="prod.rating"
-                    half-increments
-                    :size="24"
-                    active-color="yellow"
-                    readonly
-                    color="#AAA" />
-                  <p v-if="prod.reviews" style="opacity: 0.5; font-size: 14px">
-                    ({{ prod.reviews }} Avaliações)
-                  </p>
-                </div>
-                <p style="opacity: 0.5">|</p>
-                <span
-                  :style="{ color: prod.inStock ? '#00FF66' : '#FF0000' }"
-                  style="font-size: 14px">
-                  {{ prod.inStock ? 'Em Estoque' : 'Indisponível' }}
+                <span :style="{ color: product.quantity > 0 ? '#00AA55' : '#FF0000' }">
+                  {{ product.quantity > 0 ? 'In stock' : 'Out of stock' }}
                 </span>
               </div>
-              <h2>R$ {{ prod.price }}</h2>
+              <h2>R$ {{ product.price }}</h2>
+              <p v-if="product.discount">Discount: {{ product.discount }}%</p>
             </div>
             <div class="d-flex flex-column ga-4 mt-6">
               <p style="font-size: 14px">
-                {{ prod.description }}
+                Installments available: {{ product.installment }}
+              </p>
+              <p style="font-size: 14px">
+                Categories:
+                {{ product.categories.map((category) => category.name).join(', ') || 'None' }}
               </p>
               <v-divider opacity="0.5" />
-              <div class="d-flex align-center ga-6">
-                <h3>Cores:</h3>
-                <div class="d-flex align-center ga-2">
-                  <ColorButton color="red" />
-                  <ColorButton color="blue" />
-                </div>
-              </div>
-              <div class="d-flex align-center ga-6">
-                <h3>Tamanho:</h3>
-                <div class="d-flex align-center ga-4">
-                  <SizeButton size="XS" :is-active="true" />
-                  <SizeButton value="S" size="S" @click="emitClick(value)" />
-                  <SizeButton value="M" size="M" @click="emitClick(value)" />
-                  <SizeButton value="L" size="L" @click="emitClick(value)" />
-                  <SizeButton value="XL" size="XL" @click="emitClick(value)" />
-                </div>
-              </div>
               <div class="d-flex align-center">
                 <v-col cols="5" class="pl-0">
                   <v-number-input
+                    v-model="quantity"
                     density="comfortable"
                     variant="solo"
                     hide-details="false"
                     control-variant="split"
                     :min="1"
-                    :model-value="prod.quantity" />
+                    :max="product.quantity" />
                 </v-col>
                 <v-col cols="5">
-                  <button class="button">Comprar</button>
+                  <button class="button" @click="addToCart">Adicionar ao carrinho</button>
                 </v-col>
-                <v-col cols="2">
-                  <button class="button-icon">
-                    <v-icon size="large"> mdi-heart-outline </v-icon>
-                  </button>
-                </v-col>
-              </div>
-              <div class="delivery d-flex flex-column">
-                <div class="delivery-container-one d-flex align-center ga-4">
-                  <v-icon size="x-large"> mdi-truck-delivery-outline </v-icon>
-                  <div class="d-flex flex-column ga-2">
-                    <h4>Delivery</h4>
-                    <p style="font-size: 12px; font-weight: 500">
-                      Insira seu CEP para verificar opções de entrega
-                    </p>
-                  </div>
-                </div>
-                <div class="delivery-container-two d-flex align-center ga-4">
-                  <v-icon size="x-large"> mdi-cached </v-icon>
-                  <div class="d-flex flex-column ga-2">
-                    <h4>Delivery</h4>
-                    <p style="font-size: 12px; font-weight: 500">
-                      Devoluções de Entrega Grátis em 30 Dias. Detalhes
-                    </p>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </v-col>
       </v-row>
+
+      <v-alert v-else type="error" style="margin-top: 80px">
+        Product not found.
+      </v-alert>
     </div>
 
     <Footer />
@@ -125,59 +84,63 @@
 </template>
 
 <script setup>
-  import card1 from '@/assets/card1.webp'
-  import card2 from '@/assets/card2.webp'
-  import card3 from '@/assets/card3.webp'
-  import card4 from '@/assets/card4.webp'
-
   import { useRoute } from 'vue-router'
-  import { ref, onMounted } from 'vue'
+  import { getCurrentInstance, onMounted, ref } from 'vue'
   import loadPastPaths from '@/core/utils/loadPastPaths'
   import Header from '@/core/components//Header.vue'
   import Path from '@/core/components/Path.vue'
-  import ColorButton from '@/core/components/ColorButton.vue'
-  import SizeButton from '@/core/components/SizeButton.vue'
   import Footer from '@/core/components/Footer.vue'
-  //import router from '@/router';
+  import productService from '@/core/utils/productService'
+  import cartService from '@/core/services/cartService'
+
+  const { proxy } = getCurrentInstance()
   const oldPaths = ref([])
-
-  const listImages = [
-    { img: card1, active: true },
-    { img: card2, active: false },
-    { img: card3, active: false },
-    { img: card4, active: false },
-  ]
-  const activeImage = ref(card1)
-
   const route = useRoute()
+  const loading = ref(false)
+  const product = ref(null)
+  const listImages = ref([])
+  const activeImage = ref(null)
+  const quantity = ref(1)
 
-  onMounted(() => {
+  onMounted(async () => {
     oldPaths.value = loadPastPaths(route)
+    await loadProduct()
   })
 
+  async function loadProduct() {
+    loading.value = true
+
+    try {
+      product.value = await productService.loadProductDetails(route.params.productId)
+      listImages.value = [product.value.mainPhoto, ...product.value.photos].map((photo, index) => ({
+        img: photo.dataURI,
+        active: index === 0,
+      }))
+      activeImage.value = listImages.value[0]?.img || null
+    } catch (error) {
+      product.value = null
+    } finally {
+      loading.value = false
+    }
+  }
+
   function setActiveImg(image) {
-    listImages.forEach((img) => {
-      img.img == image ? (img.active = true) : (img.active = false)
-    })
+    listImages.value = listImages.value.map((img) => ({
+      ...img,
+      active: img.img === image,
+    }))
     activeImage.value = image
   }
 
-  const prod = ref({
-    discount: 35,
-    name: 'Laptop',
-    description:
-      'PlayStation 5 Controller Skin High quality vinyl with air channel adhesive for easy bubble free install & mess free removal Pressure sensitive.',
-    price: '960',
-    fullPrice: '1160',
-    isInWishList: true,
-    rating: 4.5,
-    quantity: 1,
-    reviews: 150,
-    inStock: true,
-  })
+  async function addToCart() {
+    if (!product.value) return
 
-  function emitClick(value) {
-    console.log(value)
+    try {
+      await cartService.addItem(product.value.id, quantity.value)
+      proxy.$showMessage('success', 'Product added to cart.')
+    } catch (error) {
+      proxy.$showMessage('error', 'You need to be logged in to manage the cart.')
+    }
   }
 </script>
 
@@ -196,10 +159,6 @@
     font-size: 24px;
     font-weight: 400;
   }
-  h3 {
-    font-size: 20px;
-    font-weight: 400;
-  }
   .product-container {
     max-height: 600px;
     max-width: 800px;
@@ -214,27 +173,5 @@
     font-weight: 500;
     height: 48px;
     width: 100%;
-  }
-  .button-icon {
-    padding: 4px;
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    height: 48px;
-    width: 56px;
-  }
-  .delivery {
-    border-radius: 4px;
-    border: 1px solid #aaa;
-  }
-  h4 {
-    font-size: 16px;
-    font-weight: 500;
-  }
-  .delivery-container-one {
-    padding: 20px 16px 16px 16px;
-    border-bottom: 1px solid #aaa;
-  }
-  .delivery-container-two {
-    padding: 16px 16px 20px 16px;
   }
 </style>

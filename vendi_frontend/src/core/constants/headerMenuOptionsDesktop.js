@@ -45,5 +45,6 @@ export default (context) => [
     tooltip: 'Logout',
     icon: 'mdi-logout',
     color: 'red',
+    onClick: context.logout,
   },
 ]

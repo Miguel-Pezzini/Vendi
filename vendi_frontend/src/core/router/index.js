@@ -36,27 +36,32 @@ const router = createRouter({
       path: '/account',
       name: 'Account',
       component: MyAccount,
+      meta: { requiresAuth: true },
     },
     {
       path: '/account/addresses',
       name: 'Addresses',
       component: MyAddresses,
+      meta: { requiresAuth: true },
     },
     {
       path: '/user/products',
       name: 'User Products',
       component: UserProducts,
+      meta: { requiresAuth: true },
     },
     {
       path: '/user/products/:id',
       name: 'Edit Product',
       component: EditProduct,
       props: true,
+      meta: { requiresAuth: true, requiresAdmin: true },
     },
     {
       path: '/user/products/create',
       name: 'Create Product',
       component: CreateProduct,
+      meta: { requiresAuth: true, requiresAdmin: true },
     },
     {
       path: '/store',
@@ -67,6 +72,7 @@ const router = createRouter({
       path: '/cart',
       name: 'Cart',
       component: Cart,
+      meta: { requiresAuth: true },
     },
     {
       path: '/product/:productId',
@@ -83,23 +89,32 @@ const router = createRouter({
       path: '/checkout',
       name: 'Checkout',
       component: Checkout,
+      meta: { requiresAuth: true },
     },
     {
       path: '/admin',
       name: 'Admin',
       component: Admin,
+      meta: { requiresAuth: true, requiresAdmin: true },
     },
   ],
 })
 
-// router.beforeEach((to, from, next) => {
-//   const token = localStorage.getItem('jwtToken');
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+  const roles = localStorage.getItem('roles') || ''
 
-//   if (to.meta.requiresAuth && !token) {
-//     next({ path: '/login' });
-//   } else {
-//     next();
-//   }
-// });
+  if (to.meta.requiresAuth && !token) {
+    next({ path: '/login' })
+    return
+  }
+
+  if (to.meta.requiresAdmin && !roles.includes('ROLE_ADMIN')) {
+    next({ path: '/home' })
+    return
+  }
+
+  next()
+})
 
 export default router

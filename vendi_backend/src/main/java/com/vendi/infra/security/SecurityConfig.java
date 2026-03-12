@@ -39,6 +39,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products", "/products/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/category", "/category/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/photo", "/photo/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/products", "/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/products", "/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/products", "/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/category", "/category/**").hasRole("ADMIN")
                         .requestMatchers("/actuator/prometheus").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()

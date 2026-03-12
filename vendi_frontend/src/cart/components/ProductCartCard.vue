@@ -11,16 +11,16 @@
         rounded="xl"
         height="104"
         width="104"
-        src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+        :src="product.product.image"
         cover />
 
       <div class="product-cart-card__content">
         <div class="product-cart-card__name">
-          {{ product.name }}
+          {{ product.product.name }}
         </div>
 
         <div class="product-cart-card__footer">
-          <span class="subTitle">R$ {{ formatPrice(product.price) }}</span>
+          <span class="subTitle">R$ {{ formatPrice(product.product.price) }}</span>
 
           <div class="product-cart-card__quantity">
             <button class="button" @click="decrementQuantity">

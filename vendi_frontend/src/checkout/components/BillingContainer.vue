@@ -1,30 +1,30 @@
 <template>
   <div class="prices-container">
-    <v-row v-for="n in 3" :key="n" align="center" class="mb-8">
+    <v-row v-for="item in cart.items" :key="item.id" align="center" class="mb-8">
       <div class="d-flex align-center ga-6">
-        <v-img height="54" width="54" :src="card1" />
-        <p>LCD Monitor</p>
+        <v-img height="54" width="54" :src="item.product.image" />
+        <p>{{ item.product.name }}</p>
       </div>
       <v-spacer />
-      <p>R$ 500</p>
+      <p>R$ {{ item.subtotal }}</p>
     </v-row>
     <div class="d-flex flex-column ga-4">
       <v-row>
         <p>Subtotal:</p>
         <v-spacer />
-        <p>R$ 500</p>
+        <p>R$ {{ cart.subtotal || 0 }}</p>
       </v-row>
       <v-row><v-divider opacity="0.6" /></v-row>
       <v-row>
         <p>Frete:</p>
         <v-spacer />
-        <p>R$ 500</p>
+        <p>Free</p>
       </v-row>
       <v-row><v-divider opacity="0.6" /></v-row>
       <v-row>
         <p>Total:</p>
         <v-spacer />
-        <p>R$ 500</p>
+        <p>R$ {{ cart.subtotal || 0 }}</p>
       </v-row>
     </div>
     <v-row class="mt-8">
@@ -61,13 +61,18 @@
 <script setup>
   import { ref } from 'vue'
   import Input from '@/core/components/Input.vue'
-
-  import card1 from '@/assets/card1.webp'
   import logoBradesco from '@/assets/logo-bancos/logo-bradesco.svg'
   import logoPIX from '@/assets/logo-bancos/logo-pix.png'
   import logoItau from '@/assets/logo-bancos/logo-itau.svg'
   import logoNubank from '@/assets/logo-bancos/logo-nubank.png'
   import logoSantander from '@/assets/logo-bancos/logo-santander.svg'
+
+  defineProps({
+    cart: {
+      type: Object,
+      default: () => ({ items: [], subtotal: 0 }),
+    },
+  })
 
   const emit = defineEmits(['fazerPedido'])
 

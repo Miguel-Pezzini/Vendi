@@ -60,21 +60,37 @@
   import CardTransparent from '@/home/components/CardTransparent.vue'
   import CardProducts from '@/home/components/CardProducts.vue'
   import Footer from '@/core/components/Footer.vue'
-  import { onMounted, ref } from 'vue'
+  import { getCurrentInstance, onMounted, ref } from 'vue'
   import productService from '@/core/utils/productService'
+  import categoryService from '@/core/services/categoryService'
   import constantBannerImages from '@/core/constants/BannerSlideHome.js'
   import constantTransparentImages from '@/core/constants/transparentCardsHome'
 
-  let recentProducts = ref([])
+  const { proxy } = getCurrentInstance()
+
+  const recentProducts = ref([])
   const bannerImages = constantBannerImages
-  const transparentCards = constantTransparentImages
+  const transparentCards = ref([])
 
   async function loadRecentProducts() {
-    recentProducts.value = await productService.loadProducts(`/product?limit=7`)
+    recentProducts.value = await productService.loadProducts('products', { limit: 7 })
   }
 
-  onMounted(() => {
-    loadRecentProducts()
+  async function loadFeaturedCategories() {
+    const categories = await categoryService.getCategories()
+    transparentCards.value = categories.slice(0, 4).map((category, index) => ({
+      ...constantTransparentImages[index % constantTransparentImages.length],
+      title: category.name.toUpperCase(),
+      category: category.id,
+    }))
+  }
+
+  onMounted(async () => {
+    try {
+      await Promise.all([loadRecentProducts(), loadFeaturedCategories()])
+    } catch (error) {
+      proxy.$showMessage('error', 'Could not load the home page data.')
+    }
   })
 </script>
 

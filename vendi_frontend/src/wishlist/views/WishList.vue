@@ -8,7 +8,7 @@
         <section class="wishlist-section">
           <div class="section-header">
             <div>
-              <h1 class="section-title">Lista de Desejos (4)</h1>
+              <h1 class="section-title">Lista de Desejos ({{ wishlistProducts.length }})</h1>
               <p class="section-subtitle">
                 Seus produtos salvos, organizados para comparar e comprar depois.
               </p>
@@ -18,13 +18,13 @@
 
           <v-row class="cards-grid">
             <v-col
-              v-for="n in 4"
-              :key="`wishlist-${n}`"
+              v-for="product in wishlistProducts"
+              :key="`wishlist-${product.id}`"
               cols="12"
               sm="6"
               lg="4"
               xl="3">
-              <ResultsProduct active-page="Wishlist" :product="prod1" />
+              <ResultsProduct active-page="Wishlist" :product="product" />
             </v-col>
           </v-row>
         </section>
@@ -45,13 +45,13 @@
 
           <v-row class="cards-grid">
             <v-col
-              v-for="n in 4"
-              :key="`recommended-${n}`"
+              v-for="product in recommendedProducts"
+              :key="`recommended-${product.id}`"
               cols="12"
               sm="6"
               lg="4"
               xl="3">
-              <ResultsProduct active-page="Wishlist" :product="prod2" />
+              <ResultsProduct active-page="Wishlist" :product="product" />
             </v-col>
           </v-row>
         </section>
@@ -66,26 +66,16 @@
   import Header from '@/core/components/Header.vue'
   import Footer from '@/core/components/Footer.vue'
   import ResultsProduct from '@/core/components/ResultsProduct.vue'
-  import card1 from '@/assets/card1.webp'
+  import { onMounted, ref } from 'vue'
+  import productService from '@/core/utils/productService'
 
-  import { ref } from 'vue'
+  const wishlistProducts = ref([])
+  const recommendedProducts = ref([])
 
-  const prod1 = ref({
-    discount: 35,
-    name: 'Laptop',
-    price: '960',
-    fullPrice: '1160',
-    isInWishList: true,
-    image: card1,
-  })
-
-  const prod2 = ref({
-    discount: 35,
-    name: 'Laptop',
-    price: '960',
-    fullPrice: '1160',
-    isInWishList: false,
-    image: card1,
+  onMounted(async () => {
+    const products = await productService.loadProducts('products', { limit: 8 })
+    wishlistProducts.value = products.slice(0, 4).map((product) => ({ ...product, isInWishList: true }))
+    recommendedProducts.value = products.slice(4, 8)
   })
 </script>
 

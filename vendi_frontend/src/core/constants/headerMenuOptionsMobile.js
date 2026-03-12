@@ -23,4 +23,11 @@ export default (context) => [
     title: 'My Account',
     color: context.accountActive ? 'golden' : 'black',
   },
+  {
+    to: '/login',
+    title: 'Logout',
+    prependIcon: 'mdi-logout',
+    color: 'red',
+    onClick: context.logout,
+  },
 ]

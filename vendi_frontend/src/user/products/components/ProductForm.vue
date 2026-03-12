@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-form @submit.prevent="saveProduct()" ref="form" class="rounded">
+    <v-form ref="form" class="rounded" @submit.prevent="saveProduct()">
       <v-row>
         <h1 class="title">{{ edit ? 'Edit this product' : 'Add a Product' }}</h1>
       </v-row>
@@ -48,48 +48,44 @@
         text="Select your main photo. It will appear as the product cover."
         type="info"></v-alert>
       <FileUpload
-        density="compact"
-        title="Drop your Main photo here"
-        clearable
         v-model="product.mainPhoto"
+        density="compact"
+        title="Drop your main photo here"
+        clearable
         showSize />
       <v-alert
         text="Here you can select up to 4 additional photos. These images will appear in your product gallery, but not as the main photo."
         type="info"></v-alert>
       <FileUpload
+        v-model="product.photos"
         class="mb-6"
         clearable
         density="compact"
         title="Add product photos"
-        v-model="product.photos"
         showSize
         multiple />
       <v-row>
         <v-spacer />
-        <Button title="CANCELAR" variant="text" />
-        <Button title="SALVAR MUDANçAS" type="submit" bg-color="#DBB671" />
+        <Button title="CANCELAR" variant="text" to="/user/products" />
+        <Button :title="edit ? 'SALVAR MUDANCAS' : 'ADICIONAR PRODUTO'" type="submit" bg-color="#DBB671" />
       </v-row>
     </v-form>
   </v-card>
 </template>
 
 <script lang="js" setup>
+  import { getCurrentInstance, onMounted, reactive, ref, watch } from 'vue'
+
+  import Button from '@/core/components/Button.vue'
+  import FileUpload from '@/core/components/FileUpload.vue'
   import Input from '@/core/components/Input.vue'
   import NumberInput from '@/core/components/NumberInput.vue'
   import Select from '@/core/components/Select.vue'
-  import Button from '@/core/components/Button.vue'
-  import FileUpload from '@/core/components/FileUpload.vue'
-
-  import imageService from '@/core/utils/imageService'
-
-  import { reactive, onMounted, ref, getCurrentInstance, watch } from 'vue'
   import api from '@/core/plugins/api'
   import router from '@/core/router'
+  import imageService from '@/core/utils/imageService'
 
   const { proxy } = getCurrentInstance()
-  const form = ref(null)
-  const categories = ref([])
-  const mainPhoto = ref({})
 
   const props = defineProps({
     productProp: {
@@ -102,9 +98,8 @@
     },
   })
 
-  onMounted(() => {
-    loadCategories()
-  })
+  const form = ref(null)
+  const categories = ref([])
 
   const defaultProduct = () => ({
     name: null,
@@ -119,33 +114,80 @@
 
   const product = reactive(defaultProduct())
 
+  onMounted(() => {
+    loadCategories()
+  })
+
   watch(
     () => props.productProp,
     (newProduct) => {
       if (newProduct) {
-        Object.assign(product, newProduct)
+        Object.assign(product, {
+          ...defaultProduct(),
+          ...newProduct,
+          categories: newProduct.categories?.map((category) => category.id) || [],
+        })
+        return
       }
+
+      Object.assign(product, defaultProduct())
     },
     { immediate: true }
   )
 
   async function loadCategories() {
-    categories.value = await api.getAll('/category')
+    categories.value = await api.getAll('category')
   }
-  async function saveProduct() {
-    const isValid = await form.value.validate()
-    if (!isValid.valid) return
 
-    const mainPhotoData = await imageService.fileToDataBase64(product.mainPhoto)
-    const mainPhoto = {
-      isMainPhoto: true,
-      filename: product.mainPhoto.name,
-      contentType: product.mainPhoto.type,
-      data: mainPhotoData,
+  function normalizeSingleFile(fileValue) {
+    if (Array.isArray(fileValue)) return fileValue[0] ?? null
+    return fileValue ?? null
+  }
+
+  function normalizeFiles(fileValue) {
+    if (!fileValue) return []
+    return Array.isArray(fileValue) ? fileValue.filter(Boolean) : [fileValue]
+  }
+
+  function getErrorMessage(err) {
+    if (typeof err === 'string') return err
+    if (Array.isArray(err?.errors) && err.errors.length > 0) return err.errors[0]
+    return err?.message || err?.error || err?.details || err?.title || 'Failed to save product'
+  }
+
+  function validateBeforeSave(mainPhotoFile, additionalPhotos) {
+    if (!props.edit && !mainPhotoFile) {
+      proxy.$showMessage('error', 'Select a main photo before saving the product')
+      return false
     }
 
-    let photos = [mainPhoto]
-    for (const photo of product.photos) {
+    if (!Array.isArray(product.categories) || product.categories.length === 0) {
+      proxy.$showMessage('error', 'Select at least one category before saving the product')
+      return false
+    }
+
+    if (additionalPhotos.length > 4) {
+      proxy.$showMessage('error', 'You can upload up to 4 additional photos')
+      return false
+    }
+
+    return true
+  }
+
+  async function buildPhotosPayload(mainPhotoFile, additionalPhotos) {
+    const photos = []
+
+    if (mainPhotoFile) {
+      const mainPhotoData = await imageService.fileToDataBase64(mainPhotoFile)
+      photos.push({
+        isMainPhoto: true,
+        filename: mainPhotoFile.name,
+        contentType: mainPhotoFile.type,
+        data: mainPhotoData,
+      })
+    }
+
+    for (const photo of additionalPhotos) {
       const photoData = await imageService.fileToDataBase64(photo)
       photos.push({
         isMainPhoto: false,
@@ -154,28 +196,47 @@
         data: photoData,
       })
     }
-    const method = product.id ? 'save' : 'create'
-    await api[method](product.id ? `/product/${product.id}` : '/product', {
+
+    return photos
+  }
+
+  async function saveProduct() {
+    const validation = await form.value.validate()
+    if (!validation.valid) return
+
+    const mainPhotoFile = normalizeSingleFile(product.mainPhoto)
+    const additionalPhotos = normalizeFiles(product.photos)
+
+    if (!validateBeforeSave(mainPhotoFile, additionalPhotos)) return
+
+    const payload = {
       name: product.name,
       price: product.price,
       quantity: product.quantity,
       installment: product.installment,
       discount: product.discount,
-      photosToCreate: photos,
       categoriesIds: product.categories,
-    })
-      .then((res) => {
-        if (product.id) {
-          proxy.$showMessage('success', 'Your product was updated with success')
-          product = res
-        } else {
-          proxy.$showMessage('success', 'Your product was created with success')
-          router.push({ path: '/user/products' })
-        }
-      })
-      .catch((err) => {
-        proxy.$showMessage('error', err)
-      })
+    }
+
+    if (!product.id) {
+      payload.photos = await buildPhotosPayload(mainPhotoFile, additionalPhotos)
+    }
+
+    try {
+      const resource = product.id ? `products/${product.id}` : 'products'
+      const method = product.id ? 'save' : 'create'
+      await api[method](resource, payload)
+
+      if (product.id) {
+        proxy.$showMessage('success', 'Your product was updated with success')
+        return
+      }
+
+      proxy.$showMessage('success', 'Your product was created with success')
+      router.push({ path: '/user/products' })
+    } catch (err) {
+      proxy.$showMessage('error', getErrorMessage(err))
+    }
   }
 </script>
 
@@ -184,6 +245,7 @@
     padding: 40px 80px 40px 80px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   }
+
   .title {
     padding-bottom: 16px;
     color: #dbb671;

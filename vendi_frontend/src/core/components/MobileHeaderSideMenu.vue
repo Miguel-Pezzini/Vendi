@@ -17,7 +17,8 @@
         :color="item.color"
         :prepend-icon="item.prependIcon"
         :append-icon="item.appendIcon"
-        :to="item.to">
+        :to="item.to"
+        @click="item.onClick?.()">
       </v-list-item>
       <v-list-group value="Categories">
         <template v-slot:activator="{ props }">
@@ -29,7 +30,7 @@
         <v-list-item
           v-for="(categoryItem, i) in categories"
           :key="i"
-          :value="categoryItem.category"
+          :value="categoryItem.id"
           :to="categoryItem.path"
           :title="categoryItem.name"></v-list-item>
       </v-list-group>
@@ -43,7 +44,6 @@
 </template>
 
 <script setup>
-  import headerCategories from '../constants/headerCategories'
   defineProps({
     showMenu: {
       type: Boolean,
@@ -53,9 +53,11 @@
       type: Array,
       default: () => [],
     },
+    categories: {
+      type: Array,
+      default: () => [],
+    },
   })
-
-  const categories = headerCategories()
 
   const emit = defineEmits(['update:showMenu'])
 

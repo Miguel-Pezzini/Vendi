@@ -34,7 +34,7 @@
           </div>
         </v-col>
         <v-col class="billing-container">
-          <BillingContainer @fazer-pedido="onFazerPedido" />
+          <BillingContainer :cart="cart" @fazer-pedido="onFazerPedido" />
         </v-col>
       </v-row>
     </v-container>
@@ -52,14 +52,21 @@
   import BillingContainer from '../components/BillingContainer.vue'
   import Footer from '@/core/components/Footer.vue'
   import loadPastPaths from '@/core/utils/loadPastPaths'
+  import cartService from '@/core/services/cartService'
 
   const router = useRoute()
 
   const oldPaths = ref([])
   const form = ref(null)
+  const cart = ref({ items: [], subtotal: 0, totalItems: 0 })
 
-  onMounted(() => {
+  onMounted(async () => {
     oldPaths.value = loadPastPaths(router)
+    try {
+      cart.value = await cartService.getCart()
+    } catch (error) {
+      cart.value = { items: [], subtotal: 0, totalItems: 0 }
+    }
   })
 
   const dadosForm = ref({

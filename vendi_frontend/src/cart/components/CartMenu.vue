@@ -18,16 +18,21 @@
       </template>
     </v-list-item>
     <v-divider />
-    <ProductCartCard :product="prodCart" :loading="loading" />
+    <ProductCartCard
+      v-for="item in cart.items"
+      :key="item.id"
+      :product="item"
+      :loading="loading" />
   </v-navigation-drawer>
 </template>
 
 <script setup>
-  import { ref } from 'vue'
+  import { ref, watch } from 'vue'
   import ProductCartCard from './ProductCartCard.vue'
   import { RouterLink } from 'vue-router'
+  import cartService from '@/core/services/cartService'
 
-  defineProps({
+  const props = defineProps({
     showCart: {
       type: Boolean,
       default: false,
@@ -35,6 +40,7 @@
   })
 
   const loading = ref(false)
+  const cart = ref({ items: [], totalItems: 0 })
 
   const emit = defineEmits(['update:showCart'])
 
@@ -42,12 +48,27 @@
     emit('update:showCart', value)
   }
 
-  const prodCart = ref({
-    name: 'Monitor Gamer Curvo 49 DQHD, 240Hz, 1ms, HDMI e DisplayPort, HDR 1000, FreeSync Premium, Ajuste de Altura - LC49G95TSSLXZD',
-    price: 1000.01,
-    quantity: 2,
-  })
-  const quantity = ref(4)
+  const quantity = ref(0)
+
+  watch(
+    () => props.showCart,
+    async (isOpen) => {
+      if (!isOpen) return
+
+      loading.value = true
+
+      try {
+        cart.value = await cartService.getCart()
+        quantity.value = cart.value.totalItems
+      } catch (error) {
+        cart.value = { items: [], totalItems: 0 }
+        quantity.value = 0
+      } finally {
+        loading.value = false
+      }
+    },
+    { immediate: true }
+  )
 </script>
 
 <style scoped></style>

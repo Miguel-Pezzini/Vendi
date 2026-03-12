@@ -93,8 +93,8 @@
 
   function verProduct() {
     router.push({
-      path: '/product',
-      query: { product: props.product.name, origin: loadPastPaths(route, props.activePage) },
+      path: `/product/${props.product.id}`,
+      query: { origin: loadPastPaths(route, props.activePage) },
     })
   }
 </script>

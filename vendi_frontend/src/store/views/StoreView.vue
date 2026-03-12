@@ -23,7 +23,7 @@
             :filters="filters"
             :categories="categories"
             @search-by-price="searchByPrice"
-            @get-products-by-category="getProductsByCategory" />
+            @select-category="getProductsByCategory" />
         </v-sheet>
 
         <section class="store-results">
@@ -34,21 +34,33 @@
                 Produtos organizados com filtros e uma grade otimizada para qualquer tela.
               </p>
             </div>
-            <h4 class="store-results__summary">Showing 50 of 5000 results - Page 1 of 5</h4>
+            <h4 class="store-results__summary">Showing {{ products.length }} products</h4>
           </div>
 
-          <v-row class="store-grid">
+          <v-alert v-if="errorMessage" type="error" class="mb-4" variant="tonal">
+            {{ errorMessage }}
+          </v-alert>
+
+          <v-row v-if="loading" class="store-grid">
             <v-col v-for="n in 8" :key="n" cols="12" sm="6" lg="4" xl="3">
-              <ResultsProduct
-                :product="prod1"
-                class="store-product-card"
-                active-page="Store"
-                @add-to-cart="addToCart"
-                @addToWishlist="addToWishlist" />
+              <v-skeleton-loader type="card" />
             </v-col>
           </v-row>
 
-          <v-pagination active-color="golden" class="store-pagination" :length="4" />
+          <v-row v-else class="store-grid">
+            <v-col v-for="product in products" :key="product.id" cols="12" sm="6" lg="4" xl="3">
+              <ResultsProduct
+                :product="product"
+                class="store-product-card"
+                active-page="Store"
+                @add-to-cart="addToCart"
+                @add-to-wishlist="addToWishlist" />
+            </v-col>
+          </v-row>
+
+          <p v-if="!loading && !products.length" class="store-results__subtitle">
+            No products matched the current filters.
+          </p>
         </section>
       </div>
     </v-container>
@@ -61,7 +73,7 @@
           <v-btn icon @click="filterDialog = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
-          <v-toolbar-title>Filtros</v-toolbar-title>
+          <v-toolbar-title>Filters</v-toolbar-title>
         </v-toolbar>
 
         <v-divider />
@@ -73,7 +85,7 @@
             :filters="filters"
             :categories="categories"
             @search-by-price="searchByPrice"
-            @get-products-by-category="getProductsByCategory" />
+            @select-category="getProductsByCategory" />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -81,66 +93,96 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue'
-  import card1 from '@/assets/card1.webp'
+  import { getCurrentInstance, onMounted, ref, watch } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
   import Header from '@/core/components/Header.vue'
   import Footer from '@/core/components/Footer.vue'
   import ResultsProduct from '@/core/components/ResultsProduct.vue'
   import FiltersContent from '../components/FiltersContent.vue'
+  import productService from '@/core/utils/productService'
+  import categoryService from '@/core/services/categoryService'
+  import cartService from '@/core/services/cartService'
 
-  const prod1 = ref({
-    discount: 35,
-    name: 'Laptop',
-    price: '960',
-    fullPrice: '1160',
-    isInWishList: false,
-    image: card1,
-  })
+  const { proxy } = getCurrentInstance()
+  const route = useRoute()
+  const router = useRouter()
 
-  function addToWishlist(props) {
-    prod1.value.isInWishList = props
-  }
-
-  function addToCart(props) {
-    console.log(props)
-  }
-
-  const filters = [
-    {
-      name: 'CPU',
-      items: ['Intel i5', 'Intel i7', 'Ryzen 5'],
-    },
-    {
-      name: 'RAM',
-      items: ['8GB', '16GB', '32GB'],
-    },
-    {
-      name: 'GÃªnero',
-      items: ['FicÃ§Ã£o', 'Biografia', 'Terror'],
-    },
-  ]
-
-  const categories = {
-    name: 'Eletronics',
-    childCategories: ['Computer', 'Cellphone', 'Headphone'],
-  }
-
-  const selectedFilters = ref({
-    CPU: [],
-    RAM: [],
-    GÃªnero: [],
-  })
-
-  const priceFilter = ref([0, 500])
+  const products = ref([])
+  const categories = ref([])
+  const loading = ref(false)
+  const errorMessage = ref('')
+  const filters = null
+  const selectedFilters = ref({})
+  const priceFilter = ref([0, 5000])
   const filterDialog = ref(false)
 
-  function searchByPrice() {
-    console.log(priceFilter.value, selectedFilters.value)
+  function addToWishlist(props) {
+    return props
   }
 
-  function getProductsByCategory(category) {
-    console.log(category)
+  async function addToCart(product) {
+    try {
+      await cartService.addItem(product.id, 1)
+      proxy.$showMessage('success', 'Product added to cart.')
+    } catch (error) {
+      proxy.$showMessage('error', 'You need to be logged in to manage the cart.')
+    }
   }
+
+  async function loadProducts() {
+    loading.value = true
+    errorMessage.value = ''
+
+    try {
+      const params = {}
+
+      if (route.query.search) {
+        params.search = route.query.search.toString()
+      }
+
+      if (route.query.category) {
+        params.categoryId = route.query.category.toString()
+      }
+
+      const loadedProducts = await productService.loadProducts('products', params)
+
+      products.value = loadedProducts.filter(
+        (product) => product.price >= priceFilter.value[0] && product.price <= priceFilter.value[1]
+      )
+    } catch (error) {
+      errorMessage.value = 'Could not load products.'
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function loadCategories() {
+    categories.value = await categoryService.getCategories()
+  }
+
+  function searchByPrice() {
+    loadProducts()
+  }
+
+  function getProductsByCategory(categoryId) {
+    filterDialog.value = false
+    router.push({ path: '/store', query: { ...route.query, category: categoryId } })
+  }
+
+  onMounted(async () => {
+    try {
+      await Promise.all([loadCategories(), loadProducts()])
+    } catch (error) {
+      proxy.$showMessage('error', 'Could not load the catalog.')
+    }
+  })
+
+  watch(
+    () => route.query,
+    () => {
+      loadProducts()
+    }
+  )
 </script>
 
 <style scoped>
@@ -219,10 +261,6 @@
 
   .store-product-card {
     height: 100%;
-  }
-
-  .store-pagination {
-    margin-top: 1.5rem;
   }
 
   @media (max-width: 1279px) {

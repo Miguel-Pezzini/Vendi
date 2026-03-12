@@ -1,12 +1,15 @@
 <template>
   <CartMenu v-model:show-cart="showCart" />
-  <MobileHeaderSideMenu :mobileMenuOptions="mobileMenuOptions" v-model:show-menu="showMenu" />
+  <MobileHeaderSideMenu
+    :mobile-menu-options="mobileMenuOptions"
+    :categories="categories"
+    v-model:show-menu="showMenu" />
 
   <v-row v-if="mdAndUp" class="header ma-0" align="center" justify="center">
     <span class="text-subtitle-2 mr-2">
       Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!
     </span>
-    <RouterLink class="text-decoration-underline" to="/products">
+    <RouterLink class="text-decoration-underline" to="/store">
       <span class="text-subtitle-2 text-white"> ShopNow </span>
     </RouterLink>
   </v-row>
@@ -32,7 +35,7 @@
             <component
               :is="item.isRouterLink ? 'RouterLink' : 'div'"
               :to="typeof item.to === 'function' ? item.to() : item.to">
-              <v-btn variant="text" icon elevation="0" @click="item.onClick()">
+              <v-btn variant="text" icon elevation="0" @click="item.onClick?.()">
                 <Icon
                   size="x-large"
                   :tooltip="item.tooltip"
@@ -48,8 +51,8 @@
       <v-col
         v-for="category in categories"
         class="d-flex pa-0 pb-4 align-center justify-center"
-        :key="category.category">
-        <RouterLink :to="{ path: `${category.path}`, query: category.category }">
+        :key="category.id">
+        <RouterLink :to="category.path">
           {{ category.name }}
         </RouterLink>
       </v-col>
@@ -57,16 +60,18 @@
   </div>
 </template>
 <script setup>
-  import { computed, ref } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import isAdmin from '../utils/isAdmin'
   import Input from '@/core/components/Input.vue'
   import Icon from '@/core/components/Icon.vue'
   import CartMenu from '@/cart/components/CartMenu.vue'
   import MobileHeaderSideMenu from './MobileHeaderSideMenu.vue'
+  import router from '../router'
   import { useDisplay } from 'vuetify'
+  import api from '../plugins/api'
+  import categoryService from '../services/categoryService'
   import headerMenuOptionsDesktop from '../constants/headerMenuOptionsDesktop'
   import headerMenuOptionsMobile from '../constants/headerMenuOptionsMobile'
-  import headerCategories from '../constants/headerCategories'
 
   const props = defineProps({
     accountActive: {
@@ -91,7 +96,7 @@
   const accountIcon = props.accountActive ? 'mdi-account-circle-outline' : 'mdi-account-outline'
   const adminIcon = props.accountActive ? 'mdi-shield-account' : 'mdi-shield-account-outline'
 
-  const categories = headerCategories()
+  const categories = ref([])
 
   const showCart = ref(false)
   const showMenu = ref(false)
@@ -110,6 +115,7 @@
       accountIcon,
       adminIcon,
       isAdmin: isAdmin(),
+      logout,
     })
   )
 
@@ -130,12 +136,29 @@
       accountIcon,
       adminIcon,
       isAdmin: isAdmin(),
+      logout,
     })
   )
 
+  onMounted(async () => {
+    try {
+      categories.value = (await categoryService.getCategories()).map((category) => ({
+        id: category.id,
+        name: category.name,
+        path: { path: '/store', query: { category: category.id, origin: ['Home'] } },
+      }))
+    } catch (error) {
+      categories.value = []
+    }
+  })
+
   function pesquisar() {
-    console.log(display)
-    //router.push({ path: '/store', query: { products: dadoPesquisa.value } })
+    if (!dadoPesquisa.value) return
+    router.push({ path: '/store', query: { search: dadoPesquisa.value, origin: ['Home'] } })
+  }
+
+  function logout() {
+    api.logout()
   }
 </script>
 

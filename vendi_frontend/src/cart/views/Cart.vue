@@ -6,7 +6,15 @@
     <div class="cart-container">
       <Path :old-paths="['Home']" active-path="Cart" class="cart-path" />
 
-      <section class="cart-table">
+      <v-alert v-if="errorMessage" type="error" class="mb-4" variant="tonal">
+        {{ errorMessage }}
+      </v-alert>
+
+      <section v-if="loading" class="cart-table">
+        <v-skeleton-loader type="article, article" />
+      </section>
+
+      <section v-else class="cart-table">
         <div class="cart-table__head">
           <span>Produto</span>
           <span>Preco</span>
@@ -14,38 +22,36 @@
           <span>Subtotal</span>
         </div>
 
-        <article
-          v-for="cartProduct in cartProducts"
-          :key="cartProduct.name"
-          class="cart-item">
+        <article v-for="cartItem in cart.items" :key="cartItem.id" class="cart-item">
           <div class="cart-item__product">
-            <v-img rounded="xl" width="72" height="72" :src="cartProduct.image" cover />
+            <v-img rounded="xl" width="72" height="72" :src="cartItem.product.image" cover />
             <div class="cart-item__details">
               <span class="cart-item__label cart-item__label--mobile">Produto</span>
-              <span class="cart-item__name">{{ cartProduct.name }}</span>
+              <span class="cart-item__name">{{ cartItem.product.name }}</span>
+              <button class="remove-button" @click="removeFromCart(cartItem.product.id)">Remover</button>
             </div>
           </div>
 
           <div class="cart-item__meta">
             <span class="cart-item__label cart-item__label--mobile">Preco</span>
-            <span>R$ {{ cartProduct.price }}</span>
+            <span>R$ {{ cartItem.product.price }}</span>
           </div>
 
           <div class="cart-item__meta">
             <span class="cart-item__label cart-item__label--mobile">Quantidade</span>
-            <span>{{ cartProduct.quantity }}</span>
+            <span>{{ cartItem.quantity }}</span>
           </div>
 
           <div class="cart-item__meta cart-item__meta--subtotal">
             <span class="cart-item__label cart-item__label--mobile">Subtotal</span>
-            <span>R$ {{ cartProduct.price * cartProduct.quantity }}</span>
+            <span>R$ {{ cartItem.subtotal }}</span>
           </div>
         </article>
       </section>
 
       <div class="cart-actions">
-        <button class="button">Retornar a busca</button>
-        <button class="button">Atualizar carrinho</button>
+        <button class="button" @click="goToStore">Retornar a busca</button>
+        <button class="button" @click="loadCart">Atualizar carrinho</button>
       </div>
 
       <section class="cart-summary-layout">
@@ -62,7 +68,7 @@
           <h1>Cart Total</h1>
           <div class="cart-total__row">
             <h2>Subtotal:</h2>
-            <span>R$ 1750</span>
+            <span>R$ {{ cart.subtotal || 0 }}</span>
           </div>
           <v-divider class="border-opacity-50" color="#000" />
           <div class="cart-total__row">
@@ -72,7 +78,7 @@
           <v-divider class="border-opacity-50" color="#000" />
           <div class="cart-total__row cart-total__row--total">
             <h2>Total:</h2>
-            <span>R$ 1750</span>
+            <span>R$ {{ cart.subtotal || 0 }}</span>
           </div>
           <button class="button golden cart-total__button" @click="irCheckout">
             Avancar para o checkout
@@ -86,32 +92,48 @@
 </template>
 
 <script setup>
-  import card1 from '@/assets/card1.webp'
-  import card2 from '@/assets/card2.webp'
-
-  import { ref } from 'vue'
+  import { getCurrentInstance, onMounted, ref } from 'vue'
   import router from '@/core/router'
   import Header from '@/core/components/Header.vue'
   import Path from '@/core/components/Path.vue'
   import Input from '@/core/components/Input.vue'
   import Footer from '@/core/components/Footer.vue'
+  import cartService from '@/core/services/cartService'
 
-  const cartProducts = ref([
-    {
-      name: 'LCD Monitor',
-      price: 650,
-      quantity: 1,
-      subtotal: 650,
-      image: card1,
-    },
-    {
-      name: 'LCD Monitor',
-      price: 650,
-      quantity: 1,
-      subtotal: 650,
-      image: card2,
-    },
-  ])
+  const { proxy } = getCurrentInstance()
+  const cart = ref({ items: [], subtotal: 0, totalItems: 0 })
+  const loading = ref(false)
+  const errorMessage = ref('')
+
+  onMounted(() => {
+    loadCart()
+  })
+
+  async function loadCart() {
+    loading.value = true
+    errorMessage.value = ''
+
+    try {
+      cart.value = await cartService.getCart()
+    } catch (error) {
+      errorMessage.value = 'Could not load the cart.'
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function removeFromCart(productId) {
+    try {
+      cart.value = await cartService.removeItem(productId)
+      proxy.$showMessage('success', 'Product removed from cart.')
+    } catch (error) {
+      proxy.$showMessage('error', 'Could not remove the product from the cart.')
+    }
+  }
+
+  function goToStore() {
+    router.push('/store')
+  }
 
   function irCheckout() {
     router.push({ path: '/checkout', query: { origin: ['Home', 'Cart'] } })
@@ -207,6 +229,11 @@
     display: none;
   }
 
+  .remove-button {
+    width: fit-content;
+    color: #c62828;
+  }
+
   .cart-actions {
     display: flex;
     flex-wrap: wrap;
@@ -266,10 +293,6 @@
     border-radius: 999px;
     color: #000;
     background-color: #fff;
-    transition:
-      transform 0.2s ease,
-      background-color 0.2s ease,
-      border-color 0.2s ease;
   }
 
   .golden {
@@ -311,18 +334,6 @@
     margin: 0;
     font-weight: 500;
     font-size: 1rem;
-  }
-
-  @media (hover: hover) {
-    .button:hover {
-      transform: translateY(-1px);
-      background-color: #f8fafc;
-      border-color: rgba(219, 182, 113, 0.45);
-    }
-
-    .golden:hover {
-      background-color: #cfa455;
-    }
   }
 
   @media (max-width: 1023px) {

@@ -51,7 +51,7 @@ public class User extends AbstractEditableEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return "";
+        return email;
     }
 
     public User(String email, String password,String name, UserRole role) {
