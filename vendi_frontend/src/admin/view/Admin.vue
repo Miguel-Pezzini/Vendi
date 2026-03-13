@@ -6,7 +6,7 @@
 
     <v-row class="container margin">
       <v-col class="pa-0" cols="4">
-        <SideAdminMenu active-minha-conta />
+        <SideAdminMenu active-dashboard />
       </v-col>
       <v-col />
     </v-row>

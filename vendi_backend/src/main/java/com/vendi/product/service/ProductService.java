@@ -43,23 +43,27 @@ public class ProductService {
         return ProductMapper.toDTO(this.repository.save(product));
     }
 
+    @Transactional(readOnly = true)
     public List<ProductDTO>getProducts(ProductQueryParams productQueryParams) {
         List<Product> products = this.repository.findAll(productQueryParams);
 
         return products.stream().map(ProductMapper::toDTO).toList();
     }
 
+    @Transactional(readOnly = true)
     public ProductDTO getById(UUID productId) throws ResourceNotFoundException {
         Product product = repository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found."));
 
         return ProductMapper.toDTO(product);
     }
 
+    @Transactional(readOnly = true)
     public ProductDetailsDTO getDetailsById(UUID productId) throws ResourceNotFoundException {
         Product product = repository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found."));
         return ProductMapper.toDetailsDTO(product);
     }
 
+    @Transactional(readOnly = true)
     public List<ProductDTO> getLatestProducts(int limit) {
         Pageable pageable = PageRequest.of(0, limit);
         return this.repository.findRecentProducts(pageable).stream().map(ProductMapper::toDTO).toList();
