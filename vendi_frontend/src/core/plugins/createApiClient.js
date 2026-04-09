@@ -44,20 +44,20 @@ export function createResponseSuccessInterceptor({ store }) {
   }
 }
 
-export function createResponseErrorInterceptor({ storage, router, store }) {
+export function createResponseErrorInterceptor({ storage, navigateToLogin, store }) {
   return (err) => {
     store?.commit?.('stopLoading', err)
 
     if (err.response && err.response.status === 401) {
       clearAuthSession(storage)
-      router?.push?.('/login')
+      navigateToLogin?.()
     }
 
     return Promise.reject(err.response?.data || err)
   }
 }
 
-export function createApiClient({ server, storage = fallbackStorage, router, store }) {
+export function createApiClient({ server, storage = fallbackStorage, navigateToLogin, store }) {
   server.interceptors.request.use(
     createRequestInterceptor({ storage, store }),
     createRequestErrorInterceptor()
@@ -65,7 +65,7 @@ export function createApiClient({ server, storage = fallbackStorage, router, sto
 
   server.interceptors.response.use(
     createResponseSuccessInterceptor({ store }),
-    createResponseErrorInterceptor({ storage, router, store })
+    createResponseErrorInterceptor({ storage, navigateToLogin, store })
   )
 
   async function getAll(resource, params = {}) {

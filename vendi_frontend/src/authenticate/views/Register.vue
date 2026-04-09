@@ -1,7 +1,7 @@
 <template>
   <div class="auth-page">
     <main class="auth-shell">
-      <section v-if="$vuetify.display.mdAndUp" class="auth-visual" aria-hidden="true">
+      <section v-if="mdAndUp" class="auth-visual" aria-hidden="true">
         <div class="auth-visual__image-wrapper">
           <img class="auth-visual__image" src="../../assets/side-image-login.png" alt="" />
         </div>
@@ -56,7 +56,7 @@
 
           <div class="auth-link-row">
             <RouterLink class="auth-link" to="/login">
-              Alredy have an account? <span class="text-golden">Login!</span>
+              Already have an account? <span class="text-golden">Login!</span>
             </RouterLink>
           </div>
         </v-form>
@@ -68,6 +68,7 @@
 
 <script setup>
   import { ref, getCurrentInstance } from 'vue'
+  import { useDisplay } from 'vuetify'
   import router from '@/core/router'
   import Input from '@/core/components/Input'
   import Footer from '@/core/components/Footer.vue'
@@ -75,6 +76,7 @@
   import '@/authenticate/styles/auth-layout.css'
 
   const { proxy } = getCurrentInstance()
+  const { mdAndUp } = useDisplay()
 
   const name = ref('')
   const email = ref('')

@@ -1,5 +1,4 @@
 import axios from 'axios'
-import router from '../router'
 import { store } from './store'
 import { createApiClient } from './createApiClient'
 
@@ -13,7 +12,10 @@ const server = axios.create({
 const api = createApiClient({
   server,
   storage: globalThis.localStorage,
-  router,
+  navigateToLogin: async () => {
+    const { default: router } = await import('../router')
+    router.push('/login')
+  },
   store,
 })
 
