@@ -2,26 +2,49 @@
   <div class="auth-page">
     <main class="auth-shell">
       <section v-if="mdAndUp" class="auth-visual" aria-hidden="true">
-        <div class="auth-visual__image-wrapper">
-          <img class="auth-visual__image" src="../../assets/side-image-login.png" alt="" />
+        <div class="auth-visual__panel">
+          <span class="auth-visual__badge">Vendi marketplace</span>
+
+          <div class="auth-visual__copy">
+            <p class="auth-visual__eyebrow">Acesse sua conta</p>
+            <h2 class="auth-visual__title">Entre para continuar comprando.</h2>
+            <p class="auth-visual__text">
+              Faça login para acompanhar seu carrinho, visualizar seus dados e seguir usando a
+              Vendi sem perder o contexto da navegação.
+            </p>
+          </div>
+
+          <ul class="auth-visual__list">
+            <li>Consulte seu carrinho com mais facilidade</li>
+            <li>Gerencie sua conta e seus dados pessoais</li>
+            <li>Continue navegando pelo marketplace sem começar do zero</li>
+          </ul>
         </div>
       </section>
 
       <section class="auth-content">
         <v-form ref="form" class="auth-card" @submit.prevent="logar">
+          <div class="auth-mobile-intro">
+            <span class="auth-mobile-intro__badge">Vendi marketplace</span>
+            <h2 class="auth-mobile-intro__title">Acesse sua conta</h2>
+            <p class="auth-mobile-intro__text">
+              Faça login para continuar comprando e gerenciar sua conta.
+            </p>
+          </div>
+
           <div class="auth-copy">
-            <span class="auth-eyebrow">Welcome back</span>
+            <span class="auth-eyebrow">Login</span>
             <h1 class="auth-title">Log In</h1>
-            <p class="auth-subtitle">Enter your details below</p>
+            <p class="auth-subtitle">Enter your email and password to access your account.</p>
           </div>
 
           <div class="auth-fields">
-            <Input v-model="email" class="auth-input" label="Enter your E-mail" required />
+            <Input v-model="email" class="auth-input" label="Email address" required />
             <Input
               v-model="password"
               class="auth-input"
               append-icon="mdi-eye"
-              label="Senha"
+              label="Password"
               required
               type="password" />
           </div>

@@ -2,17 +2,40 @@
   <div class="auth-page">
     <main class="auth-shell">
       <section v-if="mdAndUp" class="auth-visual" aria-hidden="true">
-        <div class="auth-visual__image-wrapper">
-          <img class="auth-visual__image" src="../../assets/side-image-login.png" alt="" />
+        <div class="auth-visual__panel auth-visual__panel--register">
+          <span class="auth-visual__badge">Create your Vendi account</span>
+
+          <div class="auth-visual__copy">
+            <p class="auth-visual__eyebrow">Crie sua conta</p>
+            <h2 class="auth-visual__title">Cadastre-se para começar a usar a Vendi.</h2>
+            <p class="auth-visual__text">
+              Preencha seus dados para entrar no marketplace e manter suas informações reunidas em
+              um só lugar.
+            </p>
+          </div>
+
+          <ul class="auth-visual__list">
+            <li>Salve seus dados para futuras compras</li>
+            <li>Gerencie sua conta dentro do mesmo fluxo da loja</li>
+            <li>Tenha um acesso simples desde o primeiro uso</li>
+          </ul>
         </div>
       </section>
 
       <section class="auth-content">
         <v-form ref="form" class="auth-card auth-card--register" @submit.prevent="register">
+          <div class="auth-mobile-intro">
+            <span class="auth-mobile-intro__badge">Create your Vendi profile</span>
+            <h2 class="auth-mobile-intro__title">Create your account</h2>
+            <p class="auth-mobile-intro__text">
+              Register to start shopping and managing your information in one place.
+            </p>
+          </div>
+
           <div class="auth-copy">
             <span class="auth-eyebrow">Create your account</span>
-            <h1 class="auth-title">Register your account</h1>
-            <p class="auth-subtitle">Enter your details below</p>
+            <h1 class="auth-title">Create your account</h1>
+            <p class="auth-subtitle">Add your details below to get started with Vendi.</p>
           </div>
 
           <div class="auth-fields">
