@@ -13,6 +13,7 @@ import Admin from '@/admin/view/Admin.vue'
 import UserProducts from '@/user/products/view/UserProducts.vue'
 import CreateProduct from '@/user/products/view/AddProduct.vue'
 import EditProduct from '@/user/products/view/EditProduct.vue'
+import { createNavigationGuard } from './navigationGuard'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -100,21 +101,6 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
-  const roles = localStorage.getItem('roles') || ''
-
-  if (to.meta.requiresAuth && !token) {
-    next({ path: '/login' })
-    return
-  }
-
-  if (to.meta.requiresAdmin && !roles.includes('ROLE_ADMIN')) {
-    next({ path: '/home' })
-    return
-  }
-
-  next()
-})
+router.beforeEach(createNavigationGuard())
 
 export default router
