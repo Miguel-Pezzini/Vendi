@@ -22,6 +22,13 @@
 
           <div class="hero-actions">
             <v-btn
+              color="black"
+              variant="outlined"
+              prepend-icon="mdi-shape-plus"
+              @click="openCategoryDialog">
+              Nova categoria
+            </v-btn>
+            <v-btn
               color="#DBB671"
               variant="flat"
               prepend-icon="mdi-plus"
@@ -47,6 +54,71 @@
           @click:close="errorMessage = null">
           {{ errorMessage }}
         </v-alert>
+
+        <v-dialog v-model="isCategoryDialogOpen" max-width="620">
+          <v-card rounded="xl">
+            <v-card-title class="dialog-title">
+              <div>
+                <p class="section-label mb-2">Catalogo</p>
+                <h2>Criar categoria</h2>
+              </div>
+            </v-card-title>
+
+            <v-card-text>
+              <v-form ref="categoryForm" @submit.prevent="submitCategory">
+                <v-row>
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="categoryDraft.name"
+                      label="Nome da categoria"
+                      variant="outlined"
+                      density="comfortable"
+                      :rules="[requiredRule]"
+                      hide-details="auto" />
+                  </v-col>
+
+                  <v-col cols="12">
+                    <v-textarea
+                      v-model="categoryDraft.description"
+                      label="Descricao"
+                      variant="outlined"
+                      density="comfortable"
+                      rows="4"
+                      auto-grow
+                      :rules="[requiredRule]"
+                      hide-details="auto" />
+                  </v-col>
+
+                  <v-col cols="12">
+                    <v-select
+                      v-model="categoryDraft.fatherCategoryId"
+                      label="Categoria pai"
+                      variant="outlined"
+                      density="comfortable"
+                      :items="categoryOptions"
+                      item-title="name"
+                      item-value="id"
+                      clearable
+                      hide-details="auto" />
+                  </v-col>
+                </v-row>
+              </v-form>
+            </v-card-text>
+
+            <v-card-actions class="dialog-actions">
+              <v-spacer />
+              <v-btn variant="text" color="black" @click="closeCategoryDialog">Cancelar</v-btn>
+              <v-btn
+                color="#DBB671"
+                variant="flat"
+                prepend-icon="mdi-content-save-outline"
+                :loading="isSavingCategory"
+                @click="submitCategory">
+                Salvar categoria
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
 
         <v-row v-if="isLoading" class="mb-6">
           <v-col v-for="n in 4" :key="`metric-skeleton-${n}`" cols="12" sm="6" xl="3">
@@ -241,7 +313,7 @@
 </template>
 
 <script setup>
-  import { computed, onMounted, ref } from 'vue'
+  import { computed, getCurrentInstance, onMounted, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import Header from '@/core/components/Header.vue'
   import Path from '@/core/components/Path.vue'
@@ -255,6 +327,7 @@
 
   const route = useRoute()
   const router = useRouter()
+  const { proxy } = getCurrentInstance()
 
   const LOW_STOCK_THRESHOLD = 5
   const RECENT_PRODUCTS_LIMIT = 4
@@ -269,6 +342,10 @@
   const recentProducts = ref([])
   const lowStockProducts = ref([])
   const discountedProducts = ref([])
+  const isCategoryDialogOpen = ref(false)
+  const isSavingCategory = ref(false)
+  const categoryForm = ref(null)
+  const categoryDraft = ref(createEmptyCategoryDraft())
 
   const categoryBreakdown = computed(() => {
     if (!products.value.length) {
@@ -304,6 +381,12 @@
   })
 
   const activeCategoryCount = computed(() => categoryBreakdown.value.length)
+  const categoryOptions = computed(() =>
+    flattenCategoryTree(categories.value).map((category) => ({
+      id: category.id,
+      name: category.name,
+    }))
+  )
 
   const metrics = computed(() => {
     const totalProducts = products.value.length
@@ -392,6 +475,69 @@
 
   async function hydrateProducts(list) {
     return Promise.all(list.map((product) => productService.hydrateProductSummary(product)))
+  }
+
+  function createEmptyCategoryDraft() {
+    return {
+      name: '',
+      description: '',
+      fatherCategoryId: null,
+    }
+  }
+
+  function openCategoryDialog() {
+    categoryDraft.value = createEmptyCategoryDraft()
+    isCategoryDialogOpen.value = true
+  }
+
+  function closeCategoryDialog() {
+    isCategoryDialogOpen.value = false
+    categoryDraft.value = createEmptyCategoryDraft()
+  }
+
+  function requiredRule(value) {
+    return String(value || '').trim().length > 0 || 'Campo obrigatorio'
+  }
+
+  function getErrorMessage(error, fallbackMessage) {
+    if (typeof error === 'string') {
+      return error
+    }
+
+    if (Array.isArray(error?.errors) && error.errors.length > 0) {
+      return error.errors[0]
+    }
+
+    return error?.message || error?.error || error?.details || fallbackMessage
+  }
+
+  async function submitCategory() {
+    const validation = await categoryForm.value?.validate()
+
+    if (!validation?.valid) {
+      return
+    }
+
+    isSavingCategory.value = true
+
+    try {
+      await api.create('category', {
+        name: categoryDraft.value.name.trim(),
+        description: categoryDraft.value.description.trim(),
+        father_category_id: categoryDraft.value.fatherCategoryId || null,
+      })
+
+      proxy.$showMessage('success', 'Categoria criada com sucesso')
+      closeCategoryDialog()
+      await loadDashboard()
+    } catch (error) {
+      proxy.$showMessage(
+        'error',
+        getErrorMessage(error, 'Nao foi possivel criar a categoria agora.')
+      )
+    } finally {
+      isSavingCategory.value = false
+    }
   }
 
   function goToProduct(productId) {
@@ -507,6 +653,21 @@
     align-items: flex-start;
     justify-content: flex-end;
     gap: 12px;
+  }
+
+  .dialog-title {
+    padding: 24px 24px 8px;
+  }
+
+  .dialog-title h2 {
+    font-size: 24px;
+    line-height: 1.1;
+    font-weight: 600;
+    color: #181818;
+  }
+
+  .dialog-actions {
+    padding: 0 24px 24px;
   }
 
   .metric-card,
