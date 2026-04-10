@@ -5,6 +5,9 @@ import com.vendi.address.dto.UpsertAddressDTO;
 import com.vendi.address.exception.AddressNotFoundException;
 import com.vendi.address.service.AddressService;
 import com.vendi.product.dto.ProductDTO;
+import com.vendi.shared.exception.ResourceAlreadyExistsException;
+import com.vendi.user.dto.UpdateMeDTO;
+import com.vendi.user.dto.UpdatePasswordDTO;
 import com.vendi.user.dto.UserDTO;
 import com.vendi.user.service.MeService;
 import jakarta.validation.Valid;
@@ -29,6 +32,17 @@ public class MeController {
     @GetMapping
     public ResponseEntity<UserDTO> getUser() {
         return ResponseEntity.ok(meService.getMe());
+    }
+
+    @PutMapping
+    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UpdateMeDTO body) throws ResourceAlreadyExistsException {
+        return ResponseEntity.ok(meService.updateMe(body));
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<Void> updatePassword(@Valid @RequestBody UpdatePasswordDTO body) {
+        meService.updatePassword(body);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/products")

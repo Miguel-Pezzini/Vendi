@@ -39,7 +39,7 @@ The backend is a JWT-secured Spring Boot API for the Vendi store. The main imple
 - authenticated Stripe checkout session creation/status under `/checkout`
 - public Stripe webhook handling under `/checkout/webhook`
 - authenticated order listing/detail lookup under `/orders`
-- authenticated self-service endpoints under `/me`, `/me/products`, and `/me/addresses`, including address create/update/delete and active-address selection
+- authenticated self-service endpoints under `/me`, `/me/password`, `/me/products`, and `/me/addresses`, including profile update, password change, and address create/update/delete with active-address selection
 - Prometheus metrics exposure through `/actuator/prometheus`
 
 The backend also contains domain models for addresses and ratings. Orders are now created through checkout and finalized from Stripe webhook events.

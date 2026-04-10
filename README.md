@@ -36,7 +36,7 @@ The backend is a JWT-secured Spring Boot API that currently handles:
 - authenticated Stripe checkout session creation and checkout status lookup
 - public Stripe webhook processing for payment confirmation
 - authenticated order listing and order detail lookup under `/orders`
-- authenticated `me` endpoints for profile, products, and full address management
+- authenticated `me` endpoints for profile reads/updates, password changes, products, and full address management
 - Prometheus metrics for observability
 
 The backend also contains domain models for ratings and addresses. Orders are now created through the checkout flow and finalized from Stripe webhook events.
@@ -242,6 +242,8 @@ MAVEN_REPO_LOCAL=/tmp/vendi-m2 ./scripts/test_all.sh
 
 ### Authenticated user data
 - `GET /me`
+- `PUT /me`
+- `PUT /me/password`
 - `GET /me/products`
 - `GET /me/addresses`
 - `POST /me/addresses`

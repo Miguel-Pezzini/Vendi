@@ -45,7 +45,7 @@ If you change frontend behavior, validate it with focused manual checks or build
 - `GET/POST /category`
 - `GET /photo/{photoId}`
 - `GET /cart`, `POST /cart/items`, `DELETE /cart/items/{productId}`
-- `GET /me`, `GET /me/products`, `GET/POST /me/addresses`, `PUT /me/addresses/{addressId}`, `DELETE /me/addresses/{addressId}`, `PUT /me/addresses/{addressId}/active`
+- `GET /me`, `PUT /me`, `PUT /me/password`, `GET /me/products`, `GET/POST /me/addresses`, `PUT /me/addresses/{addressId}`, `DELETE /me/addresses/{addressId}`, `PUT /me/addresses/{addressId}/active`
 
 Security is JWT-based. Product/category writes are role-restricted. Prometheus metrics are exposed at `/actuator/prometheus`.
 

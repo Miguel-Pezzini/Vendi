@@ -6,6 +6,9 @@ import com.vendi.address.dto.UpsertAddressDTO;
 import com.vendi.address.model.Address;
 import com.vendi.category.dto.CategoryResponseDTO;
 import com.vendi.product.dto.ProductDTO;
+import com.vendi.user.dto.LoginRequestDTO;
+import com.vendi.user.dto.UpdateMeDTO;
+import com.vendi.user.dto.UpdatePasswordDTO;
 import com.vendi.user.dto.UserDTO;
 import com.vendi.user.model.User;
 import com.vendi.user.model.UserRole;
@@ -30,6 +33,10 @@ public class MeApiIntegrationTest extends AbstractIntegrationTest {
     @Test
     void meEndpointsRequireAuthentication() throws Exception {
         mockMvc.perform(get("/me")).andExpect(status().isUnauthorized());
+        mockMvc.perform(put("/me").contentType(APPLICATION_JSON).content(asJson(new UpdateMeDTO("Name", "user@vendi.test"))))
+                .andExpect(status().isUnauthorized());
+        mockMvc.perform(put("/me/password").contentType(APPLICATION_JSON).content(asJson(new UpdatePasswordDTO("123456", "654321"))))
+                .andExpect(status().isUnauthorized());
         mockMvc.perform(get("/me/products")).andExpect(status().isUnauthorized());
         mockMvc.perform(get("/me/addresses")).andExpect(status().isUnauthorized());
         mockMvc.perform(post("/me/addresses").contentType(APPLICATION_JSON).content(asJson(addressRequest("Main Street"))))
@@ -60,6 +67,81 @@ public class MeApiIntegrationTest extends AbstractIntegrationTest {
         assertEquals(user.getEmail(), me.email());
         assertEquals("USER", me.role());
         assertEquals("Main Street", me.currentAddress().street());
+    }
+
+    @Test
+    void updateMeUpdatesAuthenticatedUsersProfile() throws Exception {
+        User user = createUser(UserRole.USER);
+        String bearerToken = bearerTokenFor(user);
+
+        String responseBody = mockMvc.perform(put("/me")
+                        .header("Authorization", bearerToken)
+                        .contentType(APPLICATION_JSON)
+                        .content(asJson(new UpdateMeDTO("Updated Name", "updated@vendi.test"))))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        UserDTO updatedMe = objectMapper.readValue(responseBody, UserDTO.class);
+        User persistedUser = userRepository.findById(user.getId()).orElseThrow();
+
+        assertEquals("Updated Name", updatedMe.name());
+        assertEquals("updated@vendi.test", updatedMe.email());
+        assertEquals("Updated Name", persistedUser.getName());
+        assertEquals("updated@vendi.test", persistedUser.getEmail());
+    }
+
+    @Test
+    void updateMeReturnsConflictWhenEmailBelongsToAnotherUser() throws Exception {
+        User user = createUser(UserRole.USER);
+        User anotherUser = createUser(UserRole.USER);
+
+        mockMvc.perform(put("/me")
+                        .header("Authorization", bearerTokenFor(user))
+                        .contentType(APPLICATION_JSON)
+                        .content(asJson(new UpdateMeDTO("Updated Name", anotherUser.getEmail()))))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void updatePasswordChangesPasswordForAuthenticatedUser() throws Exception {
+        User user = createUser(UserRole.USER);
+        String bearerToken = bearerTokenFor(user);
+
+        mockMvc.perform(put("/me/password")
+                        .header("Authorization", bearerToken)
+                        .contentType(APPLICATION_JSON)
+                        .content(asJson(new UpdatePasswordDTO("123456", "654321"))))
+                .andExpect(status().isNoContent());
+
+        User persistedUser = userRepository.findById(user.getId()).orElseThrow();
+
+        assertTrue(passwordEncoder.matches("654321", persistedUser.getPassword()));
+
+        mockMvc.perform(post("/auth/login")
+                        .contentType(APPLICATION_JSON)
+                        .content(asJson(new LoginRequestDTO(user.getEmail(), "123456"))))
+                .andExpect(status().isUnauthorized());
+
+        mockMvc.perform(post("/auth/login")
+                        .contentType(APPLICATION_JSON)
+                        .content(asJson(new LoginRequestDTO(user.getEmail(), "654321"))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void updatePasswordReturnsBadRequestWhenCurrentPasswordIsIncorrect() throws Exception {
+        User user = createUser(UserRole.USER);
+
+        mockMvc.perform(put("/me/password")
+                        .header("Authorization", bearerTokenFor(user))
+                        .contentType(APPLICATION_JSON)
+                        .content(asJson(new UpdatePasswordDTO("wrong-password", "654321"))))
+                .andExpect(status().isBadRequest());
+
+        User persistedUser = userRepository.findById(user.getId()).orElseThrow();
+        assertTrue(passwordEncoder.matches("123456", persistedUser.getPassword()));
     }
 
     @Test
