@@ -2,20 +2,6 @@
 
 Este arquivo lista o que ainda falta implementar ou finalizar no sistema com base no estado atual do monorepo.
 
-## Prioridade alta
-
-- Finalizar o fluxo de checkout.
-  Hoje a tela de checkout coleta dados e forma de pagamento, mas nao cria pedido no backend nem confirma a compra.
-
-- Implementar pedidos (`orders`) de ponta a ponta.
-  O backend ja tem modelos de dominio para pedidos, mas ainda nao ha controllers, services, repositorios expostos nem telas funcionais de acompanhamento de pedidos no frontend.
-
-- Implementar wishlist real.
-  Existe rota `/wishlist` no frontend e modelos `Wishlist`/`WishlistItem` no backend, mas a tela atual usa produtos carregados do catalogo como simulacao e nao persiste dados do usuario.
-
-- Finalizar gerenciamento de enderecos.
-  Hoje existe leitura de `/me/addresses`, mas a tela [`vendi_frontend/src/user/profile/views/MyAddresses.vue`](/home/miguel/Programming/Vendi/vendi_frontend/src/user/profile/views/MyAddresses.vue) ainda nao conclui criar, editar, remover e definir endereco ativo. O backend tambem nao expoe endpoints CRUD dedicados para isso.
-
 ## Prioridade media
 
 - Permitir atualizar dados da conta.

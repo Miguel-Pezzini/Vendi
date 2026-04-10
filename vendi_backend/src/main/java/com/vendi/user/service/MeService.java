@@ -1,6 +1,7 @@
 package com.vendi.user.service;
 
 import com.vendi.address.dto.AddressDTO;
+import com.vendi.address.service.AddressService;
 import com.vendi.product.dto.ProductDTO;
 import com.vendi.user.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ public class MeService {
     @Autowired
     UserAuthenticatedService userAuthenticatedService;
 
+    @Autowired
+    AddressService addressService;
+
     public UserDTO getMe() {
         return new UserDTO(userAuthenticatedService.getAuthenticatedUser());
     }
@@ -26,6 +30,6 @@ public class MeService {
 
     @Transactional(readOnly = true)
     public List<AddressDTO> getMyAddresses() {
-        return userAuthenticatedService.getAuthenticatedUser().getAddresses().stream().map(AddressDTO::new).toList();
+        return addressService.getMyAddresses();
     }
 }
