@@ -4,6 +4,7 @@ import Login from '@/authenticate/views/Login.vue'
 import Home from '@/home/views/Home.vue'
 import MyAccount from '@/user/profile/views/MyAccount.vue'
 import MyAddresses from '@/user/profile/views/MyAddresses.vue'
+import MyOrders from '@/user/profile/views/MyOrders.vue'
 import Products from '@/store/views/StoreView.vue'
 import Product from '@/product/views/Product.vue'
 import Cart from '@/cart/views/Cart.vue'
@@ -47,6 +48,12 @@ const router = createRouter({
       path: '/account/addresses',
       name: 'Addresses',
       component: MyAddresses,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/account/orders',
+      name: 'Orders',
+      component: MyOrders,
       meta: { requiresAuth: true },
     },
     {

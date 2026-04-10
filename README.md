@@ -34,6 +34,7 @@ The backend is a JWT-secured Spring Boot API that currently handles:
 - authenticated cart retrieval, item add, and item removal
 - authenticated Stripe checkout session creation and checkout status lookup
 - public Stripe webhook processing for payment confirmation
+- authenticated order listing and order detail lookup under `/orders`
 - authenticated `me` endpoints for profile, products, and addresses
 - Prometheus metrics for observability
 
@@ -48,7 +49,7 @@ The frontend is a Vue single-page application that currently includes:
 - product details page with gallery images loaded from the backend photo API
 - cart page with hydrated product data and subtotal calculation
 - checkout form that creates a Stripe Checkout session and confirms the order after payment
-- account, addresses, and "my products" pages
+- account, addresses, order tracking, and "my products" pages
 - admin-only product creation/editing routes and admin dashboard shell
 
 ## Tech stack
@@ -228,6 +229,10 @@ MAVEN_REPO_LOCAL=/tmp/vendi-m2 ./scripts/test_all.sh
 - `GET /checkout/session/{sessionId}`
 - `POST /checkout/webhook`
 
+### Orders
+- `GET /orders`
+- `GET /orders/{orderId}`
+
 ### Authenticated user data
 - `GET /me`
 - `GET /me/products`
@@ -247,7 +252,7 @@ Role behavior currently includes:
 
 - public read access for products, categories, and photos
 - admin-only write access for product and category management
-- authenticated access for cart, checkout session endpoints, and `me` endpoints
+- authenticated access for cart, checkout session endpoints, `orders`, and `me` endpoints
 - public access for the Stripe webhook endpoint only
 
 ## Frontend architecture notes
@@ -257,6 +262,7 @@ Role behavior currently includes:
 - auth session is stored in `localStorage`
 - product images are hydrated on demand through the `/photo/{id}` backend endpoint
 - the store page supports `search` and `category` query params
+- the account area includes `/account/orders`, which expands order details and status history from `/orders`
 
 ## Backend architecture notes
 

@@ -37,6 +37,7 @@ The backend is a JWT-secured Spring Boot API for the Vendi store. The main imple
 - authenticated cart management under `/cart` and `/cart/items`
 - authenticated Stripe checkout session creation/status under `/checkout`
 - public Stripe webhook handling under `/checkout/webhook`
+- authenticated order listing/detail lookup under `/orders`
 - authenticated self-service endpoints under `/me`, `/me/products`, and `/me/addresses`
 - Prometheus metrics exposure through `/actuator/prometheus`
 
@@ -51,7 +52,7 @@ The frontend is a Vue SPA that consumes the backend API. The main user-facing fl
 - product details with photo gallery hydration from the `/photo` endpoint
 - cart page with subtotal calculation
 - checkout form that starts Stripe Checkout and shows purchase confirmation after return
-- account, addresses, and "my products" pages
+- account, addresses, order tracking, and "my products" pages
 - admin-only product creation/editing routes and admin dashboard shell
 
 There is also a wishlist route and some admin/account UI scaffolding, but some of those flows are still partial.
@@ -64,6 +65,7 @@ There is also a wishlist route and some admin/account UI scaffolding, but some o
 - `vendi_backend/src/main/java/com/vendi/category`: category CRUD
 - `vendi_backend/src/main/java/com/vendi/cart`: cart endpoints and cart aggregation
 - `vendi_backend/src/main/java/com/vendi/photo`: photo lookup and DTO mapping
+- `vendi_backend/src/main/java/com/vendi/order`: order controllers, DTOs, repository, service
 - `vendi_backend/src/main/java/com/vendi/user`: user and `me` endpoints
 - `vendi_backend/src/main/java/com/vendi/infra`: security and web config
 - `vendi_backend/src/main/resources/application.properties`: local backend config
@@ -166,6 +168,7 @@ A change is not done until all of the following are true:
 - Product creation requires a main photo and at least one category.
 - Checkout creates a pending order from the authenticated user's cart, then redirects to hosted Stripe Checkout.
 - Successful Stripe webhook events mark the order as paid and clear the user's cart.
+- Authenticated users can list their own orders and fetch a single order with items and status history through `/orders`.
 
 ## Frontend Implementation Notes
 
@@ -175,6 +178,7 @@ A change is not done until all of the following are true:
 - Product cards/details are hydrated through `productService`, which fetches image payloads from `/photo/{id}`.
 - Cart UI depends on `cartService`, which rehydrates product summaries after cart API calls.
 - Checkout UI depends on `checkoutService`, which creates Stripe sessions and polls order status after redirect.
+- Order tracking UI depends on `orderService`, which loads summaries from `/orders` and hydrates item photos when a specific order is expanded.
 - Keep using the current feature-based folder structure unless the user asks for a broader reorganization.
 
 ## Local Commands

@@ -11,6 +11,14 @@
           <div v-if="statusMessage" :class="['checkout-status', `checkout-status--${statusTone}`]">
             {{ statusMessage }}
           </div>
+          <v-btn
+            v-if="confirmedOrderId"
+            class="mb-6"
+            color="#dbb671"
+            variant="flat"
+            @click="goToOrderTracking">
+            Ver acompanhamento do pedido
+          </v-btn>
           <div style="max-width: 470px">
             <v-form ref="form">
               <Input
@@ -68,6 +76,7 @@
   const submitting = ref(false)
   const statusMessage = ref('')
   const statusTone = ref('info')
+  const confirmedOrderId = ref(null)
 
   onMounted(async () => {
     oldPaths.value = loadPastPaths(route)
@@ -134,6 +143,7 @@
     const sessionId = route.query.session_id
 
     if (checkoutStatus === 'canceled') {
+      confirmedOrderId.value = null
       statusTone.value = 'warning'
       statusMessage.value = 'Pagamento cancelado. Seu carrinho foi mantido para voce tentar novamente.'
       return
@@ -149,6 +159,7 @@
 
         if (response.status === 'PAID') {
           await refreshCart()
+          confirmedOrderId.value = response.orderId
           statusTone.value = 'success'
           statusMessage.value = `Compra confirmada para ${response.email}. Pedido registrado com total de R$ ${response.totalAmount}.`
           proxy?.$showMessage?.('success', 'Compra confirmada com sucesso.')
@@ -157,12 +168,14 @@
         }
 
         if (response.status === 'PAYMENT_FAILED') {
+          confirmedOrderId.value = null
           statusTone.value = 'error'
           statusMessage.value = 'O pagamento falhou no Stripe. Revise os dados e tente novamente.'
           return
         }
 
         if (response.status === 'CANCELED') {
+          confirmedOrderId.value = null
           statusTone.value = 'warning'
           statusMessage.value = 'A sessao de pagamento expirou ou foi cancelada.'
           return
@@ -175,8 +188,17 @@
     }
 
     statusTone.value = 'info'
+    confirmedOrderId.value = null
     statusMessage.value =
       'Pagamento recebido e em confirmacao final. Se necessario, recarregue a pagina em alguns segundos.'
+  }
+
+  function goToOrderTracking() {
+    if (!confirmedOrderId.value) return
+    router.push({
+      path: '/account/orders',
+      query: { order: confirmedOrderId.value, origin: route.query.origin },
+    })
   }
 
   function loadSavedCheckoutDetails() {

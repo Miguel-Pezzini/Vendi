@@ -31,6 +31,10 @@
       type: Boolean,
       default: false,
     },
+    activeMyOrders: {
+      type: Boolean,
+      default: false,
+    },
     activeMyProducts: {
       type: Boolean,
       default: false,
@@ -65,14 +69,12 @@
     {
       title: 'My Orders',
       to: '/#',
+      marked: props.activeMyOrders,
       subMenus: [
         {
-          title: 'Returns',
-          to: '/#',
-        },
-        {
-          title: 'My Cancellations',
-          to: '/#',
+          title: 'Track Orders',
+          to: '/account/orders',
+          marked: props.activeMyOrders,
         },
       ],
     },
