@@ -32,13 +32,14 @@ The backend is a JWT-secured Spring Boot API that currently handles:
 - category listing and admin category creation
 - product photo retrieval by photo id
 - authenticated cart retrieval, item add, and item removal
+- authenticated wishlist retrieval, item add, and item removal
 - authenticated Stripe checkout session creation and checkout status lookup
 - public Stripe webhook processing for payment confirmation
 - authenticated order listing and order detail lookup under `/orders`
 - authenticated `me` endpoints for profile, products, and addresses
 - Prometheus metrics for observability
 
-The backend also contains domain models for wishlist, ratings, and addresses. Orders are now created through the checkout flow and finalized from Stripe webhook events.
+The backend also contains domain models for ratings and addresses. Orders are now created through the checkout flow and finalized from Stripe webhook events.
 
 ### Frontend
 The frontend is a Vue single-page application that currently includes:
@@ -48,6 +49,7 @@ The frontend is a Vue single-page application that currently includes:
 - store page with search and category filters
 - product details page with gallery images loaded from the backend photo API
 - cart page with hydrated product data and subtotal calculation
+- wishlist page backed by persisted user data
 - checkout form that creates a Stripe Checkout session and confirms the order after payment
 - account, addresses, order tracking, and "my products" pages
 - admin-only product creation/editing routes and admin dashboard shell
@@ -223,6 +225,11 @@ MAVEN_REPO_LOCAL=/tmp/vendi-m2 ./scripts/test_all.sh
 - `GET /cart`
 - `POST /cart/items`
 - `DELETE /cart/items/{productId}`
+
+### Wishlist
+- `GET /wishlist`
+- `POST /wishlist/items`
+- `DELETE /wishlist/items/{productId}`
 
 ### Checkout
 - `POST /checkout/session`

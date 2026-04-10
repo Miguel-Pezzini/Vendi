@@ -8,25 +8,51 @@
         <section class="wishlist-section">
           <div class="section-header">
             <div>
-              <h1 class="section-title">Lista de Desejos ({{ wishlistProducts.length }})</h1>
+              <h1 class="section-title">Lista de Desejos ({{ wishlistItems.length }})</h1>
               <p class="section-subtitle">
                 Seus produtos salvos, organizados para comparar e comprar depois.
               </p>
             </div>
-            <button class="button">Mover todos para o carrinho</button>
+            <button
+              class="button"
+              :disabled="movingAllToCart || !wishlistItems.length"
+              @click="moveAllToCart">
+              {{ movingAllToCart ? 'Movendo...' : 'Mover todos para o carrinho' }}
+            </button>
           </div>
 
-          <v-row class="cards-grid">
+          <v-alert v-if="errorMessage" type="error" variant="tonal">
+            {{ errorMessage }}
+          </v-alert>
+
+          <v-row v-if="loading" class="cards-grid">
+            <v-col v-for="n in 4" :key="`wishlist-loading-${n}`" cols="12" sm="6" lg="4" xl="3">
+              <v-skeleton-loader type="card" />
+            </v-col>
+          </v-row>
+
+          <v-row v-else-if="wishlistItems.length" class="cards-grid">
             <v-col
-              v-for="product in wishlistProducts"
-              :key="`wishlist-${product.id}`"
+              v-for="item in wishlistItems"
+              :key="`wishlist-${item.product.id}`"
               cols="12"
               sm="6"
               lg="4"
               xl="3">
-              <ResultsProduct active-page="Wishlist" :product="product" />
+              <ResultsProduct
+                active-page="Wishlist"
+                :product="item.product"
+                @add-to-cart="addToCart"
+                @add-to-wishlist="removeFromWishlist" />
             </v-col>
           </v-row>
+
+          <v-sheet v-else class="empty-state" rounded="xl" border="sm" color="white">
+            <h2 class="section-title">Sua wishlist está vazia</h2>
+            <p class="section-subtitle">
+              Salve produtos no catálogo para encontrá-los aqui depois.
+            </p>
+          </v-sheet>
         </section>
 
         <section class="wishlist-section wishlist-section--secondary">
@@ -40,7 +66,7 @@
                 </p>
               </div>
             </div>
-            <button class="button">Ver Todos</button>
+            <button class="button" @click="goToStore">Ver Todos</button>
           </div>
 
           <v-row class="cards-grid">
@@ -51,7 +77,11 @@
               sm="6"
               lg="4"
               xl="3">
-              <ResultsProduct active-page="Wishlist" :product="product" />
+              <ResultsProduct
+                active-page="WishlistRecommendations"
+                :product="product"
+                @add-to-cart="addToCart"
+                @add-to-wishlist="toggleRecommendedWishlist" />
             </v-col>
           </v-row>
         </section>
@@ -66,16 +96,110 @@
   import Header from '@/core/components/Header.vue'
   import Footer from '@/core/components/Footer.vue'
   import ResultsProduct from '@/core/components/ResultsProduct.vue'
-  import { onMounted, ref } from 'vue'
+  import { computed, getCurrentInstance, onMounted, ref } from 'vue'
+  import { useRouter } from 'vue-router'
   import productService from '@/core/utils/productService'
+  import wishlistService from '@/core/services/wishlistService'
+  import cartService from '@/core/services/cartService'
 
-  const wishlistProducts = ref([])
+  const { proxy } = getCurrentInstance()
+  const router = useRouter()
+
+  const wishlist = ref({ items: [], totalItems: 0 })
   const recommendedProducts = ref([])
+  const loading = ref(false)
+  const errorMessage = ref('')
+  const movingAllToCart = ref(false)
+
+  const wishlistItems = computed(() => wishlist.value.items || [])
+
+  async function loadWishlist() {
+    loading.value = true
+    errorMessage.value = ''
+
+    try {
+      wishlist.value = await wishlistService.getWishlist()
+    } catch (error) {
+      errorMessage.value = 'Nao foi possivel carregar sua wishlist.'
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function loadRecommendations() {
+    const products = await productService.loadProducts('products', { limit: 8 })
+    const wishlistIds = new Set(wishlistItems.value.map((item) => item.product.id))
+
+    recommendedProducts.value = products
+      .filter((product) => !wishlistIds.has(product.id))
+      .slice(0, 4)
+      .map((product) => ({
+        ...product,
+        isInWishList: false,
+      }))
+  }
+
+  async function removeFromWishlist(product) {
+    try {
+      wishlist.value = await wishlistService.removeItem(product.id)
+      await loadRecommendations()
+      proxy.$showMessage('success', 'Product removed from wishlist.')
+    } catch (error) {
+      proxy.$showMessage('error', 'Could not update the wishlist.')
+    }
+  }
+
+  async function toggleRecommendedWishlist(product) {
+    try {
+      if (product.isInWishList) {
+        wishlist.value = await wishlistService.removeItem(product.id)
+      } else {
+        wishlist.value = await wishlistService.addItem(product.id)
+      }
+
+      await loadRecommendations()
+      proxy.$showMessage('success', product.isInWishList ? 'Product removed from wishlist.' : 'Product added to wishlist.')
+    } catch (error) {
+      proxy.$showMessage('error', 'Could not update the wishlist.')
+    }
+  }
+
+  async function addToCart(product) {
+    try {
+      await cartService.addItem(product.id, 1)
+      proxy.$showMessage('success', 'Product added to cart.')
+    } catch (error) {
+      proxy.$showMessage('error', 'Could not add the product to the cart.')
+    }
+  }
+
+  async function moveAllToCart() {
+    movingAllToCart.value = true
+
+    try {
+      const productsToMove = wishlistItems.value.map((item) => item.product)
+
+      for (const product of productsToMove) {
+        await cartService.addItem(product.id, 1)
+        wishlist.value = await wishlistService.removeItem(product.id)
+      }
+
+      await loadRecommendations()
+      proxy.$showMessage('success', 'Wishlist moved to cart.')
+    } catch (error) {
+      proxy.$showMessage('error', 'Could not move the wishlist to the cart.')
+    } finally {
+      movingAllToCart.value = false
+    }
+  }
+
+  function goToStore() {
+    router.push('/store')
+  }
 
   onMounted(async () => {
-    const products = await productService.loadProducts('products', { limit: 8 })
-    wishlistProducts.value = products.slice(0, 4).map((product) => ({ ...product, isInWishList: true }))
-    recommendedProducts.value = products.slice(4, 8)
+    await loadWishlist()
+    await loadRecommendations()
   })
 </script>
 
@@ -150,11 +274,21 @@
       transform 0.2s ease;
   }
 
+  .button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
   .decoration {
     height: 48px;
     width: 16px;
     background-color: #dbb671;
     border-radius: 999px;
+  }
+
+  .empty-state {
+    padding: 2rem;
+    border-color: rgba(15, 23, 42, 0.08);
   }
 
   @media (hover: hover) {

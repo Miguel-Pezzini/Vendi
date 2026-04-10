@@ -102,6 +102,7 @@
   import productService from '@/core/utils/productService'
   import categoryService from '@/core/services/categoryService'
   import cartService from '@/core/services/cartService'
+  import wishlistService from '@/core/services/wishlistService'
 
   const { proxy } = getCurrentInstance()
   const route = useRoute()
@@ -115,9 +116,50 @@
   const selectedFilters = ref({})
   const priceFilter = ref([0, 5000])
   const filterDialog = ref(false)
+  const wishlistProductIds = ref(new Set())
 
-  function addToWishlist(props) {
-    return props
+  function hasAuthSession() {
+    return Boolean(globalThis.localStorage?.getItem('token'))
+  }
+
+  function mergeWishlistState(loadedProducts) {
+    return loadedProducts.map((product) => ({
+      ...product,
+      isInWishList: wishlistProductIds.value.has(product.id),
+    }))
+  }
+
+  async function loadWishlistIds() {
+    if (!hasAuthSession()) {
+      wishlistProductIds.value = new Set()
+      return
+    }
+
+    const wishlist = await wishlistService.getWishlist()
+    wishlistProductIds.value = new Set(wishlist.items.map((item) => item.product.id))
+  }
+
+  async function addToWishlist(product) {
+    if (!hasAuthSession()) {
+      proxy.$showMessage('error', 'You need to be logged in to manage the wishlist.')
+      return
+    }
+
+    try {
+      if (product.isInWishList) {
+        const wishlist = await wishlistService.removeItem(product.id)
+        wishlistProductIds.value = new Set(wishlist.items.map((item) => item.product.id))
+        proxy.$showMessage('success', 'Product removed from wishlist.')
+      } else {
+        const wishlist = await wishlistService.addItem(product.id)
+        wishlistProductIds.value = new Set(wishlist.items.map((item) => item.product.id))
+        proxy.$showMessage('success', 'Product added to wishlist.')
+      }
+
+      products.value = mergeWishlistState(products.value)
+    } catch (error) {
+      proxy.$showMessage('error', 'Could not update the wishlist.')
+    }
   }
 
   async function addToCart(product) {
@@ -146,8 +188,10 @@
 
       const loadedProducts = await productService.loadProducts('products', params)
 
-      products.value = loadedProducts.filter(
-        (product) => product.price >= priceFilter.value[0] && product.price <= priceFilter.value[1]
+      products.value = mergeWishlistState(
+        loadedProducts.filter(
+          (product) => product.price >= priceFilter.value[0] && product.price <= priceFilter.value[1]
+        )
       )
     } catch (error) {
       errorMessage.value = 'Could not load products.'
@@ -171,7 +215,8 @@
 
   onMounted(async () => {
     try {
-      await Promise.all([loadCategories(), loadProducts()])
+      await Promise.all([loadCategories(), loadWishlistIds()])
+      await loadProducts()
     } catch (error) {
       proxy.$showMessage('error', 'Could not load the catalog.')
     }

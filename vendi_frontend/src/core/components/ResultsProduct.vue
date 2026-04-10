@@ -5,17 +5,10 @@
         <span v-if="product.discount" class="product-card__badge">-{{ product.discount }}%</span>
 
         <Button
-          v-if="product.isInWishList"
           density="comfortable"
           :flat="true"
           class="product-card__icon-button"
-          icon="mdi-delete-outline" />
-        <Button
-          v-else
-          density="comfortable"
-          :flat="true"
-          class="product-card__icon-button"
-          :icon="product.isInWishList ? 'mdi-heart' : 'mdi-heart-outline'"
+          :icon="wishlistIcon"
           @click="addToWishlist()" />
       </div>
 
@@ -64,6 +57,7 @@
 
 <script setup>
   import Button from '@/core/components/Button'
+  import { computed } from 'vue'
   import router from '../router'
   import { useRoute } from 'vue-router'
   import loadPastPaths from '../utils/loadPastPaths'
@@ -83,8 +77,16 @@
     },
   })
 
+  const wishlistIcon = computed(() =>
+    props.activePage === 'Wishlist'
+      ? 'mdi-delete-outline'
+      : props.product.isInWishList
+        ? 'mdi-heart'
+        : 'mdi-heart-outline'
+  )
+
   function addToWishlist() {
-    emit('addToWishlist', props.product.isInWishList)
+    emit('addToWishlist', props.product)
   }
 
   function addToCart() {

@@ -96,6 +96,7 @@ const router = createRouter({
       path: '/wishlist',
       name: 'Wishlist',
       component: WishList,
+      meta: { requiresAuth: true },
     },
     {
       path: '/checkout',

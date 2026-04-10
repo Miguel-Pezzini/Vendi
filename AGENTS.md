@@ -35,13 +35,14 @@ The backend is a JWT-secured Spring Boot API for the Vendi store. The main imple
 - product photo retrieval under `/photo/{photoId}`
 - category creation/listing under `/category`
 - authenticated cart management under `/cart` and `/cart/items`
+- authenticated wishlist management under `/wishlist` and `/wishlist/items`
 - authenticated Stripe checkout session creation/status under `/checkout`
 - public Stripe webhook handling under `/checkout/webhook`
 - authenticated order listing/detail lookup under `/orders`
 - authenticated self-service endpoints under `/me`, `/me/products`, and `/me/addresses`
 - Prometheus metrics exposure through `/actuator/prometheus`
 
-The backend also contains domain models for addresses, ratings, and wishlist data. Orders are now created through checkout and finalized from Stripe webhook events.
+The backend also contains domain models for addresses and ratings. Orders are now created through checkout and finalized from Stripe webhook events.
 
 ### Frontend
 The frontend is a Vue SPA that consumes the backend API. The main user-facing flows currently present are:
@@ -55,7 +56,7 @@ The frontend is a Vue SPA that consumes the backend API. The main user-facing fl
 - account, addresses, order tracking, and "my products" pages
 - admin-only product creation/editing routes and admin dashboard shell
 
-There is also a wishlist route and some admin/account UI scaffolding, but some of those flows are still partial.
+There is also some admin/account UI scaffolding, but some of those flows are still partial.
 
 ## Repository Map
 
