@@ -30,4 +30,37 @@ public class Order extends AbstractEditableEntity {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    @Column(name = "payment_provider", nullable = false)
+    private String paymentProvider;
+
+    @Column(name = "stripe_checkout_session_id", unique = true)
+    private String stripeCheckoutSessionId;
+
+    @Column(name = "stripe_payment_intent_id")
+    private String stripePaymentIntentId;
+
+    @Column(name = "customer_name", nullable = false)
+    private String customerName;
+
+    @Column(name = "company_name")
+    private String companyName;
+
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @Column(name = "phone", nullable = false)
+    private String phone;
+
+    @Column(name = "address_line_1", nullable = false)
+    private String addressLine1;
+
+    @Column(name = "address_line_2")
+    private String addressLine2;
+
+    @Column(name = "city", nullable = false)
+    private String city;
+
+    @Column(name = "total_amount", nullable = false)
+    private Float totalAmount;
 }

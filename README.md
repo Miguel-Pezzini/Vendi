@@ -32,10 +32,12 @@ The backend is a JWT-secured Spring Boot API that currently handles:
 - category listing and admin category creation
 - product photo retrieval by photo id
 - authenticated cart retrieval, item add, and item removal
+- authenticated Stripe checkout session creation and checkout status lookup
+- public Stripe webhook processing for payment confirmation
 - authenticated `me` endpoints for profile, products, and addresses
 - Prometheus metrics for observability
 
-The backend also contains domain models for wishlist, orders, ratings, and addresses, but not all of those areas are fully exposed as finished API flows yet.
+The backend also contains domain models for wishlist, ratings, and addresses. Orders are now created through the checkout flow and finalized from Stripe webhook events.
 
 ### Frontend
 The frontend is a Vue single-page application that currently includes:
@@ -45,7 +47,7 @@ The frontend is a Vue single-page application that currently includes:
 - store page with search and category filters
 - product details page with gallery images loaded from the backend photo API
 - cart page with hydrated product data and subtotal calculation
-- checkout form shell
+- checkout form that creates a Stripe Checkout session and confirms the order after payment
 - account, addresses, and "my products" pages
 - admin-only product creation/editing routes and admin dashboard shell
 
@@ -118,6 +120,12 @@ The backend expects:
 - database password: `1234`
 - API base URL: `http://localhost:8080`
 
+To enable the checkout flow locally, also configure Stripe in `vendi_backend/src/main/resources/application.properties` or your runtime environment:
+
+- `app.frontend-base-url=http://localhost:3333`
+- `stripe.secret-key=<your-stripe-secret-key>`
+- `stripe.webhook-secret=<your-stripe-webhook-secret>`
+
 Prometheus metrics are exposed at:
 
 ```text
@@ -143,6 +151,12 @@ The frontend API client defaults to `http://localhost:8080`. If needed, override
 
 ```bash
 VITE_API_URL=http://localhost:8080
+```
+
+For local Stripe webhook forwarding, use the frontend and backend defaults above and point Stripe CLI at the backend:
+
+```bash
+stripe listen --forward-to localhost:8080/checkout/webhook
 ```
 
 Note: the backend CORS configuration currently allows `http://localhost:3333`.
@@ -209,6 +223,11 @@ MAVEN_REPO_LOCAL=/tmp/vendi-m2 ./scripts/test_all.sh
 - `POST /cart/items`
 - `DELETE /cart/items/{productId}`
 
+### Checkout
+- `POST /checkout/session`
+- `GET /checkout/session/{sessionId}`
+- `POST /checkout/webhook`
+
 ### Authenticated user data
 - `GET /me`
 - `GET /me/products`
@@ -228,7 +247,8 @@ Role behavior currently includes:
 
 - public read access for products, categories, and photos
 - admin-only write access for product and category management
-- authenticated access for cart and `me` endpoints
+- authenticated access for cart, checkout session endpoints, and `me` endpoints
+- public access for the Stripe webhook endpoint only
 
 ## Frontend architecture notes
 
@@ -244,6 +264,7 @@ Role behavior currently includes:
 - CORS config lives in `vendi_backend/src/main/java/com/vendi/infra/web/CorsConfig.java`
 - product query filtering supports `limit`, `search`, and `categoryId`
 - cart totals are computed server-side in `CartResponseDTO`
+- checkout creates pending orders, redirects the user to hosted Stripe Checkout, and confirms payment through `/checkout/webhook`
 
 ## Development rule
 

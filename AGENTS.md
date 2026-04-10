@@ -35,10 +35,12 @@ The backend is a JWT-secured Spring Boot API for the Vendi store. The main imple
 - product photo retrieval under `/photo/{photoId}`
 - category creation/listing under `/category`
 - authenticated cart management under `/cart` and `/cart/items`
+- authenticated Stripe checkout session creation/status under `/checkout`
+- public Stripe webhook handling under `/checkout/webhook`
 - authenticated self-service endpoints under `/me`, `/me/products`, and `/me/addresses`
 - Prometheus metrics exposure through `/actuator/prometheus`
 
-The backend also contains domain models for addresses, orders, ratings, and wishlist data, but the main API surface currently in use is auth, products, categories, photos, cart, and `me`.
+The backend also contains domain models for addresses, ratings, and wishlist data. Orders are now created through checkout and finalized from Stripe webhook events.
 
 ### Frontend
 The frontend is a Vue SPA that consumes the backend API. The main user-facing flows currently present are:
@@ -48,7 +50,7 @@ The frontend is a Vue SPA that consumes the backend API. The main user-facing fl
 - store/catalog browsing with search and category filters
 - product details with photo gallery hydration from the `/photo` endpoint
 - cart page with subtotal calculation
-- checkout form shell
+- checkout form that starts Stripe Checkout and shows purchase confirmation after return
 - account, addresses, and "my products" pages
 - admin-only product creation/editing routes and admin dashboard shell
 
@@ -74,7 +76,7 @@ There is also a wishlist route and some admin/account UI scaffolding, but some o
 - `vendi_frontend/src/store`: catalog view and filters
 - `vendi_frontend/src/product`: product details page
 - `vendi_frontend/src/cart`: cart UI
-- `vendi_frontend/src/checkout`: checkout shell
+- `vendi_frontend/src/checkout`: checkout form + Stripe redirect/return handling
 - `vendi_frontend/src/user`: account, addresses, and product management views
 - `vendi_frontend/src/admin`: admin dashboard shell
 
@@ -156,12 +158,14 @@ A change is not done until all of the following are true:
 ## Backend Implementation Notes
 
 - Security is stateless JWT auth via Spring Security.
-- Public endpoints currently include auth, product reads, category reads, photo reads, and Prometheus metrics.
+- Public endpoints currently include auth, product reads, category reads, photo reads, Prometheus metrics, and the Stripe webhook endpoint.
 - Product create/update/delete and category creation are admin-only.
 - The frontend expects the backend on `http://localhost:8080`.
 - CORS currently allows `http://localhost:3333`.
 - Product photo data is loaded separately by photo id and returned as base64 data.
 - Product creation requires a main photo and at least one category.
+- Checkout creates a pending order from the authenticated user's cart, then redirects to hosted Stripe Checkout.
+- Successful Stripe webhook events mark the order as paid and clear the user's cart.
 
 ## Frontend Implementation Notes
 
@@ -170,6 +174,7 @@ A change is not done until all of the following are true:
 - The API plugin stores `token` and `roles` in `localStorage`.
 - Product cards/details are hydrated through `productService`, which fetches image payloads from `/photo/{id}`.
 - Cart UI depends on `cartService`, which rehydrates product summaries after cart API calls.
+- Checkout UI depends on `checkoutService`, which creates Stripe sessions and polls order status after redirect.
 - Keep using the current feature-based folder structure unless the user asks for a broader reorganization.
 
 ## Local Commands
@@ -208,6 +213,12 @@ MAVEN_REPO_LOCAL=/tmp/vendi-m2 ./scripts/test_all.sh
 Frontend dev server runs on `http://localhost:3333`.
 
 The frontend API base URL defaults to `http://localhost:8080` and can be overridden with `VITE_API_URL`.
+
+Local Stripe support also requires backend values for:
+
+- `app.frontend-base-url`
+- `stripe.secret-key`
+- `stripe.webhook-secret`
 
 ## Documentation Rule
 If you change the system in a way that affects how it is run, tested, or understood, update:

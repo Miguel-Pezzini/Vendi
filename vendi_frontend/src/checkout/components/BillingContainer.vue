@@ -27,22 +27,16 @@
         <p>R$ {{ cart.subtotal || 0 }}</p>
       </v-row>
     </div>
-    <v-row class="mt-8">
-      <v-radio-group v-model="paymentMethod">
-        <div class="d-flex align-center">
-          <v-radio label="Banco" value="BANK" />
-          <div class="d-flex ga-2">
-            <v-img width="42" height="28" :src="logoBradesco" />
-            <v-img width="42" height="28" :src="logoItau" />
-            <v-img width="42" height="28" :src="logoSantander" />
-            <v-img width="42" height="28" :src="logoNubank" />
-            <v-img width="42" height="28" :src="logoPIX" />
-          </div>
-        </div>
-
-        <v-radio label="Dinheiro na entrega" value="MONEY" />
-      </v-radio-group>
-    </v-row>
+    <div class="stripe-box mt-8">
+      <div class="stripe-box__header">
+        <span class="stripe-box__badge">Stripe</span>
+        <span class="stripe-box__title">Pagamento seguro hospedado</span>
+      </div>
+      <p class="stripe-box__text">
+        Ao continuar, voce sera redirecionado para a pagina segura do Stripe para concluir o
+        pagamento.
+      </p>
+    </div>
   </div>
 
   <v-row align="center" class="ga-4">
@@ -54,32 +48,30 @@
     </v-col>
   </v-row>
   <v-row class="mt-8">
-    <button class="button-cupom" @click="fazerPedido">Fazer Pedido</button>
+    <button :disabled="loading || !cart.items?.length" class="button-cupom" @click="fazerPedido">
+      {{ loading ? 'Redirecionando...' : 'Pagar com Stripe' }}
+    </button>
   </v-row>
 </template>
 
 <script setup>
-  import { ref } from 'vue'
   import Input from '@/core/components/Input.vue'
-  import logoBradesco from '@/assets/logo-bancos/logo-bradesco.svg'
-  import logoPIX from '@/assets/logo-bancos/logo-pix.png'
-  import logoItau from '@/assets/logo-bancos/logo-itau.svg'
-  import logoNubank from '@/assets/logo-bancos/logo-nubank.png'
-  import logoSantander from '@/assets/logo-bancos/logo-santander.svg'
 
   defineProps({
     cart: {
       type: Object,
       default: () => ({ items: [], subtotal: 0 }),
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
   })
 
   const emit = defineEmits(['fazerPedido'])
 
-  const paymentMethod = ref('BANK')
-
   function fazerPedido() {
-    emit('fazerPedido', paymentMethod.value)
+    emit('fazerPedido')
   }
 </script>
 
@@ -95,5 +87,43 @@
     color: #fff;
     padding: 16px 48px;
     border-radius: 4px;
+    width: 100%;
+  }
+
+  .button-cupom:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  .stripe-box {
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.02), rgba(219, 182, 113, 0.12));
+  }
+
+  .stripe-box__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .stripe-box__badge {
+    background: #635bff;
+    color: #fff;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .stripe-box__title {
+    font-weight: 700;
+  }
+
+  .stripe-box__text {
+    margin: 0;
+    color: rgba(15, 23, 42, 0.72);
   }
 </style>
