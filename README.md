@@ -122,6 +122,15 @@ The backend expects:
 - database user: `user`
 - database password: `1234`
 - API base URL: `http://localhost:8080`
+- JWT secret via `JWT_SECRET` (dev default is `changeme-dev-only`)
+- photo files in `app.photo-storage.path` (default `~/.vendi/photos`)
+
+Schema is managed by Flyway. If you already had a database created by Hibernate `ddl-auto=update`, recreate it:
+
+```bash
+docker compose down -v
+docker compose up -d
+```
 
 To enable the checkout flow locally, also configure Stripe in `vendi_backend/src/main/resources/application.properties` or your runtime environment:
 
@@ -264,6 +273,7 @@ Authorization: Bearer <jwt-token>
 Role behavior currently includes:
 
 - public read access for products, categories, and photos
+- registration always assigns `USER`; admin accounts are not self-service
 - admin-only write access for product and category management
 - authenticated access for cart, checkout session endpoints, `orders`, and `me` endpoints
 - public access for the Stripe webhook endpoint only
@@ -281,9 +291,11 @@ Role behavior currently includes:
 
 - security config lives in `vendi_backend/src/main/java/com/vendi/infra/security`
 - CORS config lives in `vendi_backend/src/main/java/com/vendi/infra/web/CorsConfig.java`
-- product query filtering supports `limit`, `search`, and `categoryId`
-- cart totals are computed server-side in `CartResponseDTO`
-- checkout creates pending orders, redirects the user to hosted Stripe Checkout, and confirms payment through `/checkout/webhook`
+- product query filtering supports `page`, `size`, `limit` (alias of size), `search`, and `categoryId`
+- catalog listing is paginated (default 20, max 100) and loads photos/categories with the product
+- cart totals are computed server-side in `CartResponseDTO` using `BigDecimal`
+- checkout creates pending orders, reserves stock, redirects the user to hosted Stripe Checkout, and confirms payment through `/checkout/webhook`
+- schema is owned by Flyway; Hibernate `ddl-auto` is `validate`
 
 ## Development rule
 

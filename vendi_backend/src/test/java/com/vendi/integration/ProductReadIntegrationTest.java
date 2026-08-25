@@ -56,6 +56,15 @@ public class ProductReadIntegrationTest extends AbstractIntegrationTest {
         assertEquals(1, categoryResults.size());
         assertEquals("Novel Book", categoryResults.get(0).name());
         assertEquals(2, limitedResults.size());
+
+        String pagedBody = mockMvc.perform(get("/products").param("page", "0").param("size", "1"))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        List<ProductDTO> pagedResults = objectMapper.readValue(pagedBody, new TypeReference<>() {
+        });
+        assertEquals(1, pagedResults.size());
     }
 
     @Test

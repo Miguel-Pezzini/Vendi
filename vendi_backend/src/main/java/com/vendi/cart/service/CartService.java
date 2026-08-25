@@ -8,6 +8,7 @@ import com.vendi.cart.repository.CartItemRepository;
 import com.vendi.cart.repository.CartRepository;
 import com.vendi.product.model.Product;
 import com.vendi.product.repository.ProductRepository;
+import com.vendi.shared.exception.InsufficientStockException;
 import com.vendi.shared.exception.ResourceNotFoundException;
 import com.vendi.user.model.User;
 import com.vendi.user.service.UserAuthenticatedService;
@@ -47,7 +48,12 @@ public class CartService {
                     return newItem;
                 });
 
-        cartItem.setQuantity(cartItem.getQuantity() + body.quantity());
+        int nextQuantity = cartItem.getQuantity() + body.quantity();
+        if (nextQuantity > product.getQuantity()) {
+            throw new InsufficientStockException("Not enough stock for this product.");
+        }
+
+        cartItem.setQuantity(nextQuantity);
 
         Cart savedCart = cartRepository.save(cart);
         return new CartResponseDTO(savedCart);

@@ -14,10 +14,14 @@ import java.util.List;
 @Entity
 @Table(name = "cart")
 public class Cart extends AbstractEditableEntity {
+    @Version
+    private Integer version;
+
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @org.hibernate.annotations.BatchSize(size = 25)
     private List<CartItem> cartItems = new ArrayList<>();
 }

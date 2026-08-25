@@ -2,6 +2,7 @@ package com.vendi.integration;
 
 import com.vendi.category.dto.CategoryResponseDTO;
 import com.vendi.product.dto.ProductDTO;
+import com.vendi.shared.money.Money;
 import com.vendi.product.dto.UpdateProductDTO;
 import com.vendi.user.model.UserRole;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ public class ProductManagementApiIntegrationTest extends AbstractIntegrationTest
 
         UpdateProductDTO updateProductDTO = new UpdateProductDTO(
                 "Notebook Pro",
-                3500f,
+                Money.of("3500.00"),
                 8,
                 6,
                 15,
@@ -48,7 +49,7 @@ public class ProductManagementApiIntegrationTest extends AbstractIntegrationTest
 
         assertEquals(createdProduct.id(), updatedProduct.id());
         assertEquals("Notebook Pro", updatedProduct.name());
-        assertEquals(3500f, updatedProduct.price());
+        assertEquals(0, Money.of("3500.00").compareTo(updatedProduct.price()));
         assertEquals(8, updatedProduct.quantity());
     }
 
@@ -59,7 +60,7 @@ public class ProductManagementApiIntegrationTest extends AbstractIntegrationTest
         CategoryResponseDTO electronics = createCategory("Electronics");
         UpdateProductDTO updateProductDTO = new UpdateProductDTO(
                 "Updated",
-                1999f,
+                Money.of("1999.00"),
                 4,
                 2,
                 5,

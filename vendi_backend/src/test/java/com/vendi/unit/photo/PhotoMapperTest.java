@@ -11,6 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class PhotoMapperTest {
 
@@ -34,7 +35,7 @@ class PhotoMapperTest {
         assertEquals("main.png", photo.getFilename());
         assertEquals("image/png", photo.getContentType());
         assertEquals(true, photo.getIsMain());
-        assertArrayEquals("main-photo".getBytes(StandardCharsets.UTF_8), photo.getData());
+        assertNull(photo.getStorageKey());
     }
 
     @Test

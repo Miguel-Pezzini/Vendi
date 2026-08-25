@@ -20,7 +20,7 @@ public class AuthMocker {
     }
 
     public static RegisterUserDTO createRegisterUserDTO() {
-        return new RegisterUserDTO(DEFAULT_USER_NAME, DEFAULT_USER_EMAIL, DEFAULT_PASSWORD, UserRole.USER);
+        return new RegisterUserDTO(DEFAULT_USER_NAME, DEFAULT_USER_EMAIL, DEFAULT_PASSWORD);
     }
 
     public static LoginRequestDTO createLoginRequestDTO() {

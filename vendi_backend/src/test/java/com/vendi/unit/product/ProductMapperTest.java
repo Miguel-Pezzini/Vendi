@@ -3,6 +3,7 @@ package com.vendi.unit.product;
 import com.vendi.category.model.Category;
 import com.vendi.photo.dto.CreatePhotoDTO;
 import com.vendi.photo.model.Photo;
+import com.vendi.shared.money.Money;
 import com.vendi.product.dto.CreateProductDTO;
 import com.vendi.product.dto.ProductDTO;
 import com.vendi.product.dto.ProductDetailsDTO;
@@ -31,7 +32,7 @@ class ProductMapperTest {
     void createAndUpdateDtoMappingCopyEditableFields() {
         CreateProductDTO createProductDTO = new CreateProductDTO(
                 "Keyboard",
-                199.99f,
+                Money.of("199.99"),
                 5,
                 3,
                 10,
@@ -42,7 +43,7 @@ class ProductMapperTest {
 
         UpdateProductDTO updateProductDTO = new UpdateProductDTO(
                 "Mechanical Keyboard",
-                249.99f,
+                Money.of("249.99"),
                 8,
                 6,
                 15,
@@ -51,7 +52,7 @@ class ProductMapperTest {
         ProductMapper.updateDTOToProduct(updateProductDTO, product);
 
         assertEquals("Mechanical Keyboard", product.getName());
-        assertEquals(249.99f, product.getPrice());
+        assertEquals(0, Money.of("249.99").compareTo(product.getPrice()));
         assertEquals(8, product.getQuantity());
         assertEquals(6, product.getInstallment());
         assertEquals(15, product.getDiscount());
@@ -61,7 +62,7 @@ class ProductMapperTest {
     void dtoConversionsExposeMainPhotoAndAllPhotos() {
         Product product = new Product();
         product.setName("Console");
-        product.setPrice(2500f);
+        product.setPrice(Money.of("2500.00"));
         product.setQuantity(2);
         product.setInstallment(4);
         product.setDiscount(5);
@@ -123,7 +124,7 @@ class ProductMapperTest {
         Photo photo = new Photo();
         photo.setFilename(filename);
         photo.setContentType("image/png");
-        photo.setData(filename.getBytes(StandardCharsets.UTF_8));
+        photo.setStorageKey("key-" + filename);
         photo.setIsMain(isMainPhoto);
         return photo;
     }

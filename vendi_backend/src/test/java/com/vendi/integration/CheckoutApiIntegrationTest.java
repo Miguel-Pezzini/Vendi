@@ -10,6 +10,7 @@ import com.vendi.checkout.stripe.StripeWebhookEvent;
 import com.vendi.order.model.OrderStatus;
 import com.vendi.order.repository.OrderRepository;
 import com.vendi.product.dto.ProductDTO;
+import com.vendi.shared.money.Money;
 import com.vendi.user.model.UserRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +92,7 @@ public class CheckoutApiIntegrationTest extends AbstractIntegrationTest {
         assertEquals("cs_test_checkout", response.sessionId());
         assertEquals("https://checkout.stripe.com/pay/cs_test_checkout", response.checkoutUrl());
         assertEquals(OrderStatus.PENDING_PAYMENT, persistedOrder.status());
-        assertEquals(299.8f, persistedOrder.totalAmount());
+        assertEquals(0, Money.of("299.80").compareTo(persistedOrder.totalAmount()));
         assertEquals(1, orderRepository.findAll().size());
         assertEquals("cs_test_checkout", orderRepository.findAll().get(0).getStripeCheckoutSessionId());
     }
@@ -123,7 +124,7 @@ public class CheckoutApiIntegrationTest extends AbstractIntegrationTest {
                 .andExpect(status().isOk());
 
         when(stripeCheckoutGateway.parseWebhookEvent(eq("{\"id\":\"evt_123\"}"), eq("sig_test")))
-                .thenReturn(new StripeWebhookEvent("checkout.session.completed", "cs_paid", "pi_123"));
+                .thenReturn(new StripeWebhookEvent("evt_123", "checkout.session.completed", "cs_paid", "pi_123"));
 
         mockMvc.perform(
                         post("/checkout/webhook")
@@ -157,6 +158,54 @@ public class CheckoutApiIntegrationTest extends AbstractIntegrationTest {
         assertEquals(OrderStatus.PAID, statusResponse.status());
         assertEquals(0, cart.totalItems());
         assertTrue(cart.items().isEmpty());
+    }
+
+    @Test
+    void duplicateWebhookDoesNotChangeAPaidOrder() throws Exception {
+        String adminToken = bearerTokenFor(UserRole.ADMIN);
+        String userToken = bearerTokenFor(UserRole.USER);
+        CategoryResponseDTO electronics = createCategory("Electronics");
+        ProductDTO product = createProductThroughApi(adminToken, "Desk", 100f, List.of(electronics.id()));
+
+        mockMvc.perform(
+                        post("/cart/items")
+                                .header("Authorization", userToken)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJson(Map.of("productId", product.id(), "quantity", 1)))
+                )
+                .andExpect(status().isOk());
+
+        when(stripeCheckoutGateway.createCheckoutSession(any()))
+                .thenReturn(new StripeCheckoutSession("cs_dup", "https://checkout.stripe.com/pay/cs_dup"));
+
+        mockMvc.perform(
+                        post("/checkout/session")
+                                .header("Authorization", userToken)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJson(validCheckoutRequest()))
+                )
+                .andExpect(status().isOk());
+
+        when(stripeCheckoutGateway.parseWebhookEvent(any(), any()))
+                .thenReturn(new StripeWebhookEvent("evt_dup", "checkout.session.completed", "cs_dup", "pi_dup"));
+
+        mockMvc.perform(
+                        post("/checkout/webhook")
+                                .header("Stripe-Signature", "sig_test")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"id\":\"evt_dup\"}")
+                )
+                .andExpect(status().isOk());
+        mockMvc.perform(
+                        post("/checkout/webhook")
+                                .header("Stripe-Signature", "sig_test")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"id\":\"evt_dup\"}")
+                )
+                .andExpect(status().isOk());
+
+        assertEquals(1, orderRepository.findAll().size());
+        assertEquals(OrderStatus.PAID, orderRepository.findAll().get(0).getStatus());
     }
 
     private Map<String, Object> validCheckoutRequest() {

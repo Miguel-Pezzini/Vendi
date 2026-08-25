@@ -39,15 +39,15 @@ If you change frontend behavior, validate it with focused manual checks or build
 ## What The App Does
 
 ### Backend
-- `POST /auth/register`, `POST /auth/login`
-- `GET/POST/PUT/DELETE /products`
+- `POST /auth/register`, `POST /auth/login` (register always creates USER)
+- `GET/POST/PUT/DELETE /products` (`GET /products` is paginated)
 - `GET /products/{id}/details`
 - `GET/POST /category`
 - `GET /photo/{photoId}`
 - `GET /cart`, `POST /cart/items`, `DELETE /cart/items/{productId}`
 - `GET /me`, `PUT /me`, `PUT /me/password`, `GET /me/products`, `GET/POST /me/addresses`, `PUT /me/addresses/{addressId}`, `DELETE /me/addresses/{addressId}`, `PUT /me/addresses/{addressId}/active`
 
-Security is JWT-based. Product/category writes are role-restricted. Prometheus metrics are exposed at `/actuator/prometheus`.
+Security is JWT-based. Product/category writes are role-restricted. Schema is Flyway-managed. Prometheus metrics are exposed at `/actuator/prometheus`.
 
 ### Frontend
 - auth screens in `src/authenticate`

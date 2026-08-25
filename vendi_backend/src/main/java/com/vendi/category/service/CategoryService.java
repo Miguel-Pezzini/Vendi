@@ -7,8 +7,9 @@ import com.vendi.category.model.Category;
 import com.vendi.category.repository.CategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -16,11 +17,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
 
-    @Autowired
-    CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
+    @Transactional
     public CategoryResponseDTO create(CategoryRequestDTO createCategoryDTO) {
         Category category = CategoryMapper.dtoToCategory(createCategoryDTO);
         if(createCategoryDTO.father_category_id() != null) {
@@ -33,6 +35,7 @@ public class CategoryService {
         return new CategoryResponseDTO(savedCategory);
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryResponseDTO> findAll() {
         return categoryRepository.findAll()
                 .stream()

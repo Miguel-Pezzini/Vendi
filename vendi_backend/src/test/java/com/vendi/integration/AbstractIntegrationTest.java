@@ -25,6 +25,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import com.vendi.shared.money.Money;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
@@ -72,6 +74,7 @@ public abstract class AbstractIntegrationTest {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);
+        registry.add("app.photo-storage.path", () -> System.getProperty("java.io.tmpdir") + "/vendi-test-photos");
     }
 
     @BeforeEach
@@ -84,7 +87,8 @@ public abstract class AbstractIntegrationTest {
                 (SELECT 'TRUNCATE TABLE ' || string_agg(format('%I.%I', schemaname, tablename), ', ')
                         || ' RESTART IDENTITY CASCADE'
                  FROM pg_tables
-                 WHERE schemaname = 'public');
+                 WHERE schemaname = 'public'
+                   AND tablename <> 'flyway_schema_history');
             END
             $func$;
         """);
@@ -117,7 +121,7 @@ public abstract class AbstractIntegrationTest {
     protected CreateProductDTO createProductDTO(String name, float price, List<UUID> categoryIds) {
         return new CreateProductDTO(
                 name,
-                price,
+                Money.of(price),
                 3,
                 2,
                 10,

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +62,6 @@ public class Order extends AbstractEditableEntity {
     @Column(name = "city", nullable = false)
     private String city;
 
-    @Column(name = "total_amount", nullable = false)
-    private Float totalAmount;
+    @Column(name = "total_amount", nullable = false, precision = 12, scale = 2)
+    private BigDecimal totalAmount;
 }

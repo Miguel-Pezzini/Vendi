@@ -101,8 +101,8 @@ export function createApiClient({ server, storage = fallbackStorage, navigateToL
     return response.data
   }
 
-  async function register(email, name, password, role) {
-    const response = await server.post('auth/register', { email, name, role, password })
+  async function register(email, name, password) {
+    const response = await server.post('auth/register', { email, name, password })
     setAuthSession(storage, response.data)
     return response.data
   }

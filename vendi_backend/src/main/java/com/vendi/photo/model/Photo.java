@@ -1,6 +1,5 @@
 package com.vendi.photo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vendi.shared.model.AbstractEditableEntity;
 import com.vendi.product.model.Product;
 import jakarta.persistence.*;
@@ -12,15 +11,14 @@ import lombok.Setter;
 @Entity
 @Table(name = "photo")
 public class Photo extends AbstractEditableEntity {
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @JsonIgnore
-    private byte[] data;
+    @Column(name = "storage_key", nullable = false, length = 512)
+    private String storageKey;
 
     private String contentType;
 
     private String filename;
 
+    @Column(nullable = false)
     private Boolean isMain = false;
 
     @ManyToOne

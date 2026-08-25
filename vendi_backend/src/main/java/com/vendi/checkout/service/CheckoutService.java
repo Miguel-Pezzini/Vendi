@@ -6,6 +6,8 @@ import com.vendi.cart.repository.CartRepository;
 import com.vendi.checkout.dto.CheckoutSessionRequestDTO;
 import com.vendi.checkout.dto.CheckoutSessionResponseDTO;
 import com.vendi.checkout.dto.CheckoutStatusResponseDTO;
+import com.vendi.checkout.model.StripeProcessedEvent;
+import com.vendi.checkout.repository.StripeProcessedEventRepository;
 import com.vendi.checkout.stripe.StripeCheckoutGateway;
 import com.vendi.checkout.stripe.StripeCheckoutSession;
 import com.vendi.checkout.stripe.StripeCheckoutSessionItem;
@@ -16,16 +18,19 @@ import com.vendi.order.model.OrderItem;
 import com.vendi.order.model.OrderStatus;
 import com.vendi.order.model.OrderStatusHistory;
 import com.vendi.order.repository.OrderRepository;
+import com.vendi.product.repository.ProductRepository;
+import com.vendi.shared.exception.InsufficientStockException;
 import com.vendi.shared.exception.ResourceNotFoundException;
+import com.vendi.shared.money.Money;
 import com.vendi.user.model.User;
 import com.vendi.user.service.UserAuthenticatedService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +43,8 @@ public class CheckoutService {
     private final UserAuthenticatedService userAuthenticatedService;
     private final CartRepository cartRepository;
     private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
+    private final StripeProcessedEventRepository stripeProcessedEventRepository;
     private final StripeCheckoutGateway stripeCheckoutGateway;
 
     @Value("${app.frontend-base-url:http://localhost:3333}")
@@ -53,7 +60,10 @@ public class CheckoutService {
             throw new IllegalStateException("Cart is empty.");
         }
 
-        Order order = buildPendingOrder(user, cart, request);
+        List<CartItem> cartItems = List.copyOf(cart.getCartItems());
+        reserveStock(cartItems);
+
+        Order order = buildPendingOrder(user, cartItems, request);
         Order savedOrder = orderRepository.save(order);
 
         StripeCheckoutSession stripeSession = stripeCheckoutGateway.createCheckoutSession(
@@ -97,7 +107,11 @@ public class CheckoutService {
 
     @Transactional
     public void handleWebhook(StripeWebhookEvent event) {
+        if (alreadyProcessed(event.eventId())) {
+            return;
+        }
         if (event.sessionId() == null || event.sessionId().isBlank()) {
+            markProcessed(event);
             return;
         }
 
@@ -105,15 +119,17 @@ public class CheckoutService {
                 .ifPresent(order -> {
                     switch (event.eventType()) {
                         case "checkout.session.completed" -> markAsPaid(order, event.paymentIntentId());
-                        case "checkout.session.expired" -> updateStatus(order, OrderStatus.CANCELED);
-                        case "checkout.session.async_payment_failed" -> updateStatus(order, OrderStatus.PAYMENT_FAILED);
+                        case "checkout.session.expired" -> cancelAndRestore(order, OrderStatus.CANCELED);
+                        case "checkout.session.async_payment_failed" -> cancelAndRestore(order, OrderStatus.PAYMENT_FAILED);
                         default -> {
                         }
                     }
                 });
+
+        markProcessed(event);
     }
 
-    private Order buildPendingOrder(User user, Cart cart, CheckoutSessionRequestDTO request) {
+    private Order buildPendingOrder(User user, List<CartItem> cartItems, CheckoutSessionRequestDTO request) {
         Order order = new Order();
         order.setUser(user);
         order.setStatus(OrderStatus.PENDING_PAYMENT);
@@ -125,9 +141,9 @@ public class CheckoutService {
         order.setAddressLine1(request.address());
         order.setAddressLine2(request.additionalAddress());
         order.setCity(request.city());
-        order.setTotalAmount(calculateTotal(cart.getCartItems()));
+        order.setTotalAmount(calculateTotal(cartItems));
 
-        List<OrderItem> orderItems = cart.getCartItems().stream()
+        List<OrderItem> orderItems = cartItems.stream()
                 .map(cartItem -> toOrderItem(order, cartItem))
                 .toList();
         order.getOrderItems().addAll(orderItems);
@@ -135,39 +151,49 @@ public class CheckoutService {
         return order;
     }
 
+    private void reserveStock(List<CartItem> items) {
+        for (CartItem item : items) {
+            int updated = productRepository.decrementStock(item.getProduct().getId(), item.getQuantity());
+            if (updated == 0) {
+                throw new InsufficientStockException("Not enough stock for this product.");
+            }
+        }
+    }
+
+    private void restoreStock(Order order) {
+        for (OrderItem item : order.getOrderItems()) {
+            productRepository.incrementStock(item.getProduct().getId(), item.getQuantity());
+        }
+    }
+
     private OrderItem toOrderItem(Order order, CartItem cartItem) {
         OrderItem orderItem = new OrderItem();
         orderItem.setOrder(order);
         orderItem.setProduct(cartItem.getProduct());
         orderItem.setQuantity(cartItem.getQuantity());
-        orderItem.setUnitPrice(cartItem.getProduct().getPrice());
+        orderItem.setUnitPrice(Money.of(cartItem.getProduct().getPrice()));
         return orderItem;
     }
 
     private StripeCheckoutSessionItem toStripeItem(OrderItem item) {
         return new StripeCheckoutSessionItem(
                 item.getProduct().getName(),
-                toCents(item.getUnitPrice()),
+                Money.toCents(item.getUnitPrice()),
                 item.getQuantity()
         );
     }
 
-    private Float calculateTotal(List<CartItem> items) {
-        return (float) items.stream()
-                .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
-                .sum();
-    }
-
-    private long toCents(Float amount) {
-        return BigDecimal.valueOf(amount.doubleValue())
-                .movePointRight(2)
-                .setScale(0, RoundingMode.HALF_UP)
-                .longValueExact();
+    private BigDecimal calculateTotal(List<CartItem> items) {
+        return items.stream()
+                .map(item -> Money.multiply(item.getProduct().getPrice(), item.getQuantity()))
+                .reduce(Money.zero(), BigDecimal::add);
     }
 
     private void markAsPaid(Order order, String paymentIntentId) {
         order.setStripePaymentIntentId(paymentIntentId);
-        updateStatus(order, OrderStatus.PAID);
+        if (!updateStatus(order, OrderStatus.PAID)) {
+            return;
+        }
 
         Cart cart = order.getUser().getCart();
         if (cart != null) {
@@ -176,17 +202,39 @@ public class CheckoutService {
         }
     }
 
-    private void updateStatus(Order order, OrderStatus newStatus) {
-        if (order.getStatus() == newStatus) {
+    private void cancelAndRestore(Order order, OrderStatus newStatus) {
+        if (updateStatus(order, newStatus)) {
+            restoreStock(order);
+        }
+    }
+
+    private boolean alreadyProcessed(String eventId) {
+        return eventId != null && !eventId.isBlank() && stripeProcessedEventRepository.existsById(eventId);
+    }
+
+    private void markProcessed(StripeWebhookEvent event) {
+        if (event.eventId() == null || event.eventId().isBlank()) {
             return;
         }
+        try {
+            stripeProcessedEventRepository.save(new StripeProcessedEvent(event.eventId(), event.eventType()));
+        } catch (DataIntegrityViolationException ignored) {
+            // Duplicate webhook deliveries are ignored after the first successful persist.
+        }
+    }
+
+    private boolean updateStatus(Order order, OrderStatus newStatus) {
+        if (order.getStatus() == newStatus) {
+            return false;
+        }
         if (order.getStatus() == OrderStatus.PAID && newStatus != OrderStatus.PAID) {
-            return;
+            return false;
         }
 
         order.setStatus(newStatus);
         order.getOrderStatusHistory().add(createStatusHistory(order, newStatus));
         orderRepository.save(order);
+        return true;
     }
 
     private OrderStatusHistory createStatusHistory(Order order, OrderStatus status) {

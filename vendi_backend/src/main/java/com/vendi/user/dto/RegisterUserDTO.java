@@ -1,12 +1,10 @@
 package com.vendi.user.dto;
 
-import com.vendi.user.model.UserRole;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 public record RegisterUserDTO(
-        @NotNull String name,
-        @NotNull @Email String email,
-        @NotNull String password,
-        @NotNull UserRole role) {
+        @NotBlank String name,
+        @NotBlank @Email String email,
+        @NotBlank String password) {
 }

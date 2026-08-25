@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "wishlist_item")
+@Table(name = "wishlist_item", uniqueConstraints = @UniqueConstraint(columnNames = {"wishlist_id", "product_id"}))
 public class WishlistItem extends AbstractEditableEntity {
     @ManyToOne
     @JoinColumn(name = "wishlist_id", nullable = false)

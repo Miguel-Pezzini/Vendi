@@ -85,10 +85,10 @@ public class StripeCheckoutGatewayImpl implements StripeCheckoutGateway {
             StripeObject stripeObject = event.getDataObjectDeserializer().getObject().orElse(null);
 
             if (!(stripeObject instanceof Session session)) {
-                return new StripeWebhookEvent(event.getType(), null, null);
+                return new StripeWebhookEvent(event.getId(), event.getType(), null, null);
             }
 
-            return new StripeWebhookEvent(event.getType(), session.getId(), session.getPaymentIntent());
+            return new StripeWebhookEvent(event.getId(), event.getType(), session.getId(), session.getPaymentIntent());
         } catch (SignatureVerificationException e) {
             throw new IllegalArgumentException("Invalid Stripe webhook signature.", e);
         }

@@ -16,7 +16,6 @@ public class PhotoMapper {
     public static Photo mapToPhoto(CreatePhotoDTO createPhotoRequestDTO) {
         Photo photo = new Photo();
         photo.setFilename(createPhotoRequestDTO.filename());
-        photo.setData(decodeBase64ToBytes(createPhotoRequestDTO.data()));
         photo.setContentType(createPhotoRequestDTO.contentType());
         photo.setIsMain(createPhotoRequestDTO.isMainPhoto());
         return photo;

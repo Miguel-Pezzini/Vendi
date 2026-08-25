@@ -61,6 +61,11 @@
           <p v-if="!loading && !products.length" class="store-results__subtitle">
             No products matched the current filters.
           </p>
+
+          <div v-if="!loading && (page > 0 || products.length === pageSize)" class="d-flex justify-center mt-6">
+            <v-btn class="mx-2" variant="outlined" :disabled="page === 0" @click="goToPage(page - 1)">Previous</v-btn>
+            <v-btn class="mx-2" variant="outlined" :disabled="products.length < pageSize" @click="goToPage(page + 1)">Next</v-btn>
+          </div>
         </section>
       </div>
     </v-container>
@@ -117,6 +122,8 @@
   const priceFilter = ref([0, 5000])
   const filterDialog = ref(false)
   const wishlistProductIds = ref(new Set())
+  const pageSize = 20
+  const page = ref(0)
 
   function hasAuthSession() {
     return Boolean(globalThis.localStorage?.getItem('token'))
@@ -186,6 +193,10 @@
         params.categoryId = route.query.category.toString()
       }
 
+      page.value = Number(route.query.page || 0)
+      params.page = page.value
+      params.size = pageSize
+
       const loadedProducts = await productService.loadProducts('products', params)
 
       products.value = mergeWishlistState(
@@ -210,7 +221,11 @@
 
   function getProductsByCategory(categoryId) {
     filterDialog.value = false
-    router.push({ path: '/store', query: { ...route.query, category: categoryId } })
+    router.push({ path: '/store', query: { ...route.query, category: categoryId, page: 0 } })
+  }
+
+  function goToPage(nextPage) {
+    router.push({ path: '/store', query: { ...route.query, page: Math.max(nextPage, 0) } })
   }
 
   onMounted(async () => {

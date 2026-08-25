@@ -3,13 +3,14 @@ package com.vendi.order.dto;
 import com.vendi.order.model.Order;
 import com.vendi.order.model.OrderStatus;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record OrderSummaryResponseDTO(
         UUID id,
         OrderStatus status,
-        Float totalAmount,
+        BigDecimal totalAmount,
         String customerName,
         String email,
         String paymentProvider,

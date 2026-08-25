@@ -3,6 +3,7 @@ package com.vendi.integration;
 import com.vendi.cart.dto.CartResponseDTO;
 import com.vendi.category.dto.CategoryResponseDTO;
 import com.vendi.product.dto.ProductDTO;
+import com.vendi.shared.money.Money;
 import com.vendi.user.model.UserRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -44,7 +45,7 @@ public class CartApiIntegrationTest extends AbstractIntegrationTest {
         CartResponseDTO cart = objectMapper.readValue(responseBody, CartResponseDTO.class);
 
         assertEquals(0, cart.totalItems());
-        assertEquals(0f, cart.subtotal());
+        assertEquals(0, Money.zero().compareTo(cart.subtotal()));
         assertEquals(0, cart.items().size());
     }
 
@@ -90,15 +91,31 @@ public class CartApiIntegrationTest extends AbstractIntegrationTest {
         CartResponseDTO emptiedCart = objectMapper.readValue(removeBody, CartResponseDTO.class);
 
         assertEquals(2, firstCart.totalItems());
-        assertEquals(200f, firstCart.subtotal());
+        assertEquals(0, Money.of("200.00").compareTo(firstCart.subtotal()));
         assertEquals(1, firstCart.items().size());
 
         assertEquals(3, secondCart.totalItems());
-        assertEquals(300f, secondCart.subtotal());
+        assertEquals(0, Money.of("300.00").compareTo(secondCart.subtotal()));
         assertEquals(3, secondCart.items().get(0).quantity());
 
         assertEquals(0, emptiedCart.totalItems());
-        assertEquals(0f, emptiedCart.subtotal());
+        assertEquals(0, Money.zero().compareTo(emptiedCart.subtotal()));
         assertEquals(0, emptiedCart.items().size());
+    }
+
+    @Test
+    void addItemRejectsQuantityAboveAvailableStock() throws Exception {
+        String adminToken = bearerTokenFor(UserRole.ADMIN);
+        String userToken = bearerTokenFor(UserRole.USER);
+        CategoryResponseDTO electronics = createCategory("Electronics");
+        ProductDTO product = createProductThroughApi(adminToken, "Limited Stock", 50f, List.of(electronics.id()));
+
+        mockMvc.perform(
+                        post("/cart/items")
+                                .header("Authorization", userToken)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJson(Map.of("productId", product.id(), "quantity", product.quantity() + 1)))
+                )
+                .andExpect(status().isConflict());
     }
 }

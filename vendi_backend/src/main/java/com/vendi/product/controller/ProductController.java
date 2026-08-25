@@ -54,7 +54,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable UUID productId) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable UUID productId) throws ResourceNotFoundException {
         productService.delete(productId);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

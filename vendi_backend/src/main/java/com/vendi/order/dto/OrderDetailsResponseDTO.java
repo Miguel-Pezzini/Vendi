@@ -4,6 +4,7 @@ import com.vendi.order.model.Order;
 import com.vendi.order.model.OrderStatus;
 import com.vendi.order.model.OrderStatusHistory;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.UUID;
 public record OrderDetailsResponseDTO(
         UUID id,
         OrderStatus status,
-        Float totalAmount,
+        BigDecimal totalAmount,
         String paymentProvider,
         String stripeCheckoutSessionId,
         String stripePaymentIntentId,

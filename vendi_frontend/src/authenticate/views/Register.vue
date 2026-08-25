@@ -135,7 +135,7 @@
     if (!isValid.valid) return
 
     api
-      .register(email.value, name.value, password.value, 'USER')
+      .register(email.value, name.value, password.value)
       .then(() => {
         proxy.$showMessage('success', 'Your account was registered with success!')
 

@@ -12,6 +12,7 @@ import com.vendi.product.dto.CreateProductDTO;
 import com.vendi.product.dto.ProductDTO;
 import com.vendi.product.dto.UpdateProductDTO;
 import com.vendi.product.service.ProductService;
+import com.vendi.shared.money.Money;
 import com.vendi.user.model.User;
 import com.vendi.user.repository.UserRepository;
 import com.vendi.user.service.UserAuthenticatedService;
@@ -82,7 +83,7 @@ public class ProductIntegrationTest extends AbstractIntegrationTest {
         ProductDTO createdProduct = assertDoesNotThrow(() -> productService.create(createProductDTO));
 
         // Act
-        Float newPrice = createdProduct.price() + 10.0f;
+        BigDecimal newPrice = createdProduct.price().add(Money.of("10.00"));
         UpdateProductDTO updateProductDTO = new UpdateProductDTO(
                 "Novo Nome",
                 newPrice,

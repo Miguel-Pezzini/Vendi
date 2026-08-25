@@ -165,10 +165,11 @@ A change is not done until all of the following are true:
 - Product create/update/delete and category creation are admin-only.
 - The frontend expects the backend on `http://localhost:8080`.
 - CORS currently allows `http://localhost:3333`.
-- Product photo data is loaded separately by photo id and returned as base64 data.
+- Product photo metadata is stored in the database; binary payloads live on disk (`app.photo-storage.path`) and are still served as base64 from `/photo/{id}`.
 - Product creation requires a main photo and at least one category.
-- Checkout creates a pending order from the authenticated user's cart, then redirects to hosted Stripe Checkout.
-- Successful Stripe webhook events mark the order as paid and clear the user's cart.
+- Registration always creates a `USER`. Admins are provisioned out-of-band.
+- Checkout decrements product stock when a Stripe session is created and restores it if the session expires or payment fails.
+- Successful Stripe webhook events mark the order as paid and clear the user's cart. Duplicate event ids are ignored.
 - Authenticated users can list their own orders and fetch a single order with items and status history through `/orders`.
 
 ## Frontend Implementation Notes
