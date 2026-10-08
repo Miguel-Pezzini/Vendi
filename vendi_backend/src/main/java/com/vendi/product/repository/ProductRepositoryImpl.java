@@ -4,6 +4,7 @@ import com.vendi.product.dto.ProductQueryParams;
 import com.vendi.product.model.Product;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Tuple;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -48,9 +49,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     private List<UUID> findMatchingIds(ProductQueryParams dto) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<UUID> query = cb.createQuery(UUID.class);
+        CriteriaQuery<Tuple> query = cb.createTupleQuery();
         Root<Product> product = query.from(Product.class);
-        Join<Object, Object> categories = product.join("categories", jakarta.persistence.criteria.JoinType.LEFT);
 
         List<Predicate> predicates = new ArrayList<>();
 
@@ -59,17 +59,21 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         }
 
         if (dto.categoryId() != null) {
+            Join<Object, Object> categories = product.join("categories", jakarta.persistence.criteria.JoinType.INNER);
             predicates.add(cb.equal(categories.get("id"), dto.categoryId()));
         }
 
-        query.select(product.get("id"))
+        // Include createdAt in the select list so PostgreSQL accepts DISTINCT + ORDER BY.
+        query.multiselect(product.get("id"), product.get("createdAt"))
                 .distinct(true)
-                .where(cb.and(predicates.toArray(new Predicate[0])))
+                .where(predicates.isEmpty() ? cb.conjunction() : cb.and(predicates.toArray(new Predicate[0])))
                 .orderBy(cb.desc(product.get("createdAt")));
 
-        TypedQuery<UUID> typedQuery = entityManager.createQuery(query);
+        TypedQuery<Tuple> typedQuery = entityManager.createQuery(query);
         typedQuery.setFirstResult(dto.resolvedPage() * dto.resolvedSize());
         typedQuery.setMaxResults(dto.resolvedSize());
-        return typedQuery.getResultList();
+        return typedQuery.getResultList().stream()
+                .map(tuple -> tuple.get(0, UUID.class))
+                .toList();
     }
 }
